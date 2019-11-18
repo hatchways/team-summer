@@ -18,6 +18,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# EK: Pycharm (my editor) adds files that, in my opinion do not need to be shared in a repo
+.idea
+
 
 #TODO add .env to your gitignore
 
