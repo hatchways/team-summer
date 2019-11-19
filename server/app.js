@@ -9,7 +9,6 @@ const { MONGO_URI } = process.env;
 
 import indexRouter from "./routes/index";
 import pingRouter from "./routes/ping";
-import ProjectRouter from "./routes/Project";
 
 const app = express();
 
@@ -30,7 +29,6 @@ app.use(express.static(join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/ping", pingRouter);
-app.use("/project", ProjectRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

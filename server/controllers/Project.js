@@ -37,13 +37,15 @@ exports.getProjects = (req, res, next) => {
 }
 
 exports.addProject = (req, res, next) => {
-    const project = new Project(req.body);
-    Project.save((err, project) => {
+    const { userId } = req.params
+    const { title, description, industry, location, fundingGoal } = req.body
+    const project = new Project({ title, description, industry, location, fundingGoal: parseInt(fundingGoal) });
+    project.save((err, project) => {
         if (err) {
             return res.status(400).json({
                 error: 'Project could not be created.'
             });
         }
-        res.json(project)
+        return res.json(project)
     })
 }
