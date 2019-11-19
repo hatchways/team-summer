@@ -6,8 +6,6 @@ const db = require('../config/db.config.js');
 const User = db.user;
 const jwt = require('jsonwebtoken');
 const passport = require('passport')
-const bcrypt = require('bcrypt');
-const saltRounds = 12;
 const JWTSecret = process.env.JWT_SECRET || 'some secret';
 
 
@@ -15,6 +13,12 @@ exports.register = (req, res) => {
     const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
+    if (password.length <= 6) {
+        return res.json({
+            status: 401,
+            message: 'invalid password'
+        })
+    }
 
     const newUser = new User({
       username,
@@ -73,7 +77,7 @@ exports.login = (req, res) => {
                     console.log('invalid pwd')
                     return res.json({
                         status: 401,
-                        message: 'invalid'
+                        message: 'invalid password'
                     })
                 }
             });
