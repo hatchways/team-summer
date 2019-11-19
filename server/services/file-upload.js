@@ -3,21 +3,20 @@ const express = require('express');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 
-const { secretAccessKey, accessKeyId, region, bucket } = process.env;
+const { AWS_SECRET_ACCESS_KEY, AWS_ACCESS_KEY_ID, AWS_REGION, AWS_BUCKET } = process.env;
 
 aws.config.update({
-    secretAccessKey,
-    accessKeyId,
-    region
+    secretAccessKey: AWS_SECRET_ACCESS_KEY,
+    accessKeyId: AWS_ACCESS_KEY_ID,
+    region: AWS_REGION
 })
 
-const app = express();
 const s3 = new aws.S3();
 
 const upload = multer({
     storage: multerS3({
         s3: s3,
-        bucket,
+        bucket: AWS_BUCKET,
         metadata: function (req, file, cb) {
             cb(null, { fieldName: 'TESTING_META_DATA!' });
         },

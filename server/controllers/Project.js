@@ -2,8 +2,9 @@ const Project = require('../models/Project');
 const upload = require('../services/file-upload');
 const singleUpload = upload.single('image');
 
-exports.imageUpload = (req, res, next) => {
+exports.imageUpload = (req, res) => {
     singleUpload(req, res, function (err) {
+        if (err) return res.status(400).json({ 'error': err });
         return res.json({ 'imageUrl': req.file.location })
     })
 }
