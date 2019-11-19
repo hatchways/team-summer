@@ -1,11 +1,12 @@
 import React from 'react'
-import {MuiThemeProvider, AppBar, Toolbar, Typography, makeStyles} from '@material-ui/core'
-import {BrowserRouter, Route} from 'react-router-dom'
+import {MuiThemeProvider, AppBar, Toolbar, Typography} from '@material-ui/core'
+import {BrowserRouter, Route, Redirect} from 'react-router-dom'
 
 import {theme} from './themes/theme'
-import LandingPage from './pages/Landing'
 
 import SvgProductLaunchLogo from './components/ProductLaunchLogo'
+import SignUp from './pages/sign-up'
+import Login from './pages/login'
 
 const App = () => {
     return (
@@ -17,7 +18,9 @@ const App = () => {
                 </Toolbar>
             </AppBar>
             <BrowserRouter>
-                <Route path="/" component={LandingPage}/>
+                    <Route exact path="/" render={() => <Redirect to="/signup"/>}/>
+                    <Route path="/signup" component={SignUp}/>
+                    <Route path="/login" component={Login}/>
             </BrowserRouter>
         </MuiThemeProvider>
     )
