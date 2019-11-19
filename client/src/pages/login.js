@@ -3,46 +3,55 @@ import {
     makeStyles,
     Button
 } from '@material-ui/core';
-import {Link} from "react-router-dom";
+import {Link} from 'react-router-dom';
 
-import {CustomOutlinedInput} from "../components/inputs";
+import {CustomOutlinedInput} from '../components/inputs';
 import CenteredPageHeader from '../components/centered-page-header';
 
 const useStyles = makeStyles({
     pageContent: {
+        // Alignment
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        //Spacing & Page width
         margin: '0 auto',
         padding: '40px 30px',
         maxWidth: 500
     },
     form: {
-        width: '100%',
+        // Alignment
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
+        // Form sizing
+        width: '100%',
     },
     lastInput: {
+        // Last input has spacing to separate from bottom
+        // according to specs.
         marginBottom: 80
     }
 });
 
 const Login = () => {
     const classes = useStyles();
-    const [emailValue, setEmail] = useState(null);
-    const [passwordValue, setPassword] = useState(null);
-    const [confirmPassword, setConfirmPassword] = useState(null);
+
+    // Controlled form paramaters
+    const [emailValue, setEmail] = useState('');
+    const [passwordValue, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
     return (
         <main className={classes.pageContent}>
+            {/* Page Header */}
             <CenteredPageHeader
                 title="Member Login"
-                descriptionText={(
-                    <span>New here? <Link to="/signup">Sign Up</Link></span>
-                )}
+                descriptionText={<span>New here? <Link to="/signup">Sign Up</Link></span>}
             />
-            <form className={classes.form}>
+
+            {/* Login Form */}
+            <form className={classes.form} noValidate>
                 <CustomOutlinedInput
                     name="email"
                     value={emailValue}
@@ -60,7 +69,7 @@ const Login = () => {
                     required
                 />
                 <CustomOutlinedInput
-                    name="confirm-password"
+                    name="confirmPassword"
                     value={confirmPassword}
                     label="Confirm Password"
                     onChange={setConfirmPassword}
@@ -68,11 +77,10 @@ const Login = () => {
                     required
                     className={classes.lastInput}
                 />
-
                 <Button variant="contained" color="primary">Login</Button>
             </form>
         </main>
-    )
+    );
 };
 
-export default Login
+export default Login;

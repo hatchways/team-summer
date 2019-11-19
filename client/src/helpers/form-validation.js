@@ -1,6 +1,6 @@
 import validator from 'validator';
 
-const filedValidate = (field, value, required = false, additionalFields = []) => {
+const fieldValidate = (field, value, required = false, additionalFields = []) => {
     const valid = {valid: true, error: ''};
 
     if (required && validator.isEmpty(value)) return {valid: false, error: 'Field is empty'};
@@ -16,7 +16,7 @@ const filedValidate = (field, value, required = false, additionalFields = []) =>
 
             return valid;
 
-        case 'confirm-password':
+        case 'confirmPassword':
             if (!additionalFields.length || additionalFields.find((field) => field.name === 'confirm-password') !== value) {
                 return {valid: false, error: 'Passwords do not match'};
             }
@@ -29,5 +29,5 @@ const filedValidate = (field, value, required = false, additionalFields = []) =>
 };
 
 export {
-    filedValidate
+    fieldValidate
 }
