@@ -1,5 +1,19 @@
 const Project = require('../models/Project');
 
+exports.projectById = (req, res, next, id) => {
+    Project.findById(id)
+        .populate('user')
+        .exec((err, project) => {
+            if (err || !project) {
+                return res.status(400).json({
+                    error: 'Project not found.'
+                });
+            }
+            req.project = project;
+            next();
+        })
+}
+
 exports.getProjects = (req, res, next) => {
     Project.find({ user: req.profile._id })
         .populate('user', '_id name')
