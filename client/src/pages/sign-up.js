@@ -30,9 +30,9 @@ const useStyles = makeStyles({
 
 const SignUp = () => {
     const classes = useStyles();
-    const [nameValue, setName] = useState(null);
-    const [emailValue, setEmail] = useState(null);
-    const [passwordValue, setPassword] = useState(null);
+    const [nameValue, setName] = useState('');
+    const [emailValue, setEmail] = useState('');
+    const [passwordValue, setPassword] = useState('');
 
     return (
         <main className={classes.pageContent}>

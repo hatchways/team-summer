@@ -35,7 +35,10 @@ const CenteredPageHeader = (props) => {
 
 CenteredPageHeader.propTypes = {
     title: PropTypes.string.isRequired,
-    descriptionText: PropTypes.string.isRequired
+    descriptionText: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.element
+    ]).isRequired
 };
 
 

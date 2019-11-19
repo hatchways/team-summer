@@ -58,8 +58,7 @@ const CustomOutlinedInput = (props) => {
             margin="normal"
             variant="outlined"
             fullWidth
-            autoComplete={props.autocomplete || false}
-            onChange={(event) => props.onChange(event.target.value)}
+            autoComplete={props.autocomplete || 'false'}
             {...props}
         />
     )
@@ -78,4 +77,7 @@ CustomOutlinedInput.propTypes = {
     type: PropTypes.string
 };
 
-export {OutlinedSelect, CustomOutlinedInput}
+export {
+    OutlinedSelect,
+    CustomOutlinedInput
+}

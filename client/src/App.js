@@ -47,7 +47,8 @@ const App = () => {
     return (
         <MuiThemeProvider theme={theme}>
             <BrowserRouter>
-                <AppBar className={classes.navBar} position="static" color="#ffffff" elevation={0}>
+                {/* Navbar */}
+                <AppBar className={classes.navBar} position="static" color="inherit" elevation={0}>
                     <Toolbar>
                         <Link to="/" className={classes.navBarHomeLink}>
                             <SvgProductLaunchLogo style={{marginRight: 22}}/>
@@ -56,6 +57,12 @@ const App = () => {
                     </Toolbar>
                 </AppBar>
 
+                {/* Routes */}
+                {/*
+                    - Base route uses a Redirect Component to redirect to
+                    /signup. Change render to component with the home page
+                    component if changing landing page.
+                */}
                 <Route exact path="/" render={() => <Redirect to="/signup"/>}/>
                 <Route path="/signup" component={SignUp}/>
                 <Route path="/login" component={Login}/>
