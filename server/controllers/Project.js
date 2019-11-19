@@ -4,7 +4,7 @@ const singleUpload = upload.single('image');
 
 exports.imageUpload = (req, res) => {
     singleUpload(req, res, function (err) {
-        if (err) return res.status(400).json({ 'error': err });
+        if (err) return res.status(422).json({ errors: [{ title: 'File Upload Error', detail: err.message }] });
         return res.json({ 'imageUrl': req.file.location })
     })
 }
