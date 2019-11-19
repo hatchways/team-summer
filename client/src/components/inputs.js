@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {InputLabel, OutlinedInput, Select} from '@material-ui/core';
+import {InputLabel, OutlinedInput, Select, TextField} from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 const handleSelect = (callback) => event => callback(event.target.value);
@@ -47,4 +47,35 @@ OutlinedSelect.propTypes = {
     disabled: PropTypes.bool
 };
 
-export { OutlinedSelect }
+const CustomOutlinedInput = (props) => {
+    return (
+        <TextField
+            id={props.id || `input-${props.label}`}
+            name={props.name}
+            value={props.value}
+            label={props.label}
+            type={props.type || 'text'}
+            margin="normal"
+            variant="outlined"
+            fullWidth
+            autoComplete={props.autocomplete || false}
+            onChange={(event) => props.onChange(event.target.value)}
+            {...props}
+        />
+    )
+};
+
+CustomOutlinedInput.propTypes = {
+    name: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.object
+    ]).isRequired,
+    label: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    autocomplete: PropTypes.bool,
+    id: PropTypes.string,
+    type: PropTypes.string
+};
+
+export {OutlinedSelect, CustomOutlinedInput}

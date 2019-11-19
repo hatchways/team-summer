@@ -1,7 +1,12 @@
-import React from 'react'
-import {makeStyles, Typography} from '@material-ui/core'
+import React, {useState} from 'react';
+import {
+    makeStyles,
+    Typography,
+} from '@material-ui/core';
 
-import BoldLine from '../components/bold-line'
+import BoldLine from '../components/bold-line';
+import {Link} from "react-router-dom";
+import {CustomOutlinedInput} from "../components/inputs";
 
 const useStyles = makeStyles({
     pageContent: {
@@ -17,20 +22,53 @@ const useStyles = makeStyles({
     },
     explanationText: {
         textAlign: 'center',
+        marginBottom: 40
+    },
+    input: {
+        width: '100%'
     }
-})
+});
 
-const SignUp = (props) => {
-    const classes = useStyles()
+const SignUp = () => {
+    const classes = useStyles();
+    const [nameValue, setName] = useState(null);
+    const [emailValue, setEmail] = useState(null);
+    const [passwordValue, setPassword] = useState(null);
+
     return (
         <main className={classes.pageContent}>
-            <Typography variant="h2" className={classes.pageTitle}>Let's get started</Typography>
+            <Typography variant="h2" className={classes.pageTitle}>Create an account</Typography>
             <BoldLine/>
             <Typography variant="body1" className={classes.explanationText}>
-                Pick a project industry to connect with a community. You can always update this later.
+                Already a member? <Link to="/login">Login</Link>
             </Typography>
+            <form style={{width: '100%'}}>
+                <CustomOutlinedInput
+                    name="name"
+                    value={nameValue}
+                    label="Name"
+                    onChange={setName}
+                    required
+                />
+                <CustomOutlinedInput
+                    name="email"
+                    value={emailValue}
+                    label="Email"
+                    onChange={setEmail}
+                    type="email"
+                    required
+                />
+                <CustomOutlinedInput
+                    name="password"
+                    value={passwordValue}
+                    label="Password"
+                    onChange={setPassword}
+                    type="password"
+                    required
+                />
+            </form>
         </main>
     )
-}
+};
 
 export default SignUp
