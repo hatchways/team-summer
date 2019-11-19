@@ -3,55 +3,53 @@ import {
     makeStyles,
     Button
 } from '@material-ui/core';
-import {Link} from 'react-router-dom';
+import {Link} from "react-router-dom";
 
-import {CustomOutlinedInput} from '../components/inputs';
-import CenteredPageHeader from '../components/centered-page-header';
+import {CustomOutlinedInput} from "../components/Inputs";
+import CenteredPageHeader from '../components/CenteredPageHeader';
 
 const useStyles = makeStyles({
     pageContent: {
-        // Alignment
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        //Spacing & Page width
         margin: '0 auto',
         padding: '40px 30px',
         maxWidth: 500
     },
     form: {
-        // Alignment
+        width: '100%',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        // Form sizing
-        width: '100%',
+        alignItems: 'center'
     },
     lastInput: {
-        // Last input has spacing to separate from bottom
-        // according to specs.
         marginBottom: 80
     }
 });
 
-const Login = () => {
+const SignUp = () => {
     const classes = useStyles();
-
-    // Controlled form paramaters
+    const [nameValue, setName] = useState('');
     const [emailValue, setEmail] = useState('');
     const [passwordValue, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
 
     return (
         <main className={classes.pageContent}>
-            {/* Page Header */}
             <CenteredPageHeader
-                title="Member Login"
-                descriptionText={<span>New here? <Link to="/signup">Sign Up</Link></span>}
+                title="Create an Account"
+                descriptionText={(
+                    <span>Already a member? <Link to="/login">Login</Link></span>
+                )}
             />
-
-            {/* Login Form */}
-            <form className={classes.form} noValidate>
+            <form className={classes.form}>
+                <CustomOutlinedInput
+                    name="name"
+                    value={nameValue}
+                    label="Name"
+                    onChange={setName}
+                    required
+                />
                 <CustomOutlinedInput
                     name="email"
                     value={emailValue}
@@ -67,20 +65,13 @@ const Login = () => {
                     onChange={setPassword}
                     type="password"
                     required
-                />
-                <CustomOutlinedInput
-                    name="confirmPassword"
-                    value={confirmPassword}
-                    label="Confirm Password"
-                    onChange={setConfirmPassword}
-                    type="password"
-                    required
                     className={classes.lastInput}
                 />
-                <Button variant="contained" color="primary">Login</Button>
+
+                <Button variant="contained" color="primary">Create account</Button>
             </form>
         </main>
-    );
+    )
 };
 
-export default Login;
+export default SignUp

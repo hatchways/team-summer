@@ -4,9 +4,9 @@ import {BrowserRouter, Route, Redirect, Link} from 'react-router-dom';
 
 import {theme} from './themes/theme';
 
-import SvgProductLaunchLogo from './components/product-launch-logo';
-import SignUp from './pages/sign-up';
-import Login from './pages/login';
+import SvgProductLaunchLogo from './components/ProductLaunchPage';
+import SignUp from './pages/SignUp';
+import Login from './pages/Login';
 
 const useStyles = makeStyles({
     navBar: (theme) => ({

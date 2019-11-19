@@ -2,7 +2,7 @@ import React from 'react';
 import {makeStyles, Typography} from '@material-ui/core';
 import PropTypes from 'prop-types';
 
-import BoldLine from './bold-line';
+import BoldLine from './BoldLine';
 
 const useStyles = makeStyles({
     header: {
