@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {
     makeStyles,
-    Typography,
+    Button
 } from '@material-ui/core';
-
-import BoldLine from '../components/bold-line';
 import {Link} from "react-router-dom";
+
 import {CustomOutlinedInput} from "../components/inputs";
+import CenteredPageHeader from '../components/centered-page-header';
 
 const useStyles = makeStyles({
     pageContent: {
@@ -17,15 +17,14 @@ const useStyles = makeStyles({
         padding: '40px 30px',
         maxWidth: 500
     },
-    pageTitle: {
-        marginBottom: 30
+    form: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
     },
-    explanationText: {
-        textAlign: 'center',
-        marginBottom: 40
-    },
-    input: {
-        width: '100%'
+    lastInput: {
+        marginBottom: 80
     }
 });
 
@@ -37,12 +36,13 @@ const SignUp = () => {
 
     return (
         <main className={classes.pageContent}>
-            <Typography variant="h2" className={classes.pageTitle}>Create an account</Typography>
-            <BoldLine/>
-            <Typography variant="body1" className={classes.explanationText}>
-                Already a member? <Link to="/login">Login</Link>
-            </Typography>
-            <form style={{width: '100%'}}>
+            <CenteredPageHeader
+                title="Create an Account"
+                descriptionText={(
+                    <span>Already a member? <Link to="/login">Login</Link></span>
+                )}
+            />
+            <form className={classes.form}>
                 <CustomOutlinedInput
                     name="name"
                     value={nameValue}
@@ -65,7 +65,10 @@ const SignUp = () => {
                     onChange={setPassword}
                     type="password"
                     required
+                    className={classes.lastInput}
                 />
+
+                <Button variant="contained" color="primary">Create account</Button>
             </form>
         </main>
     )

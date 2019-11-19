@@ -8,13 +8,13 @@ const useStyles = makeStyles({
         backgroundColor: theme.primary,
         marginBottom: 30
     })
-})
+});
 
 const BoldLine = (props) => {
     const classes = useStyles(props)
 
     return <div className={classes.boldLine}/>
 
-}
+};
 
 export default withTheme(BoldLine)

@@ -14,6 +14,15 @@ export const theme = createMuiTheme({
             textAlign: 'center'
         }
     },
+    palette: {
+        primary: {
+            main: '#69E781',
+            contrastText: '#ffffff'
+        },
+        secondary: {
+            main: '#1f1f1f'
+        }
+    },
     primary: '#69E781',
     secondary: '#1f1f1f',
     meta: '#E8E8E8',
