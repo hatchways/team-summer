@@ -3,11 +3,23 @@ import express, { json, urlencoded } from "express";
 import { join } from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
+const mongoose = require("mongoose");
+
+const { MONGO_URI } = process.env;
 
 import indexRouter from "./routes/index";
 import pingRouter from "./routes/ping";
 
-var app = express();
+const app = express();
+
+// DB config
+mongoose
+  .connect(MONGO_URI, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+  })
+  .then(() => console.log('DB Connected'));
 
 app.use(logger("dev"));
 app.use(json());
@@ -19,12 +31,12 @@ app.use("/", indexRouter);
 app.use("/ping", pingRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
