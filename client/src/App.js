@@ -1,26 +1,12 @@
 import React from 'react';
-import {MuiThemeProvider, AppBar, Toolbar, Typography, makeStyles} from '@material-ui/core';
-import {BrowserRouter, Route, Redirect, Link} from 'react-router-dom';
+import {MuiThemeProvider, makeStyles} from '@material-ui/core';
+import {BrowserRouter, Route, Redirect} from 'react-router-dom';
 
 import {theme} from './themes/theme';
 
-import SvgProductLaunchLogo from './components/ProductLaunchPage';
+import NavBar from './components/NavBar'
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
-
-const useStyles = makeStyles({
-    navBar: (theme) => ({
-        borderBottom: `1px solid ${theme.meta}`
-    }),
-    navBarHomeLink: {
-        display: 'flex',
-        alignItems: 'center',
-
-        '&:hover': {
-            color: 'unset'
-        }
-    }
-});
 
 const globalStyles = makeStyles({
     '@global': {
@@ -42,20 +28,10 @@ const globalStyles = makeStyles({
 
 const App = () => {
     globalStyles();
-    const classes = useStyles(theme);
-
     return (
         <MuiThemeProvider theme={theme}>
             <BrowserRouter>
-                {/* Navbar */}
-                <AppBar className={classes.navBar} position="static" color="inherit" elevation={0}>
-                    <Toolbar>
-                        <Link to="/" className={classes.navBarHomeLink}>
-                            <SvgProductLaunchLogo style={{marginRight: 22}}/>
-                            <Typography variant="h1">Product Launch</Typography>
-                        </Link>
-                    </Toolbar>
-                </AppBar>
+                <NavBar />
 
                 {/* Routes */}
                 {/*
