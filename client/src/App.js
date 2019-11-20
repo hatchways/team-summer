@@ -4,7 +4,7 @@ import {BrowserRouter, Route, Redirect, Link} from 'react-router-dom';
 
 import {theme} from './themes/theme';
 
-import SvgProductLaunchLogo from './components/ProductLaunchPage';
+import SvgProductLaunchLogo from './components/ProductLaunchLogo';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 
