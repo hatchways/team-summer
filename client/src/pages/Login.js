@@ -39,61 +39,51 @@ const styles = {
 class Login extends React.Component {
     constructor(props) {
         super(props);
+
+        this.validators = FormValidator([
+            {
+                field: 'email',
+                method: validator.isEmpty,
+                validWhen: false,
+                message: 'Email is required.'
+            },
+            {
+                field: 'email',
+                method: validator.isEmail,
+                validWhen: true,
+                message: 'Email format is incorrect.'
+            },
+            {
+                field: 'password',
+                method: validator.isEmpty,
+                validWhen: false,
+                message: 'Password is required'
+            },
+            {
+                field: 'password',
+                method: (value) => value.length >= 6,
+                validWhen: true,
+                message: 'Password must be 6 characters or more'
+            },
+        ]);
+
         this.state = {
             email: '',
             password: '',
-            confirmPassword: '',
-            validation: {
-                email: {isInvalid: false, message: ''},
-                password: {isInvalid: false, message: ''},
-                confirmPassword: {isInvalid: false, message: ''}
-            }
+            validation: this.validators.valid()
         };
     }
 
-    validators = FormValidator([
-        {
-            field: 'email',
-            method: validator.isEmpty,
-            validWhen: false,
-            message: 'Email is required.'
-        },
-        {
-            field: 'email',
-            method: validator.isEmail,
-            validWhen: true,
-            message: 'Email format is incorrect.'
-        },
-        {
-            field: 'password',
-            method: validator.isEmpty,
-            validWhen: false,
-            message: 'Password is required'
-        },
-        {
-            field: 'password',
-            method: (value) => value.length >= 6,
-            validWhen: true,
-            message: 'Password must be 6 characters or more'
-        },
-        {
-            field: 'confirmPassword',
-            method: (value, state) => state.password === value,
-            validWhen: true,
-            message: 'Passwords must match'
-        }
-    ]);
-
-    handleInputChange = (event) => {
+    handleInput = (event) => {
         const {value, name} = event.target;
 
         this.setState({[name]: value});
     };
 
     disableSubmit = () => {
-        const {email, password, confirmPassword} = this.state;
+        const {email, password} = this.state;
 
-        return [email, password, confirmPassword].some((value) => !value);
+        return [email, password].some((value) => !value);
 
 
     };
@@ -104,12 +94,15 @@ class Login extends React.Component {
         const validation = this.validators.validate(this.state);
         this.setState({validation});
 
-        if (validation.isValid) console.log('valid');
+        if (validation.isValid) {
+            // TODO: Integration form submission with backend
+            console.log('valid');
+        }
     };
 
     render() {
         const {classes} = this.props;
-        const {email, password, confirmPassword, validation} = this.state;
+        const {email, password, validation} = this.state;
 
         return (
             <main className={classes.pageContent}>
@@ -125,7 +118,7 @@ class Login extends React.Component {
                         name="email"
                         value={email}
                         label="Email"
-                        onChange={this.handleInputChange}
+                        onChange={this.handleInput}
                         type="email"
                         required
                         error={validation.email.isInvalid}
@@ -135,22 +128,11 @@ class Login extends React.Component {
                         name="password"
                         value={password}
                         label="Password"
-                        onChange={this.handleInputChange}
+                        onChange={this.handleInput}
                         type="password"
                         required
                         error={validation.password.isInvalid}
                         helperText={validation.password.message}
-                    />
-                    <CustomOutlinedInput
-                        name="confirmPassword"
-                        value={confirmPassword}
-                        label="Confirm Password"
-                        onChange={this.handleInputChange}
-                        type="password"
-                        required
-                        className={classes.lastInput}
-                        error={validation.confirmPassword.isInvalid}
-                        helperText={validation.confirmPassword.message}
                     />
                     <Button
                         type="submit"
