@@ -1,33 +1,50 @@
-import validator from 'validator';
+const FormValidator = (validations) => ({
+    /* Takes in array of objects for validating form fields
+    Ex:
+        [
+         {
+         field: 'email', // Input name
+         method: validator.isEmail. // string of validator from validator package or custom validator,
+         args: [], // Optional: arguments for the validation method
+         validWhen: true, // Valid when method is true,
+         message: 'Email is invalid' // Error message
+         }
+       ]
+    */
 
-const fieldValidate = (field, value, required = false, additionalFields = []) => {
-    const valid = {valid: true, error: ''};
+    // Validator Rule set
+    validations,
 
-    if (required && validator.isEmpty(value)) return {valid: false, error: 'Field is empty'};
+    validate(state) {
+        // Valid by default
+        let validation = this.valid();
 
-    switch (field) {
-        case 'email':
-            if (!validator.isEmail(value)) return {valid: false, error: 'Email is incorrect'};
+        this.validations.forEach(rule => {
+            // Validation rule not marked as invalid already
+            if (!validation[rule.field].isInvalid) {
+                const field_value = state[rule.field].toString();
+                const args = rule.args || [];
+                const validation_method = rule.method;
 
-            return valid;
-
-        case 'password':
-            if (field.length < 12) return {valid: false, error: 'Password be 12 or more characters'};
-
-            return valid;
-
-        case 'confirmPassword':
-            if (!additionalFields.length || additionalFields.find((field) => field.name === 'confirm-password') !== value) {
-                return {valid: false, error: 'Passwords do not match'};
+                if (validation_method(field_value, ...args, state) !== rule.validWhen) {
+                    validation[rule.field] = {isInvalid: true, message: rule.message};
+                    validation.isValid = false;
+                }
             }
+        });
 
-            return valid;
+        return validation;
+    },
 
-        default:
-            return {valid: false, error: 'No validation field'};
+    valid() {
+        const validation = {};
+
+        this.validations.map(rule => (
+            validation[rule.field] = {isInvalid: false, message: ''}
+        ));
+
+        return {isValid: true, ...validation};
     }
-};
+});
 
-export {
-    fieldValidate
-}
+export default FormValidator;
