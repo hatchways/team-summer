@@ -15,7 +15,7 @@ export const theme = createMuiTheme({
         },
         h6: {
             fontSize: '1em',
-            fontWeight: 'semi-bold',
+            fontWeight: '500',
             textAlign: 'center'
         }
     },

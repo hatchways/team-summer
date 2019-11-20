@@ -31,7 +31,8 @@ const App = () => {
     return (
         <MuiThemeProvider theme={theme}>
             <BrowserRouter>
-                <NavBar />
+                {/* Placeholder user object */}
+                <NavBar user={{name: 'Joe'}}/>
 
                 {/* Routes */}
                 {/*

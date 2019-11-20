@@ -1,6 +1,16 @@
-import React from 'react';
-import {AppBar, makeStyles, Toolbar, Typography} from '@material-ui/core';
-import {Link} from 'react-router-dom';
+import React, {useState} from 'react';
+import {
+    AppBar,
+    makeStyles,
+    Toolbar,
+    Typography,
+    IconButton,
+    Avatar,
+    Menu,
+    MenuItem
+} from '@material-ui/core';
+import {Link, withRouter} from 'react-router-dom';
+
 import SvgProductLaunchLogo from './ProductLaunchPage';
 
 const useStyles = makeStyles((theme) => ({
@@ -17,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     navLinks: {
-        display: 'flex'
+        display: 'flex',
+        alignItems: 'center'
     },
     menuItem: {
         marginRight: 50,
@@ -28,11 +39,21 @@ const useStyles = makeStyles((theme) => ({
             color: '#000000',
             borderBottom: `2px solid ${theme.palette.primary.main}`,
         }
+    },
+    userAvatar: {
+        width: 50,
+        height: 50
     }
 }));
 
-export default () => {
+const NavBar = (props) => {
     const classes = useStyles();
+    const [userDropdown, toggleUserDropdown] = useState(null);
+
+    const handleClick = (route) => {
+        props.history.push(route);
+        toggleUserDropdown(null)
+    };
 
     return (
         <AppBar className={classes.navBar} position="static" color="inherit" elevation={0}>
@@ -57,8 +78,28 @@ export default () => {
                             Launch
                         </Typography>
                     </Link>
+                    <div>
+                        <IconButton aria-controls="user-dropdown"
+                                    onClick={(event) => toggleUserDropdown(event.currentTarget)}>
+                            <Avatar className={classes.userAvatar} src={props.user.avatar || null}>
+                                {props.user.avatar || props.user.name.split('')[0]}
+                            </Avatar>
+                        </IconButton>
+                        <Menu
+                            id="user-dropdown"
+                            anchorEl={userDropdown}
+                            keepMounted
+                            open={Boolean(userDropdown)}
+                            onClose={() => toggleUserDropdown(null)}
+                        >
+                            <MenuItem onClick={() => handleClick('/profile')}>Profile</MenuItem>
+                            <MenuItem onClick={() => handleClick('/logout')}>Logout</MenuItem>
+                        </Menu>
+                    </div>
                 </div>
             </Toolbar>
         </AppBar>
     );
 };
+
+export default withRouter(NavBar);
