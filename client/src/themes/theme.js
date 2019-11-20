@@ -19,6 +19,11 @@ export const theme = createMuiTheme({
             textAlign: 'center'
         }
     },
+    breakpoints: {
+      values: {
+          md: 800
+      }
+    },
     palette: {
         primary: {
             main: '#69E781',
