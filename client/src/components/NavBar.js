@@ -13,7 +13,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 import {Link, withRouter} from 'react-router-dom';
 
-import SvgProductLaunchLogo from './ProductLaunchPage';
+import SvgProductLaunchLogo from './ProductLaunchLogo';
 
 const useStyles = makeStyles((theme) => ({
     navBar: {
