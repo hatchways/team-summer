@@ -10,11 +10,13 @@ const UserSchema = new Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,
-        require: true
+        require: true,
+        minlength: 5
     },
     date: {
         type: Date,
@@ -42,13 +44,8 @@ UserSchema.pre('save', function (next) {
     }
 });
 
-UserSchema.methods.comparePassword = function (pw, cb) {
-    bcrypt.compare(pw, this.password, function (err, isMatch) {
-        if (err) {
-            return cb(err);
-        }
-        cb(null, isMatch);
-    });
+UserSchema.methods.comparePassword = function (pw) {
+    return bcrypt.compareSync(pw, this.password);
 };
 
 module.exports = mongoose.model("users", UserSchema);
