@@ -41,7 +41,6 @@ exports.getProjects = (req, res, next) => {
 }
 
 exports.uploadImages = (req, res, next) => {
-    console.log('req', req)
     multiUpload(req, res, function (err) {
         if (err) return res.status(422).json({ errors: [{ title: 'File Upload Error', detail: err.message }] });
         const fileLocations = req.files.map(file => file.location);
@@ -57,6 +56,7 @@ exports.addProject = (req, res, next) => {
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
     form.parse(req, (err, fields, files) => {
+        console.log('parsing form..')
         if (err) {
             return res.status(400).json({
                 error: 'Image could not be uploaded.'
@@ -79,7 +79,5 @@ exports.addProject = (req, res, next) => {
             }
             return res.json(project);
         })
-        // console.log(fields)
-        // return res.status(200).json('hey who is that female?')
     })
 }
