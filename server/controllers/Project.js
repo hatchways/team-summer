@@ -40,37 +40,27 @@ exports.getProjects = (req, res, next) => {
         })
 }
 
-exports.uploadImages = (req, res, next) => {
-    multiUpload(req, res, function (err) {
-        if (err) return res.status(422).json({ errors: [{ title: 'File Upload Error', detail: err.message }] });
-        const fileLocations = req.files.map(file => file.location);
-        req.locations = fileLocations
-        next();
-    })
-}
-
 exports.addProject = (req, res, next) => {
-    // console.log('req files', req.locations)
-    const images = req.locations
-    console.log(images)
-    let form = new formidable.IncomingForm();
-    form.keepExtensions = true;
-    form.parse(req, (err, fields, files) => {
-        console.log('parsing form..')
-        if (err) {
-            return res.status(400).json({
-                error: 'Image could not be uploaded.'
-            });
-        }
-
-        const { title, description, industry, location, fundingGoal } = fields;
+    multiUpload(req, res, function (err) {
+        if (err) return res.status(422).json({
+            errors: [{
+                title: 'File Upload Error', detail: err.message
+            }]
+        });
+        const { title, description, industry, location, fundingGoal } = req.body;
         if (!title || !description || !industry || !location || !fundingGoal) {
             return res.status(400).json({
                 error: 'Please fill out the required fields.'
             });
         }
-        console.log(fields)
-        const project = new Project({ title, description, industry, location, images, fundingGoal: parseInt(fundingGoal) })
+        const images = req.files.map(file => file.location);
+        const project = new Project({
+            title,
+            description,
+            industry, location,
+            images,
+            fundingGoal: parseInt(fundingGoal)
+        })
         project.save((err, project) => {
             if (err) {
                 return res.status(400).json({
