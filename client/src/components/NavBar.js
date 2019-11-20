@@ -20,8 +20,12 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         height: 74,
-        padding: '0 30px',
-        borderBottom: `1px solid ${theme.meta}`
+        padding: 0,
+        borderBottom: `1px solid ${theme.meta}`,
+
+        [theme.breakpoints.up('md')]: {
+            padding: '0 30px'
+        }
     },
     navBarHomeLink: {
         display: 'flex',
