@@ -18,12 +18,11 @@ exports.register = (req, res) => {
 }
 
 exports.login = (req, res) => {
-    const {name, password} = req.body;
+    const { name, password } = req.body;
     User.findOne({
         name
     }, (err, user) => {
         if (err) {
-            console.log('find failed', err)
             return res.status(500).json({ message: 'an error occurred' });
         } else if (user && user.comparePassword(password)) {
             const { name, email } = user;

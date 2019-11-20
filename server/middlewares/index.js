@@ -8,6 +8,6 @@ exports.verifyJwt = (req, res, next) => {
         req.user = decodedToken.payload;
         next();
     } else {
-        res.status(500).send({error: 'JWT token missing!!!'})
+        return res.status(500).send({error: 'not authorized'})
     }
 }

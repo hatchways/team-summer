@@ -6,7 +6,8 @@ const saltRounds = 12; // defaults to 10
 const UserSchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     email: {
         type: String,
@@ -16,7 +17,7 @@ const UserSchema = new Schema({
     password: {
         type: String,
         require: true,
-        minlength: 5
+        minlength: 6
     },
     date: {
         type: Date,
