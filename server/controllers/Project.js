@@ -70,4 +70,5 @@ exports.addProject = (req, res, next) => {
             return res.json(project);
         })
     })
+    return res.json('we in this yooooo')
 }
