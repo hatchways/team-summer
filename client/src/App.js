@@ -11,10 +11,12 @@ import Login from './pages/Login';
 const globalStyles = makeStyles({
   '@global': {
     '.MuiButton-root': {
+      // Custom styling for buttons according to specs
       width: 220,
       height: 64,
       boxShadow: 'none'
     },
+    // Styling links
     a: {
       textDecoration: 'none',
       color: '#000000',
@@ -35,11 +37,10 @@ const App = () => {
         <NavBar user={{ name: 'Joe' }} />
 
         {/* Routes */}
-        {/*
-                    - Base route uses a Redirect Component to redirect to
-                    /signup. Change render to component with the home page
-                    component if changing landing page.
-                */}
+        {/*- Base route uses a Redirect Component to redirect to
+            /signup. Change render to component with the home page
+            component if changing landing page.
+        */}
         <Route exact path="/" render={() => <Redirect to="/signup" />} />
         <Route path="/signup" component={SignUp} />
         <Route path="/login" component={Login} />
