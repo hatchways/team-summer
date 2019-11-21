@@ -27,6 +27,11 @@ app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*"); // must update
+  next();
+});
+
 app.use("/", indexRouter);
 app.use("/ping", pingRouter);
 

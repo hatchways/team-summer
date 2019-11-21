@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const auth = require('../controllers/authController.api.js');
+const users = require('../controllers/usersController.api.js');
 const { verifyJwt } = require('../middlewares');
 
 router.get("/welcome", function (req, res, next) {
@@ -9,6 +10,8 @@ router.get("/welcome", function (req, res, next) {
 
 router.post('/register', auth.register);
 router.post('/login', auth.login);
+
+router.get('/users/:id', users.getUser)
 
 
 // EG usage of verifyJwt middleware for protected routes
