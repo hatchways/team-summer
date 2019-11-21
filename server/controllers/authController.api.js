@@ -53,7 +53,6 @@ exports.login = (req, res) => {
 }
 
 exports.userById = (req, res, next, id) => {
-    console.log('userId', id)
     User.findById(id).exec((err, user) => {
         if (err || !user) {
             return res.status(400).json({

@@ -26,10 +26,9 @@ exports.projectById = (req, res, next, id) => {
         })
 }
 
-exports.getProjects = (req, res, next) => {
+exports.getUserProjects = (req, res, next) => {
+    console.log(req.profile._id)
     Project.find({ user: req.profile._id })
-        .populate('user', '_id name')
-        .sort('-created')
         .exec((err, projects) => {
             if (err) {
                 return res.status(400).json({
@@ -54,7 +53,9 @@ exports.addProject = (req, res, next) => {
             });
         }
         const images = req.files.map(file => file.location);
+        const user = req.profile;
         const project = new Project({
+            user,
             title,
             description,
             industry, location,
@@ -70,5 +71,4 @@ exports.addProject = (req, res, next) => {
             return res.json(project);
         })
     })
-    return res.json('we in this yooooo')
 }
