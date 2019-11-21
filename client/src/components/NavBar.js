@@ -20,58 +20,71 @@ import SvgProductLaunchLogo from './ProductLaunchLogo';
 
 const useStyles = makeStyles((theme) => ({
   navBar: {
+    // Alignment
     display: 'flex',
     justifyContent: 'center',
+
+    // Sizing
     height: 74,
     padding: 0,
+
+    // Styling
     borderBottom: `1px solid ${theme.meta}`,
 
+    // Desktop style adjustments
     [theme.breakpoints.up('md')]: {
       padding: '0 30px'
     }
   },
   navBarHomeLink: {
+    // Alignment
     display: 'flex',
     alignItems: 'center',
-    flexGrow: 1,
-
-    '&:hover': {
-      color: 'unset'
-    }
+    flexGrow: 1
   },
   navLinks: {
+    // Alignment
     display: 'flex',
     alignItems: 'center'
   },
   menuItem: {
-    margin: '10px 0',
-    borderBottom: `2px solid #ffffff`,
-    width: '100%',
+    // Alignment
     display: 'flex',
     justifyContent: 'center',
 
+    // Sizing
+    margin: '10px 0',
+    width: '100%',
+
+    // Style link label pre-hover
     '& h6': {
       borderBottom: `2px solid #ffffff`,
       paddingBottom: 2
     },
 
+    // Link hover
     '&:hover > h6': {
       color: '#000000',
       borderBottom: `2px solid ${theme.palette.primary.main}`
     },
 
+    // Desktop margins
     [theme.breakpoints.up('md')]: {
       margin: '0 50px 0 0'
     }
   },
   userAvatar: {
+    // Sizing
     width: 50,
     height: 50
   },
   drawer: {
+    // Alignment
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+
+    // Sizing
     width: 150,
     padding: 30
   }
@@ -80,10 +93,17 @@ const useStyles = makeStyles((theme) => ({
 const Navigation = (props) => {
   const [userDropdown, toggleUserDropdown] = useState(null);
 
+  /* Show property values: authenticated, unauthenticated, both */
   const links = [
-    { label: 'Explore', url: '/explore' },
-    { label: 'Messages', url: '/messages' },
-    { label: 'Launch', url: '/launch' }
+    { label: 'Explore', url: '/explore', show: 'authenticated' },
+    { label: 'Messages', url: '/messages', show: 'authenticated' },
+    { label: 'Launch', url: '/launch', show: 'authenticated' },
+    { label: 'Login', url: '/login', show: 'unauthenticated' }
+  ];
+
+  const userDropdownLinks = [
+    { label: 'Profile', url: '/profile' },
+    { label: 'Logout', url: '/logout' }
   ];
 
   /* Wrapper is the element that surrounds this component
@@ -115,33 +135,51 @@ const Navigation = (props) => {
 
   return (
     <Wrapper {...wrapperProps}>
-      {links.map((link) => (
-        <Link to={link.url} className={props.classes.menuItem} key={link.label}>
-          <Typography variant="h6">{link.label}</Typography>
-        </Link>
-      ))}
+      {links.map((link) => {
+        /* Render link if:
+         * - Link is for authenticated users and logged in
+         * - Link is for unauthenticated users and not logged in
+         * - Link is meant for both authenticated and unauthenticated
+         * */
+        if (
+          (link.show === 'authenticated' && props.authenticated) ||
+          (link.show === 'unauthenticated' && !props.authenticated) ||
+          link.show === 'both'
+        ) {
+          return (
+            <Link to={link.url} className={props.classes.menuItem} key={link.label}>
+              <Typography variant="h6">{link.label}</Typography>
+            </Link>
+          );
+        }
 
-      {/* User dropdown actions*/}
-      <div id="account-dropdown">
-        <IconButton
-          aria-controls="user-dropdown"
-          onClick={(event) => toggleUserDropdown(event.currentTarget)}>
-          <Avatar
-            className={props.classes.userAvatar}
-            src={props.user.avatar || null}>
-            {props.user.avatar || props.user.name.split('')[0]}
-          </Avatar>
-        </IconButton>
-        <Menu
-          id="user-dropdown"
-          anchorEl={userDropdown}
-          keepMounted
-          open={Boolean(userDropdown)}
-          onClose={() => toggleUserDropdown(null)}>
-          <MenuItem onClick={() => handleClick('/profile')}>Profile</MenuItem>
-          <MenuItem onClick={() => handleClick('/logout')}>Logout</MenuItem>
-        </Menu>
-      </div>
+        return null;
+      })}
+
+      {/* User dropdown actions */}
+      {props.authenticated && (
+        <div id="account-dropdown">
+          <IconButton
+            aria-controls="user-dropdown"
+            onClick={(event) => toggleUserDropdown(event.currentTarget)}>
+            <Avatar className={props.classes.userAvatar} src={props.user.avatar || null}>
+              {props.user.avatar || props.user.name.split('')[0]}
+            </Avatar>
+          </IconButton>
+          <Menu
+            id="user-dropdown"
+            anchorEl={userDropdown}
+            keepMounted
+            open={Boolean(userDropdown)}
+            onClose={() => toggleUserDropdown(null)}>
+            {userDropdownLinks.map((link) => (
+              <MenuItem onClick={() => handleClick(link.url)} key={link.label}>
+                {link.label}
+              </MenuItem>
+            ))}
+          </Menu>
+        </div>
+      )}
     </Wrapper>
   );
 };
@@ -149,23 +187,16 @@ const Navigation = (props) => {
 const NavBar = (props) => {
   const classes = useStyles();
   const desktop = useMediaQuery(props.theme.breakpoints.up('md'));
-  const [drawer, toggleDrawer] = useState(true);
+  const [drawer, toggleDrawer] = useState(false);
 
-  const showDrawer = (event) => {
-    if (
-      event.type === 'keydown' &&
-      (event.key === 'Tab' || event.key === 'Shift')
-    )
-      return;
-    toggleDrawer(true);
-  };
+  // If navbar is in desktop mode and drawer is still set to open,
+  // toggle the drawer closed
+  if (desktop && drawer) toggleDrawer(false);
+
+  const showDrawer = (event) => toggleDrawer(true);
 
   return (
-    <AppBar
-      className={classes.navBar}
-      position="static"
-      color="inherit"
-      elevation={0}>
+    <AppBar className={classes.navBar} position="static" color="inherit" elevation={0}>
       <Toolbar>
         <Link to="/" className={classes.navBarHomeLink}>
           <SvgProductLaunchLogo style={{ marginRight: 22 }} />
@@ -178,6 +209,7 @@ const NavBar = (props) => {
           toggleDrawer={toggleDrawer}
           classes={classes}
           desktop={desktop}
+          authenticated={true} // TODO: Placeholder for authentication
         />
         {!desktop ? (
           <IconButton onClick={showDrawer}>
