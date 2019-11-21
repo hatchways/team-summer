@@ -3,6 +3,8 @@ import { MuiThemeProvider, makeStyles } from '@material-ui/core';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 
 import { theme } from './themes/theme';
+import LandingPage from "./pages/Landing";
+import ProfilePage from "./pages/Profile";
 
 import NavBar from './components/NavBar';
 import SignUp from './pages/SignUp';
@@ -44,6 +46,8 @@ const App = () => {
         <Route exact path="/" render={() => <Redirect to="/signup" />} />
         <Route path="/signup" component={SignUp} />
         <Route path="/login" component={Login} />
+        <Route exact path="/" component={LandingPage} />
+        <Route path="/profiles/:id" component={ProfilePage} />
       </BrowserRouter>
     </MuiThemeProvider>
   );
