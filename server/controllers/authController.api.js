@@ -11,7 +11,7 @@ exports.register = (req, res) => {
       if (err.code === 11000) {
         const key = Object.keys(err.keyValue)[0];
         error = {
-          err: `${key} already taken`,
+          err: `${key} already registered.`,
           property: key
         };
         // Throw HTTP error 200 OK as request was fine, but error was with key taken
