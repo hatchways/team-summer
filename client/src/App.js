@@ -1,22 +1,52 @@
-import React from "react";
-import { MuiThemeProvider } from "@material-ui/core";
-import { BrowserRouter, Route } from "react-router-dom";
+import React from 'react';
+import { MuiThemeProvider, makeStyles } from '@material-ui/core';
+import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 
-import { theme } from "./themes/theme";
-import LandingPage from "./pages/Landing";
-import LaunchPage from "./components/LaunchPage"
+import { theme } from './themes/theme';
 
-import "./App.css";
+import NavBar from './components/NavBar';
+import SignUp from './pages/SignUp';
+import Login from './pages/Login';
 
-function App() {
+const globalStyles = makeStyles({
+  '@global': {
+    '.MuiButton-root': {
+      // Custom styling for buttons according to specs
+      width: 220,
+      height: 64,
+      boxShadow: 'none'
+    },
+    // Styling links
+    a: {
+      textDecoration: 'none',
+      color: '#000000',
+
+      '&:hover': {
+        color: theme.palette.primary.main
+      }
+    }
+  }
+});
+
+const App = () => {
+  globalStyles();
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
-        {/* <Route path="/" component={LandingPage} /> */}
-        <Route exact path="/launch" component={LaunchPage} />
+        {/* Placeholder user object */}
+        <NavBar user={{ name: 'Joe' }} />
+
+        {/* Routes */}
+        {/*- Base route uses a Redirect Component to redirect to
+            /signup. Change render to component with the home page
+            component if changing landing page.
+        */}
+        <Route exact path="/" render={() => <Redirect to="/signup" />} />
+        <Route path="/signup" component={SignUp} />
+        <Route path="/login" component={Login} />
       </BrowserRouter>
     </MuiThemeProvider>
   );
-}
+};
 
 export default App;
