@@ -59,18 +59,16 @@ exports.userById = (req, res, next, id) => {
                 error: 'User not found'
             });
         }
-        req.profile = user;
+        const { _id, name, email } = user;
+        req.profile = { _id, name, email };
         next();
     });
 }
 
-exports.requireSignIn = expressJwt({
-    secret: process.env.JWT_SECRET,
-    userProperty: 'auth'
-})
-
 exports.isAuth = (req, res, next) => {
-    let user = req.profile && req.auth.payload._id && req.profile._id == req.auth.payload._id; //if the user matches the logged in user
+    console.log('req.user', req.user._id)
+    console.log('req.profile', req.profile._id)
+    let user = req.profile && req.user._id && req.profile._id == req.user._id;
     if (!user) {
         return res.status(403).json({
             // 403 means unauthorized access

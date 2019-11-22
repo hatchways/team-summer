@@ -1,4 +1,6 @@
-const Project = require('../models/Project');
+// const Project = require('../models/Project');
+// const User = require('../models/User');
+const { User, Project } = require('../models');
 const formidable = require('formidable');
 const upload = require('../services/file-upload');
 const singleUpload = upload.single('image');
@@ -26,20 +28,30 @@ exports.projectById = (req, res, next, id) => {
         })
 }
 
-exports.getUserProjects = (req, res, next) => {
-    console.log(req.profile._id)
-    Project.find({ user: req.profile._id })
+exports.getUserProjects = (req, res) => {
+    // console.log(req.profile._id)
+    // Project.find({ user: req.profile._id })
+    //     .exec((err, projects) => {
+    //         if (err) {
+    //             return res.status(400).json({
+    //                 error: 'Projects not found.'
+    //             });
+    //         }
+    //         res.json(projects)
+    //     })
+    User.findById(req.profile._id)
+        .populate('projects')
         .exec((err, projects) => {
-            if (err) {
+            if (err || !projects) {
                 return res.status(400).json({
                     error: 'Projects not found.'
                 });
             }
-            res.json(projects)
+            return res.json(projects);
         })
 }
 
-exports.addProject = (req, res, next) => {
+exports.addProject = (req, res) => {
     multiUpload(req, res, function (err) {
         if (err) return res.status(422).json({
             errors: [{
