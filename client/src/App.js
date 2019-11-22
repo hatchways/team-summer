@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MuiThemeProvider, makeStyles } from '@material-ui/core';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ import { theme } from './themes/theme';
 import NavBar from './components/NavBar';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
+import Toast from './components/Toast';
 
 const globalStyles = makeStyles({
   '@global': {
@@ -30,6 +31,19 @@ const globalStyles = makeStyles({
 
 const App = () => {
   globalStyles();
+
+  const [toastButton, setButtonText] = useState('');
+  const [toastMessage, setToastMessage] = useState('');
+  const [showToast, toggleToast] = useState(false);
+
+  const activateToast = (text, button = 'CLOSE') => {
+    setToastMessage(text);
+    setButtonText(button);
+    toggleToast(true);
+  };
+
+  const toastContext = React.createContext({ activateToast });
+
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
@@ -41,9 +55,17 @@ const App = () => {
             /signup. Change render to component with the home page
             component if changing landing page.
         */}
-        <Route exact path="/" render={() => <Redirect to="/signup" />} />
-        <Route path="/signup" component={SignUp} />
-        <Route path="/login" component={Login} />
+        <toastContext.Provider>
+          <Route exact path="/" render={() => <Redirect to="/signup" />} />
+          <Route path="/signup" component={SignUp} />
+          <Route path="/login" component={Login} />
+        </toastContext.Provider>
+        <Toast
+          buttonText={toastButton}
+          toastMessage={toastMessage}
+          toggleToast={toggleToast}
+          showToast={showToast}
+        />
       </BrowserRouter>
     </MuiThemeProvider>
   );
