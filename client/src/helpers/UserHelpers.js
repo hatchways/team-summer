@@ -16,5 +16,6 @@ export const registerUser = async (userData) => {
 
   if (response.data.hasOwnProperty('err')) return { ...response.data };
 
-  return response.data;
+  localStorage.setItem('jwtToken', response.data.token);
+  return { success: true };
 };
