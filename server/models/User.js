@@ -24,10 +24,10 @@ const UserSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    projects: {
+    projects: [{
         type: ObjectId,
-        ref: 'Projects'
-    }
+        ref: 'Project'
+    }]
 });
 
 UserSchema.pre('save', function (next) {
@@ -54,4 +54,4 @@ UserSchema.methods.comparePassword = function (pw) {
     return bcrypt.compareSync(pw, this.password);
 };
 
-module.exports = mongoose.model("users", UserSchema);
+module.exports = mongoose.model("User", UserSchema);

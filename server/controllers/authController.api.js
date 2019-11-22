@@ -1,7 +1,6 @@
 'use strict';
 const { User } = require('../models');
 const { encodeToken } = require('../utils');
-const expressJwt = require('express-jwt');
 
 exports.register = (req, res) => {
     User.create(req.body, (err, user) => {
@@ -66,8 +65,6 @@ exports.userById = (req, res, next, id) => {
 }
 
 exports.isAuth = (req, res, next) => {
-    console.log('req.user', req.user._id)
-    console.log('req.profile', req.profile._id)
     let user = req.profile && req.user._id && req.profile._id == req.user._id;
     if (!user) {
         return res.status(403).json({

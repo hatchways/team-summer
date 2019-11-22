@@ -1,5 +1,3 @@
-// const Project = require('../models/Project');
-// const User = require('../models/User');
 const { User, Project } = require('../models');
 const formidable = require('formidable');
 const upload = require('../services/file-upload');
@@ -41,13 +39,13 @@ exports.getUserProjects = (req, res) => {
     //     })
     User.findById(req.profile._id)
         .populate('projects')
-        .exec((err, projects) => {
-            if (err || !projects) {
+        .exec((err, user) => {
+            if (err || !user) {
                 return res.status(400).json({
                     error: 'Projects not found.'
                 });
             }
-            return res.json(projects);
+            return res.json(user.projects);
         })
 }
 
@@ -80,6 +78,18 @@ exports.addProject = (req, res) => {
                     error: 'Project could not be created.'
                 })
             }
+            User.updateOne(
+                { "_id": user._id },
+                { "$push": { "projects": project._id } },
+                (err, project) => {
+                    if (err) {
+                        return res.status(400).json({
+                            error: "User project\'s could not be updated."
+                        });
+                    }
+                    console.log(project);
+                }
+            )
             return res.json(project);
         })
     })
