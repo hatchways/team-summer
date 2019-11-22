@@ -6,7 +6,7 @@ import validator from 'validator';
 import { CustomOutlinedInput } from '../components/Inputs';
 import CenteredPageHeader from '../components/CenteredPageHeader';
 import FormValidator from '../helpers/form-validation';
-import { registerUser } from '../helpers/UserHelpers';
+import { authenticateUser } from '../helpers/UserHelpers';
 import { capitalize } from '@material-ui/core/utils';
 
 const styles = {
@@ -108,17 +108,17 @@ class SignUp extends React.Component {
     if (validation.isValid) {
       const { name, email, password } = this.state;
 
-      let userRegistraton = await registerUser({ name, email, password });
+      let userRegistration = await authenticateUser('register', { name, email, password });
 
-      if (userRegistraton.hasOwnProperty('err')) {
-        validation[userRegistraton.property] = {
+      if (userRegistration.hasOwnProperty('err')) {
+        validation[userRegistration.property] = {
           isInvalid: true,
-          message: capitalize(userRegistraton.err)
+          message: capitalize(userRegistration.err)
         };
         return this.setState({ validation });
       }
 
-      if (userRegistraton.hasOwnProperty('success')) this.props.history.push('/profile');
+      if (userRegistration.hasOwnProperty('success')) this.props.history.push('/profile');
     }
   };
 

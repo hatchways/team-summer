@@ -33,7 +33,7 @@ exports.login = (req, res) => {
       }
 
       // Invalid login
-      return res.status(401).json({ message: 'Invalid email/password' });
+      return res.status(401).json({ err: 'Invalid email/password', property: 'email' });
     }
   });
 };
