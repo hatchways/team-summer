@@ -107,7 +107,6 @@ class SignUp extends React.Component {
 
     if (validation.isValid) {
       const { name, email, password } = this.state;
-      // TODO: Integration form submission with backend
 
       let userRegistraton = await registerUser({ name, email, password });
 
@@ -116,10 +115,10 @@ class SignUp extends React.Component {
           isInvalid: true,
           message: capitalize(userRegistraton.err)
         };
-        this.setState({ validation });
-
-        console.log(userRegistraton);
+        return this.setState({ validation });
       }
+
+      console.log(userRegistraton);
     }
   };
 

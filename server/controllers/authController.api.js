@@ -16,17 +16,14 @@ exports.register = (req, res) => {
         };
         // Throw HTTP error 200 OK as request was fine, but error was with key taken
         // handle errors client side
-        code = 200;
+        code = 409;
       }
 
       res.status(code).json(error);
     } else {
       const { name, email } = user;
       const token = encodeToken({ name, email });
-      return res.status(201).json({
-        status: 201,
-        token
-      });
+      return res.status(201).json({ token });
     }
   });
 };
