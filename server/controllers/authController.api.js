@@ -1,6 +1,7 @@
 'use strict';
 const { User } = require('../models');
 const { encodeToken } = require('../utils');
+const {decodeToken} = require('../utils');
 
 exports.register = (req, res) => {
     User.create(req.body, (err, user) => {
@@ -28,11 +29,10 @@ exports.login = (req, res) => {
         name
     }, (err, user) => {
         if (err) {
-            return res.status(500).json({ message: 'an error occurred' });
+            return res.status(400).json({ message: 'User not found' });
         } else if (user && user.comparePassword(password)) {
             const { name, email, _id } = user;
             const token = encodeToken({ name, email, _id });
-            res.cookie('t', token, { expire: new Date() + 9999 });
             return res.json({
                 status: 200,
                 token,
@@ -52,23 +52,30 @@ exports.login = (req, res) => {
 }
 
 exports.userById = (req, res, next, id) => {
-    User.findById(id).exec((err, user) => {
-        if (err || !user) {
-            return res.status(400).json({
-                error: 'User not found'
-            });
-        }
-        const { _id, name, email } = user;
-        req.profile = { _id, name, email };
+        User.findById(id)
+        .populate('projects')
+        .exec((err, user) => {
+            if (err || !user) {
+                return res.status(400).json({
+                    error: 'Projects not found.'
+                });
+            }
+            const { _id, name, email, projects } = user;
+            req.profile = {  _id, name, email, projects }
+        })
         next();
-    });
 }
 
 exports.isAuth = (req, res, next) => {
+    const {authorization} = req.headers;
+    if (authorization) {
+        const token = authorization.split(' ')[1];
+        const decodedToken = decodeToken(token);
+        req.user = decodedToken.payload;
+    } 
     let user = req.profile && req.user._id && req.profile._id == req.user._id;
     if (!user) {
         return res.status(403).json({
-            // 403 means unauthorized access
             error: 'Access denied'
         });
     }
