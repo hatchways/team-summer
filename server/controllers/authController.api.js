@@ -1,25 +1,11 @@
 'use strict';
 const { User } = require('../models');
-const { encodeToken } = require('../utils');
+const { encodeToken, mongoDbErrorHandler } = require('../utils');
 
 exports.register = (req, res) => {
   User.create(req.body, (err, user) => {
     if (err) {
-      let error = err;
-      let code = 400;
-
-      if (err.code === 11000) {
-        const key = Object.keys(err.keyValue)[0];
-        error = {
-          err: `${key} already registered.`,
-          property: key
-        };
-        // Throw HTTP error 200 OK as request was fine, but error was with key taken
-        // handle errors client side
-        code = 409;
-      }
-
-      res.status(code).json(error);
+      mongoDbErrorHandler(err, res);
     } else {
       const { name, email } = user;
       const token = encodeToken({ name, email });
