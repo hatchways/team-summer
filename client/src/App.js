@@ -7,8 +7,7 @@ import { theme } from './themes/theme';
 import NavBar from './components/NavBar';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
-import Toast from './components/Toast';
-import { ToastContext } from './components/withToast';
+import Toast, { ToastContext } from './components/Toast';
 
 const globalStyles = makeStyles({
   '@global': {

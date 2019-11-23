@@ -8,7 +8,7 @@ import { CustomOutlinedInput } from '../components/Inputs';
 import CenteredPageHeader from '../components/CenteredPageHeader';
 import FormValidator from '../helpers/form-validation';
 import { authenticateUser } from '../helpers/UserHelpers';
-import withToast from '../components/withToast';
+import { withToast } from '../components/Toast';
 
 
 const styles = {
