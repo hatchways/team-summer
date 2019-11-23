@@ -49,7 +49,7 @@ const App = () => {
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
         {/* Placeholder user object */}
-        <NavBar user={{ name: 'Joe' }}/>
+        <NavBar user={{ name: 'Joe' }} />
 
         {/* Routes */}
         {/*- Base route uses a Redirect Component to redirect to
