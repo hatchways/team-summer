@@ -7,4 +7,6 @@ Ex: `mongodb://localhost:{PORT NUMBER}/{DATABASE NAME}` The default port is usua
 
 ### Installing
 Install server dependencies by running the command ```npm install``` in the root directory of this project.
+
+Note: bcrypt relies on python 2.7 need to  have it in path when installing bcrypt
 <!-- TO DO... Finish this -->
