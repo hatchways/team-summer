@@ -7,7 +7,6 @@ exports.decodeToken = (token) => jwt.verify(token, JWTSecret);
 
 exports.mongoDbErrorHandler = (err, res, defaultErrorCode = 400) => {
   // Preset error to handle unknown errors
-  console.log(err);
   let error = err;
   let code = defaultErrorCode;
 
