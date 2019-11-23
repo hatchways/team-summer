@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   success: {
-    color: '#000000',
+    color: '#3b3b3b',
     backgroundColor: theme.primary
   },
   neutral: {
@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#ffffff'
   },
   warning: {
-    color: '#000000',
+    color: '#3b3b3b',
     backgroundColor: '#fff67b'
   },
   error: {
@@ -62,7 +62,8 @@ Toast.propTypes = {
   toastMessage: PropTypes.string,
   buttonText: PropTypes.string,
   toggleToast: PropTypes.func.isRequired,
-  showToast: PropTypes.bool
+  showToast: PropTypes.bool,
+  variant: PropTypes.oneOf(['success', 'neutral', 'warning', 'error'])
 };
 
 export default Toast;
