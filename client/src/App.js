@@ -7,7 +7,6 @@ import { theme } from './themes/theme';
 import NavBar from './components/NavBar';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
-import LaunchProject from './pages/LaunchProject'
 
 const globalStyles = makeStyles({
   '@global': {
@@ -45,7 +44,6 @@ const App = () => {
         <Route exact path="/" render={() => <Redirect to="/signup" />} />
         <Route path="/signup" component={SignUp} />
         <Route path="/login" component={Login} />
-        <Route path="/launch" component={LaunchProject} />
       </BrowserRouter>
     </MuiThemeProvider>
   );
