@@ -1,11 +1,22 @@
-import React, { useState } from 'react';
-import { makeStyles, Button, Snackbar, IconButton } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+import React from 'react';
+import { makeStyles, Snackbar } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
-  close: {
-    padding: theme.spacing(0.5)
+  toastStyles: {
+    color: '#ffffff'
+  },
+  success: {
+    color: '#000000',
+    backgroundColor: theme.primary
+  },
+  neutral: {
+    color: '#000000',
+    backgroundColor: '#ffffff'
+  },
+  buttonStyle: {
+    cursor: 'pointer',
+    padding: theme.spacing(1)
   }
 }));
 
@@ -27,25 +38,18 @@ export const Toast = (props) => {
         horizontal: 'left'
       }}
       open={props.showToast || false}
-      autoHideDuration={6000}
+      autoHideDuration={6500}
       onClose={handleClose}
       ContentProps={{
-        'aria-describedby': 'message-id'
+        'aria-describedby': 'message-id',
+        className: `classes.toastStyles, ${classes[props.variant || 'neutral']}`
       }}
       message={<span id="message-id">{props.toastMessage || 'Placeholder text'}</span>}
-      action={[
-        <Button key="undo" color="secondary" size="small" onClick={handleClose}>
+      action={(
+        <div className={classes.buttonStyle} onClick={handleClose}>
           {props.buttonText || 'CLOSE'}
-        </Button>,
-        <IconButton
-          key="close"
-          aria-label="close"
-          color="inherit"
-          className={classes.close}
-          onClick={handleClose}>
-          <CloseIcon />
-        </IconButton>
-      ]}
+        </div>
+      )}
     />
   );
 };

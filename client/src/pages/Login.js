@@ -8,6 +8,7 @@ import { CustomOutlinedInput } from '../components/Inputs';
 import CenteredPageHeader from '../components/CenteredPageHeader';
 import FormValidator from '../helpers/form-validation';
 import { authenticateUser } from '../helpers/UserHelpers';
+import withToast from '../components/withToast';
 
 const styles = {
   pageContent: {
@@ -103,7 +104,10 @@ class Login extends React.Component {
         return this.setState({ validation });
       }
 
-      if (userLogin.hasOwnProperty('success')) this.props.history.push('/profile');
+      if (userLogin.hasOwnProperty('success')) {
+        this.props.activateToast('Success!')
+        this.props.history.push('/profile');
+      }
     }
   };
 
@@ -123,6 +127,7 @@ class Login extends React.Component {
           }
         />
 
+        <Button onClick={() => this.props.activateToast('class test', 'success')}>Test Toast</Button>
         {/* Login Form */}
         <form className={classes.form} onSubmit={this.handleSubmit} noValidate>
           <CustomOutlinedInput
@@ -155,4 +160,4 @@ class Login extends React.Component {
   }
 }
 
-export default withStyles(styles)(Login);
+export default withToast(withStyles(styles)(Login));

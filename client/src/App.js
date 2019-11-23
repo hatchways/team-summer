@@ -8,6 +8,7 @@ import NavBar from './components/NavBar';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Toast from './components/Toast';
+import { ToastContext } from './components/withToast';
 
 const globalStyles = makeStyles({
   '@global': {
@@ -34,37 +35,38 @@ const App = () => {
 
   const [toastButton, setButtonText] = useState('');
   const [toastMessage, setToastMessage] = useState('');
+  const [toastVariant, setToastVariant] = useState('');
   const [showToast, toggleToast] = useState(false);
 
-  const activateToast = (text, button = 'CLOSE') => {
+  const activateToast = (text, variant, button = 'CLOSE') => {
     setToastMessage(text);
     setButtonText(button);
+    setToastVariant(variant);
     toggleToast(true);
   };
-
-  const toastContext = React.createContext({ activateToast });
 
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
         {/* Placeholder user object */}
-        <NavBar user={{ name: 'Joe' }} />
+        <NavBar user={{ name: 'Joe' }}/>
 
         {/* Routes */}
         {/*- Base route uses a Redirect Component to redirect to
             /signup. Change render to component with the home page
             component if changing landing page.
         */}
-        <toastContext.Provider>
-          <Route exact path="/" render={() => <Redirect to="/signup" />} />
-          <Route path="/signup" component={SignUp} />
-          <Route path="/login" component={Login} />
-        </toastContext.Provider>
+        <ToastContext.Provider value={activateToast}>
+          <Route exact path="/" render={() => <Redirect to="/signup"/>}/>
+          <Route path="/signup" render={(routeProps) => <SignUp activateToast={activateToast} {...routeProps}/>}/>
+          <Route path="/login" component={Login}/>
+        </ToastContext.Provider>
         <Toast
           buttonText={toastButton}
           toastMessage={toastMessage}
           toggleToast={toggleToast}
           showToast={showToast}
+          variant={toastVariant}
         />
       </BrowserRouter>
     </MuiThemeProvider>
