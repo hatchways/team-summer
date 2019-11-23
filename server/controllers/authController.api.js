@@ -10,7 +10,6 @@ exports.register = (req, res) => {
             const { name, email, _id } = user;
             const token = encodeToken({ name, email, _id });
             return res.status(201).json({
-                status: 201,
                 token,
                 user: {
                     _id,
@@ -32,8 +31,7 @@ exports.login = (req, res) => {
             } else if (user && user.comparePassword(password)) {
                 const { name, email, _id, projects, } = user;
                 const token = encodeToken({ name, email, _id });
-                return res.json({
-                    status: 200,
+                return res.status(200).json({
                     token,
                     user: {
                         _id,
