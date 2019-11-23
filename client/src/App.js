@@ -33,15 +33,15 @@ const globalStyles = makeStyles({
 const App = () => {
   globalStyles();
 
-  const [toastButton, setButtonText] = useState('');
-  const [toastMessage, setToastMessage] = useState('');
-  const [toastVariant, setToastVariant] = useState('');
+  const [toastProperties, setToastProperties] = useState({
+    text: '',
+    button: 'CLOSE',
+    variant: 'neutral'
+  });
   const [showToast, toggleToast] = useState(false);
 
-  const activateToast = (text, variant, button = 'CLOSE') => {
-    setToastMessage(text);
-    setButtonText(button);
-    setToastVariant(variant);
+  const activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
+    setToastProperties({text, variant, button});
     toggleToast(true);
   };
 
@@ -62,11 +62,11 @@ const App = () => {
           <Route path="/login" component={Login}/>
         </ToastContext.Provider>
         <Toast
-          buttonText={toastButton}
-          toastMessage={toastMessage}
+          buttonText={toastProperties.button}
+          toastMessage={toastProperties.text}
+          variant={toastProperties.variant}
           toggleToast={toggleToast}
           showToast={showToast}
-          variant={toastVariant}
         />
       </BrowserRouter>
     </MuiThemeProvider>

@@ -3,9 +3,6 @@ import { makeStyles, Snackbar } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
-  toastStyles: {
-    color: '#ffffff'
-  },
   success: {
     color: '#000000',
     backgroundColor: theme.primary
@@ -13,6 +10,13 @@ const useStyles = makeStyles((theme) => ({
   neutral: {
     color: '#000000',
     backgroundColor: '#ffffff'
+  },
+  warning: {
+    color: '#000000',
+    backgroundColor: '#fff67b'
+  },
+  error: {
+    backgroundColor: '#ff4b46'
   },
   buttonStyle: {
     cursor: 'pointer',
@@ -38,7 +42,7 @@ export const Toast = (props) => {
         horizontal: 'left'
       }}
       open={props.showToast || false}
-      autoHideDuration={6500}
+      autoHideDuration={2000}
       onClose={handleClose}
       ContentProps={{
         'aria-describedby': 'message-id',

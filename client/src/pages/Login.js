@@ -105,7 +105,7 @@ class Login extends React.Component {
       }
 
       if (userLogin.hasOwnProperty('success')) {
-        this.props.activateToast('Success!')
+        this.props.activateToast('Login Successful', 'success');
         this.props.history.push('/profile');
       }
     }
@@ -127,7 +127,6 @@ class Login extends React.Component {
           }
         />
 
-        <Button onClick={() => this.props.activateToast('class test', 'success')}>Test Toast</Button>
         {/* Login Form */}
         <form className={classes.form} onSubmit={this.handleSubmit} noValidate>
           <CustomOutlinedInput
