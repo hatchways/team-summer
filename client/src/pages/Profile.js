@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import ProjectCard from '../components/projectCard';
-import { withStyles, Button, Grid } from '@material-ui/core';
+import ProfileDetailPanel from '../components/ProfileDetailPanel';
+import { withStyles, Button, Grid, Typography } from '@material-ui/core';
 import { getUser } from '../api/users';
 
 class ProfilePage extends Component {
@@ -14,7 +15,7 @@ class ProfilePage extends Component {
       projects: [],
       imageUrl: ''
     },
-    currentUserId: localStorage.getItem('id')
+    currentUserId: localStorage.getItem('id') || ""
   };
 
   componentDidMount() {
@@ -28,17 +29,14 @@ class ProfilePage extends Component {
     const { imageUrl, name, location, about, expertise } = this.state.profile;
 
     return (
-      <div className="profile-details">
-        <div>
-            <div><h3>{name}</h3></div>
-            <div><p>location</p></div>
-        </div>
-        {this.renderButton()}
-        <div>
-            <div><p>about me</p></div>
-            <div><p>expertise</p></div>
-        </div>
-      </div>
+      <Fragment>
+        <ProfileDetailPanel
+          imageUrl={imageUrl}
+          name={name}
+          location={location}
+          about={about}
+          expertise={expertise} />
+      </Fragment>
     );
   }
 
@@ -60,13 +58,34 @@ class ProfilePage extends Component {
   }
 
   renderProjects = () => {
-    const { projects } = this.state.profile
+    // const { projects } = this.state.profile
+    const projects = [
+      {
+        name: 'testname2',
+        funding: 500,
+        goal: 1000
+      },
+      {
+        name: 'testname',
+        funding: 500,
+        goal: 1000
+      },
+      {
+        name: 'testname3',
+        funding: 5030,
+        goal: 10030
+      },
+      {
+        name: 'testname4',
+        funding: 5040,
+        goal: 10400
+      }
+    ];
 
     return (
-      <div style={{ marginTop: 50, padding: 50 }}>
-        <Grid container spacing={5} justify="center">
+        <Grid container spacing={1} justify="center">
           {projects.map(({ id, name, funding, goal, imageUrl }, ix) => (
-            <Grid item key={name}>
+            <Grid item xs key={name}>
               <ProjectCard
                 key={ix}
                 id={id}
@@ -78,14 +97,12 @@ class ProfilePage extends Component {
             </Grid>
           ))}
         </Grid>
-      </div>
     );
   };
 
   render() {
     return (
       <div className="profilePage">
-        <h1>profile pg</h1>
         {this.renderUserInfo()}
         {this.renderProjects()}
       </div>
