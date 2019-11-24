@@ -128,8 +128,15 @@ const Navigation = (props) => {
     };
   }
 
-  const handleClick = (route) => {
-    props.history.push(route);
+  const handleDropdownClick = (route) => () => {
+    if (route === '/logout') {
+      props.setAuthenticated(false);
+      localStorage.removeItem('jwtToken');
+      props.history.push('/login');
+    } else {
+      props.history.push(route);
+    }
+
     toggleUserDropdown(null);
   };
 
@@ -173,7 +180,7 @@ const Navigation = (props) => {
             open={Boolean(userDropdown)}
             onClose={() => toggleUserDropdown(null)}>
             {userDropdownLinks.map((link) => (
-              <MenuItem onClick={() => handleClick(link.url)} key={link.label}>
+              <MenuItem onClick={handleDropdownClick(link.url)} key={link.label}>
                 {link.label}
               </MenuItem>
             ))}
@@ -209,7 +216,6 @@ const NavBar = (props) => {
           toggleDrawer={toggleDrawer}
           classes={classes}
           desktop={desktop}
-          authenticated={props.authenticated} // TODO: Placeholder for authentication
         />
         {!desktop ? (
           <IconButton onClick={showDrawer}>
