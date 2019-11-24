@@ -10,7 +10,6 @@ import FormValidator from '../helpers/form-validation';
 import { authenticateUser } from '../helpers/UserHelpers';
 import { withToast } from '../components/Toast';
 
-
 const styles = {
   pageContent: {
     display: 'flex',

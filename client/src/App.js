@@ -40,7 +40,7 @@ const App = () => {
   const [showToast, toggleToast] = useState(false);
 
   const activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
-    setToastProperties({text, variant, button});
+    setToastProperties({ text, variant, button });
     toggleToast(true);
   };
 
@@ -56,9 +56,9 @@ const App = () => {
             component if changing landing page.
         */}
         <ToastContext.Provider value={activateToast}>
-          <Route exact path="/" render={() => <Redirect to="/signup"/>}/>
-          <Route path="/signup" render={(routeProps) => <SignUp activateToast={activateToast} {...routeProps}/>}/>
-          <Route path="/login" component={Login}/>
+          <Route exact path="/" render={() => <Redirect to="/signup" />} />
+          <Route path="/signup" component={SignUp} />
+          <Route path="/login" component={Login} />
         </ToastContext.Provider>
         <Toast
           buttonText={toastProperties.button}

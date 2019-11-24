@@ -51,11 +51,11 @@ export const Toast = (props) => {
         className: `classes.toastStyles, ${classes[props.variant || 'neutral']}`
       }}
       message={<span id="message-id">{props.toastMessage || 'Placeholder text'}</span>}
-      action={(
+      action={
         <div className={classes.buttonStyle} onClick={handleClose}>
           {props.buttonText || 'CLOSE'}
         </div>
-      )}
+      }
     />
   );
 };
@@ -68,18 +68,15 @@ Toast.propTypes = {
   variant: PropTypes.oneOf(['success', 'neutral', 'warning', 'error'])
 };
 
-export const withToast = (Component) => (
+export const withToast = (Component) =>
   class WrappedComponent extends React.Component {
     render() {
       return (
         <ToastContext.Consumer>
-          {(activateToast) => (
-            <Component {...this.props} activateToast={activateToast}/>
-          )}
+          {(activateToast) => <Component {...this.props} activateToast={activateToast} />}
         </ToastContext.Consumer>
       );
     }
-  }
-);
+  };
 
 export default Toast;
