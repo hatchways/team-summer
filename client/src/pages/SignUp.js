@@ -118,7 +118,10 @@ class SignUp extends React.Component {
         return this.setState({ validation });
       }
 
-      if (userRegistration.hasOwnProperty('success')) this.props.history.push('/profile');
+      if (userRegistration.hasOwnProperty('success')) {
+        this.props.history.push('/profile');
+        this.props.setAuthenticated(true);
+      }
     }
   };
 

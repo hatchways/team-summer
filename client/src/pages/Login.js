@@ -103,7 +103,10 @@ class Login extends React.Component {
         return this.setState({ validation });
       }
 
-      if (userLogin.hasOwnProperty('success')) this.props.history.push('/profile');
+      if (userLogin.hasOwnProperty('success')) {
+        this.props.history.push('/profile');
+        this.props.setAuthenticated(true);
+      }
     }
   };
 

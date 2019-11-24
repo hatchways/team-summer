@@ -209,7 +209,7 @@ const NavBar = (props) => {
           toggleDrawer={toggleDrawer}
           classes={classes}
           desktop={desktop}
-          authenticated={true} // TODO: Placeholder for authentication
+          authenticated={props.authenticated} // TODO: Placeholder for authentication
         />
         {!desktop ? (
           <IconButton onClick={showDrawer}>

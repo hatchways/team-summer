@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { MuiThemeProvider, makeStyles } from '@material-ui/core';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 
@@ -30,11 +30,21 @@ const globalStyles = makeStyles({
 
 const App = () => {
   globalStyles();
+  const [userAuthenticated, setAuthenticated] = useState(false);
+
+  useEffect(() => {
+    setAuthenticated(Boolean(localStorage.getItem('jwtToken')));
+  }, []);
+
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
         {/* Placeholder user object */}
-        <NavBar user={{ name: 'Joe' }} />
+        <NavBar
+          user={{ name: 'Joe' }}
+          authenticated={userAuthenticated}
+          setAuthenticated={setAuthenticated}
+        />
 
         {/* Routes */}
         {/*- Base route uses a Redirect Component to redirect to
@@ -42,8 +52,14 @@ const App = () => {
             component if changing landing page.
         */}
         <Route exact path="/" render={() => <Redirect to="/signup" />} />
-        <Route path="/signup" component={SignUp} />
-        <Route path="/login" component={Login} />
+        <Route
+          path="/signup"
+          render={(routerProps) => <SignUp setAuthenticated={setAuthenticated} {...routerProps} />}
+        />
+        <Route
+          path="/login"
+          render={(routerProps) => <Login setAuthenticated={setAuthenticated} {...routerProps} />}
+        />
       </BrowserRouter>
     </MuiThemeProvider>
   );
