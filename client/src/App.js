@@ -51,7 +51,11 @@ const App = () => {
             /signup. Change render to component with the home page
             component if changing landing page.
         */}
-        <Route exact path="/" render={() => <Redirect to="/signup" />} />
+        <Route
+          exact
+          path="/"
+          render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'} />}
+        />
         <Route
           path="/signup"
           render={(routerProps) => <SignUp setAuthenticated={setAuthenticated} {...routerProps} />}
