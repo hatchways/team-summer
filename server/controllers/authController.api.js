@@ -27,7 +27,7 @@ exports.login = (req, res) => {
         .populate('projects')
         .exec((err, user) => {
             if (err) {
-                mongoDbErrorHandler(err, res, 500);
+                mongoDbErrorHandler(err, res, 400);
             } else if (user && user.comparePassword(password)) {
                 const { name, email, _id, projects, } = user;
                 const token = encodeToken({ name, email, _id });
@@ -44,22 +44,24 @@ exports.login = (req, res) => {
                 if (!['email', 'password'].every((value) => req.body.hasOwnProperty(value))) {
                     return res.status(401).json({ err: 'Email and password need to be in response body' });
                 }
-                return res.status(401).json({ err: 'Invalid email/password', property: 'email' });
+                return res.status(400).json({ err: 'Invalid email/password', property: 'email' });
             }
         });
 }
 
 exports.userById = (req, res, next, id) => {
-    User.findById(id).exec((err, user) => {
-        if (err || !user) {
-            return res.status(400).json({
-                error: 'User not found'
-            });
-        }
-        const { _id, name, email } = user;
-        req.profile = { _id, name, email };
-        next();
-    });
+    User.findById(id)
+        .populate('projects')
+        .exec((err, user) => {
+            if (err || !user) {
+                return res.status(400).json({
+                    error: 'User not found'
+                });
+            }
+            const { _id, name, email, projects } = user;
+            req.profile = { _id, name, email, projects };
+            next();
+        });
 }
 
 exports.isAuth = (req, res, next) => {
