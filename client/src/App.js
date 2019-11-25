@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { MuiThemeProvider, makeStyles } from '@material-ui/core';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ import { theme } from './themes/theme';
 import NavBar from './components/NavBar';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
+import ProfilePage from './pages/Profile';
 
 const globalStyles = makeStyles({
   '@global': {
