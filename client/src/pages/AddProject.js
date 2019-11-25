@@ -28,7 +28,7 @@ const styles = {
 }
 
 const industries = [
-    { id: 0, name: '' },
+    // { id: 0, name: '' },
     { id: 1321, name: 'Technology' },
     { id: 21423, name: 'Marketting' },
     { id: 42342, name: 'Engineering' },
@@ -37,10 +37,10 @@ const industries = [
 ]
 
 const locations = [
-    { name: 'New York' },
-    { name: 'California' },
-    { name: 'Georgia' },
-    { name: 'Florida' }
+    { id: 123, name: 'New York' },
+    { id: 431, name: 'California' },
+    { id: 903, name: 'Georgia' },
+    { id: 223, name: 'Florida' }
 ]
 
 class AddProject extends Component {
@@ -151,7 +151,8 @@ class AddProject extends Component {
                                 })
                             }
                         </OutlinedSelect>
-                        {/* <OutlinedSelect
+                        <h3>Project Location</h3>
+                        <OutlinedSelect
                             name="location"
                             selectId="location"
                             setState={this.handleInput}
@@ -159,7 +160,7 @@ class AddProject extends Component {
                             value={location}
                         >
                             {
-                                industries.map(location => {
+                                locations.map(location => {
                                     return (
                                         <option
                                             key={location.id}
@@ -170,7 +171,7 @@ class AddProject extends Component {
                                     )
                                 })
                             }
-                        </OutlinedSelect> */}
+                        </OutlinedSelect>
                         <CustomOutlinedInput
                             name="fundingGoal"
                             value={fundingGoal}
