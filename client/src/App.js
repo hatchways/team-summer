@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MuiThemeProvider, makeStyles } from '@material-ui/core';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ import { theme } from './themes/theme';
 import NavBar from './components/NavBar';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
+import ProfilePage from './pages/Profile';
 import Toast, { ToastContext } from './components/Toast';
 
 const globalStyles = makeStyles({
@@ -59,6 +60,7 @@ const App = () => {
           <Route exact path="/" render={() => <Redirect to="/signup" />} />
           <Route path="/signup" component={SignUp} />
           <Route path="/login" component={Login} />
+          <Route path="/profiles/:id" component={ProfilePage} />
         </ToastContext.Provider>
         <Toast
           buttonText={toastProperties.button}
