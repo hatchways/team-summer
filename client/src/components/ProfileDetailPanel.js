@@ -21,9 +21,6 @@ const useStyles = makeStyles((theme) => ({
       margin: '30px auto',
     }
   },
-  body: {
-    margin: '10px 0'
-  }
 }));
 
 const ProfileDetailPanel = ({ imageUrl, name, location, about, expertise, buttonType }) => {
@@ -34,12 +31,12 @@ const ProfileDetailPanel = ({ imageUrl, name, location, about, expertise, button
       <Paper className={classes.paper}>
         <Avatar className={classes.avatar} src={imageUrl || null} />
         <Typography variant="h3">{name}</Typography>
-        <Typography variant="body1" classes={{body1: classes.body}}> Location</Typography>
+        <Typography variant="body1"> Location</Typography>
         <Button type="submit" variant="outlined" color="primary">
           {buttonType}
         </Button>
-        <Typography variant="body1" classes={{body1: classes.body}}>About me</Typography>
-        <Typography variant="body1" classes={{body1: classes.body}}>Expertise</Typography>
+        <Typography variant="body1">About me</Typography>
+        <Typography variant="body1">Expertise</Typography>
       </Paper>
     );
 };

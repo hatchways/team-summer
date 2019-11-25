@@ -22,7 +22,7 @@ export const theme = createMuiTheme({
       fontWeight: '500',
       textAlign: 'center'
     },
-    p: {
+    body1: {
       margin: '10px 0'
     }
   },
