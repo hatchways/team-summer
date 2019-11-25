@@ -10,6 +10,7 @@
   "dependencies": {
     "aws-sdk": "^2.576.0",
     "bcrypt": "^3.0.7",
+    "bucket": "0.0.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^8.0.0",
