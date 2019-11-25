@@ -5,11 +5,10 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
-
 const styles = (muiBaseTheme) => ({
   card: {
     maxWidth: '700px',
-    margin: '30px',
+    margin: '10px',
     transition: '0.3s',
     boxShadow: '0 8px 40px -12px rgba(0,0,0,0.3)',
     '&:hover': {
@@ -22,9 +21,6 @@ const styles = (muiBaseTheme) => ({
   content: {
     textAlign: 'left',
     padding: muiBaseTheme.spacing.unit * 3
-  },
-  divider: {
-    margin: `${muiBaseTheme.spacing.unit * 3}px 0`
   },
   heading: {
     fontWeight: 'bold'
@@ -52,7 +48,7 @@ const ProjectCard = ({name, funding, goal, imageUrl, classes}) => {
             variant={"h6"}
             gutterBottom
           >
-            {'title'}
+            {name}
           </Typography>
           <Typography
             className={"MuiTypography--subheading"}
