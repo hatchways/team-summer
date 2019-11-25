@@ -121,6 +121,7 @@ class SignUp extends React.Component {
 
       if (userRegistration.hasOwnProperty('success')) {
         this.props.activateToast('Successful registration', 'success');
+        this.props.setAuthenticated(true);
         this.props.history.push('/profile');
       }
     }

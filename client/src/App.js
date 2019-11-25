@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MuiThemeProvider, makeStyles } from '@material-ui/core';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 
@@ -39,17 +39,22 @@ const App = () => {
     variant: 'neutral'
   });
   const [showToast, toggleToast] = useState(false);
+  const [userAuthenticated, setAuthenticated] = useState(false);
 
   const activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
     setToastProperties({ text, variant, button });
     toggleToast(true);
   };
 
+  useEffect(() => {
+    setAuthenticated(Boolean(localStorage.getItem('jwtToken')));
+  }, []);
+
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
         {/* Placeholder user object */}
-        <NavBar user={{ name: 'Joe' }} />
+        <NavBar user={{ name: 'Joe' }} authenticated={userAuthenticated} setAuthenticated={setAuthenticated}/>
 
         {/* Routes */}
         {/*- Base route uses a Redirect Component to redirect to
@@ -57,10 +62,20 @@ const App = () => {
             component if changing landing page.
         */}
         <ToastContext.Provider value={activateToast}>
-          <Route exact path="/" render={() => <Redirect to="/signup" />} />
-          <Route path="/signup" component={SignUp} />
-          <Route path="/login" component={Login} />
-          <Route path="/profiles/:id" component={ProfilePage} />
+          <Route
+            exact
+            path="/"
+            render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'}/>}
+          />
+          <Route
+            path="/signup"
+            render={(routerProps) => <SignUp setAuthenticated={setAuthenticated} {...routerProps} />}
+          />
+          <Route
+            path="/login"
+            render={(routerProps) => <Login setAuthenticated={setAuthenticated} {...routerProps} />}
+          />
+          <Route path="/profiles/:id" component={ProfilePage}/>
         </ToastContext.Provider>
         <Toast
           buttonText={toastProperties.button}
