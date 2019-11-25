@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { MuiThemeProvider, makeStyles } from '@material-ui/core';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ import NavBar from './components/NavBar';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import ProfilePage from './pages/Profile';
+import Toast, { ToastContext } from './components/Toast';
 
 const globalStyles = makeStyles({
   '@global': {
@@ -31,7 +32,19 @@ const globalStyles = makeStyles({
 
 const App = () => {
   globalStyles();
+
+  const [toastProperties, setToastProperties] = useState({
+    text: '',
+    button: 'CLOSE',
+    variant: 'neutral'
+  });
+  const [showToast, toggleToast] = useState(false);
   const [userAuthenticated, setAuthenticated] = useState(false);
+
+  const activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
+    setToastProperties({ text, variant, button });
+    toggleToast(true);
+  };
 
   useEffect(() => {
     setAuthenticated(Boolean(localStorage.getItem('jwtToken')));
@@ -48,7 +61,8 @@ const App = () => {
             /signup. Change render to component with the home page
             component if changing landing page.
         */}
-        <Route
+        <ToastContext.Provider value={activateToast}>
+          <Route
           exact
           path="/"
           render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'} />}
@@ -61,7 +75,15 @@ const App = () => {
           path="/login"
           render={(routerProps) => <Login setAuthenticated={setAuthenticated} {...routerProps} />}
         />
-        <Route path="/profiles/:id" component={ProfilePage} />
+          <Route path="/profiles/:id" component={ProfilePage} />
+        </ToastContext.Provider>
+        <Toast
+          buttonText={toastProperties.button}
+          toastMessage={toastProperties.text}
+          variant={toastProperties.variant}
+          toggleToast={toggleToast}
+          showToast={showToast}
+        />
       </BrowserRouter>
     </MuiThemeProvider>
   );
