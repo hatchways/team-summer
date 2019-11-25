@@ -1,10 +1,10 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component, Fragment } from 'react';
 import ProjectCard from '../components/projectCard';
 import ProfileDetailPanel from '../components/ProfileDetailPanel';
 import { withStyles, Button, Grid, Typography } from '@material-ui/core';
 import { getUser } from '../api/users';
 
-import './profile.css'
+import './profile.css';
 
 class ProfilePage extends Component {
   state = {
@@ -14,10 +14,31 @@ class ProfilePage extends Component {
       location: 'orlando',
       about: '',
       expertise: '',
-      projects: [],
+      projects: [
+        {
+          name: 'testname2',
+          funding: 500,
+          goal: 1000
+        },
+        {
+          name: 'testname',
+          funding: 500,
+          goal: 1000
+        },
+        {
+          name: 'testname3',
+          funding: 5030,
+          goal: 10030
+        },
+        {
+          name: 'testname4',
+          funding: 5040,
+          goal: 10400
+        }
+      ],
       imageUrl: ''
     },
-    currentUserId: localStorage.getItem('id') || ""
+    currentUserId: localStorage.getItem('id') || ''
   };
 
   componentDidMount() {
@@ -37,7 +58,7 @@ class ProfilePage extends Component {
           name={name}
           location={location}
           about={about}
-          expertise={expertise} 
+          expertise={expertise}
           buttonType={this.getButtonType()}/>
       </Fragment>
     );
@@ -55,10 +76,10 @@ class ProfilePage extends Component {
   }
 
   renderProjects = () => {
-    const { projects } = this.state.profile
+    const { projects } = this.state.profile;
 
     return (
-        <Grid container spacing={1} justify="center">
+        <Grid container classes={{root: 'project-section'}} spacing={3} justify="center">
           {projects.map(({ id, name, funding, goal, imageUrl }, ix) => (
             <Grid item xs={12} md={6} key={name}>
               <ProjectCard

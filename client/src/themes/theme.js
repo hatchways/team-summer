@@ -13,10 +13,17 @@ export const theme = createMuiTheme({
       fontWeight: 'semi-bold',
       textAlign: 'center'
     },
+    h3: {
+      fontSize: '2em',
+      fontWeight: 'semi-bold'
+    },
     h6: {
       fontSize: '1em',
       fontWeight: '500',
       textAlign: 'center'
+    },
+    p: {
+      margin: '10px 0'
     }
   },
   breakpoints: {
