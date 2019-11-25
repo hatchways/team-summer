@@ -8,6 +8,7 @@ import NavBar from './components/NavBar';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import ProfilePage from './pages/Profile';
+import AddProject from './pages/AddProject';
 import Toast, { ToastContext } from './components/Toast';
 
 const globalStyles = makeStyles({
@@ -54,7 +55,7 @@ const App = () => {
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
         {/* Placeholder user object */}
-        <NavBar user={{ name: 'Joe' }} authenticated={userAuthenticated} setAuthenticated={setAuthenticated}/>
+        <NavBar user={{ name: 'Joe' }} authenticated={userAuthenticated} setAuthenticated={setAuthenticated} />
 
         {/* Routes */}
         {/*- Base route uses a Redirect Component to redirect to
@@ -65,7 +66,7 @@ const App = () => {
           <Route
             exact
             path="/"
-            render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'}/>}
+            render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'} />}
           />
           <Route
             path="/signup"
@@ -75,7 +76,8 @@ const App = () => {
             path="/login"
             render={(routerProps) => <Login setAuthenticated={setAuthenticated} {...routerProps} />}
           />
-          <Route path="/profiles/:id" component={ProfilePage}/>
+          <Route path="/profiles/:id" component={ProfilePage} />
+          <Route path="/projects/add" component={AddProject} />
         </ToastContext.Provider>
         <Toast
           buttonText={toastProperties.button}

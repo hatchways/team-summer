@@ -29,7 +29,6 @@ const ProjectSchema = new Schema({
     }],
     fundingGoal: {
         type: Number,
-        required: true,
         trim: true
     },
     date: {

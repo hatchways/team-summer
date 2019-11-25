@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component, Fragment } from 'react';
 import ProjectCard from '../components/projectCard';
 import ProfileDetailPanel from '../components/ProfileDetailPanel';
 import { withStyles, Button, Grid, Typography } from '@material-ui/core';
@@ -35,8 +35,8 @@ class ProfilePage extends Component {
           name={name}
           location={location}
           about={about}
-          expertise={expertise} 
-          buttonType={this.getButtonType()}/>
+          expertise={expertise}
+          buttonType={this.getButtonType()} />
       </Fragment>
     );
   }
@@ -56,26 +56,26 @@ class ProfilePage extends Component {
     const { projects } = this.state.profile
 
     return (
-        <Grid container spacing={2} justify="center">
-          {projects.map(({ id, name, funding, goal, imageUrl }, ix) => (
-            <Grid item xs key={name}>
-              <ProjectCard
-                key={ix}
-                id={id}
-                name={name}
-                funding={funding}
-                goal={goal}
-                imageUrl={imageUrl}
-              />
-            </Grid>
-          ))}
-        </Grid>
+      <Grid container spacing={2} justify="center">
+        {projects.map(({ id, name, funding, goal, imageUrl }, ix) => (
+          <Grid item xs key={name}>
+            <ProjectCard
+              key={ix}
+              id={id}
+              name={name}
+              funding={funding}
+              goal={goal}
+              imageUrl={imageUrl}
+            />
+          </Grid>
+        ))}
+      </Grid>
     );
   };
 
   render() {
     return (
-      <div className="profilePage" style={{display: 'flex'}}>
+      <div className="profilePage" style={{ display: 'flex' }}>
         {this.renderUserInfo()}
         {this.renderProjects()}
       </div>
