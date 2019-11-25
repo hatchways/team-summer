@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withStyles, Button } from '@material-ui/core';
+import { withStyles, Button, MenuItem } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import validator from 'validator';
 
@@ -11,6 +11,7 @@ import { withToast } from '../components/Toast';
 const styles = {
     pageContent: {
         display: 'flex',
+        justifyContent: 'center'
     },
     projectPreview: {
         margin: "10px"
@@ -25,6 +26,22 @@ const styles = {
         width: '100%'
     },
 }
+
+const industries = [
+    { id: 0, name: '' },
+    { id: 1321, name: 'Technology' },
+    { id: 21423, name: 'Marketting' },
+    { id: 42342, name: 'Engineering' },
+    { id: 21342, name: 'Art' },
+    { id: 93082, name: 'Film' }
+]
+
+const locations = [
+    { name: 'New York' },
+    { name: 'California' },
+    { name: 'Georgia' },
+    { name: 'Florida' }
+]
 
 class AddProject extends Component {
     constructor(props) {
@@ -67,6 +84,7 @@ class AddProject extends Component {
 
     handleInput = (event) => {
         const { value, name } = event.target;
+        console.log(value, name)
         this.setState({ [name]: value })
     }
 
@@ -112,6 +130,47 @@ class AddProject extends Component {
                             onChange={this.handleInput}
                             type="subtitle"
                         />
+                        <h3>Industry</h3>
+                        <OutlinedSelect
+                            name="industry"
+                            selectId="industry"
+                            setState={this.handleInput}
+                            selectName="industry"
+                            value={industry}
+                        >
+                            {
+                                industries.map(industry => {
+                                    return (
+                                        <option
+                                            key={industry.id}
+                                            value={industry.name}
+                                        >
+                                            {industry.name}
+                                        </option>
+                                    )
+                                })
+                            }
+                        </OutlinedSelect>
+                        {/* <OutlinedSelect
+                            name="location"
+                            selectId="location"
+                            setState={this.handleInput}
+                            selectName="location"
+                            value={location}
+                        >
+                            {
+                                industries.map(location => {
+                                    return (
+                                        <option
+                                            key={location.id}
+                                            value={location.name}
+                                        >
+                                            {location.name}
+                                        </option>
+                                    )
+                                })
+                            }
+                        </OutlinedSelect> */}
                         <CustomOutlinedInput
                             name="fundingGoal"
                             value={fundingGoal}
