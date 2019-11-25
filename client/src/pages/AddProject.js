@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withStyles, Button, MenuItem } from '@material-ui/core';
+import { withStyles, Button, TextField } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import validator from 'validator';
 
@@ -7,7 +7,7 @@ import { CustomOutlinedInput, OutlinedSelect, handleSelect } from '../components
 import UploadImages from '../components/UploadImages';
 import FormValidator from '../helpers/form-validation';
 import { withToast } from '../components/Toast';
-// import { addProject } from '../api/projects';
+import { addProject } from '../api/projects';
 
 const styles = {
     pageContent: {
@@ -86,7 +86,6 @@ class AddProject extends Component {
 
     handleInput = (event) => {
         const { value, name } = event.target;
-        console.log(value, name)
         this.setState({ [name]: value })
     }
 
@@ -112,16 +111,17 @@ class AddProject extends Component {
         const { title, subtitle, industry, location, images, fundingGoal, validation } = this.state;
         return (
             <main className={classes.pageContent}>
-                <div className={classes.projectPreview}>
+                {/* <div className={classes.projectPreview}>
                     <h2>Product Preview Thing</h2>
                     <Button type="submit" variant="contained" color="primary" >
                         Preview
                     </Button>
-                </div>
+                </div> */}
                 <div className={classes.addProjectPage}>
                     <h2>Start with basics</h2>
                     <form className={classes.form} onSubmit={this.handleSubmit} >
-                        <CustomOutlinedInput
+                        <h3>Title</h3>
+                        <TextField
                             name="title"
                             value={title}
                             label="title"
@@ -131,7 +131,8 @@ class AddProject extends Component {
                             error={validation.title.isInvalid}
                             helperText={validation.title.message}
                         />
-                        <CustomOutlinedInput
+                        <h3>Subtitle</h3>
+                        <TextField
                             name="subtitle"
                             value={subtitle}
                             label="subtitle"
@@ -190,6 +191,9 @@ class AddProject extends Component {
                             error={validation.fundingGoal.isInvalid}
                             helperText={validation.fundingGoal.message}
                         />
+                        <Button type="submit" variant="contained" color="primary" disabled={this.disableSubmit()}>
+                            Submit
+                        </Button>
                     </form>
                 </div>
             </main>

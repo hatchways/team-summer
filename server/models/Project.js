@@ -31,6 +31,9 @@ const ProjectSchema = new Schema({
         type: Number,
         trim: true
     },
+    fundingDeadline: {
+        type: Date
+    },
     date: {
         type: Date,
         default: Date.now
