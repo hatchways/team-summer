@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import validator from 'validator';
 
 import { CustomOutlinedInput, OutlinedSelect, handleSelect } from '../components/Inputs';
+import UploadImages from '../components/UploadImages';
 import FormValidator from '../helpers/form-validation';
 import { withToast } from '../components/Toast';
 // import { addProject } from '../api/projects';
@@ -72,6 +73,7 @@ class AddProject extends Component {
             }
         ]);
         this.state = {
+            uploading: false,
             title: '',
             subtitle: '',
             industry: '',
@@ -91,6 +93,12 @@ class AddProject extends Component {
     handleSubmit = async (event) => {
         event.preventDefault();
         console.log('submitted')
+    }
+
+    setImages = (newImages) => {
+        console.log(newImages)
+        const addImage = [...this.state.images, ...newImages]
+        this.setState({ images: addImage })
     }
 
     disableSubmit = () => {
@@ -172,6 +180,7 @@ class AddProject extends Component {
                                 })
                             }
                         </OutlinedSelect>
+                        <UploadImages setImages={this.setImages} images={images} />
                         <CustomOutlinedInput
                             name="fundingGoal"
                             value={fundingGoal}

@@ -77,7 +77,7 @@ const App = () => {
             render={(routerProps) => <Login setAuthenticated={setAuthenticated} {...routerProps} />}
           />
           <Route path="/profiles/:id" component={ProfilePage} />
-          <Route path="/projects/add" component={AddProject} />
+          <Route path="/projects/add/:id" component={AddProject} />
         </ToastContext.Provider>
         <Toast
           buttonText={toastProperties.button}
