@@ -12,8 +12,6 @@ class ProfilePage extends Component {
       id: '',
       name: 'tony',
       location: 'orlando',
-      about: '',
-      expertise: '',
       projects: [
         {
           name: 'testname2',
