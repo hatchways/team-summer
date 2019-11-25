@@ -53,29 +53,7 @@ class ProfilePage extends Component {
   }
 
   renderProjects = () => {
-    // const { projects } = this.state.profile
-    const projects = [
-      {
-        name: 'testname2',
-        funding: 500,
-        goal: 1000
-      },
-      {
-        name: 'testname',
-        funding: 500,
-        goal: 1000
-      },
-      {
-        name: 'testname3',
-        funding: 5030,
-        goal: 10030
-      },
-      {
-        name: 'testname4',
-        funding: 5040,
-        goal: 10400
-      }
-    ];
+    const { projects } = this.state.profile
 
     return (
         <Grid container spacing={2} justify="center">

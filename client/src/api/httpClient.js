@@ -1,13 +1,6 @@
 import axios from 'axios';
 
-const baseURLs = {
-	production: '',
-	development: 'http://localhost:3001/'
-};
-const baseURL = baseURLs[process.env.NODE_ENV];
-
 const instance = axios.create({
-	baseURL,
 	headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
@@ -24,10 +17,3 @@ instance.interceptors.request.use((config) => {
 });
 
 export default instance;
-
-
-
-// Alternatively for JWT we could set token as default in a 
-// protected route HOC or something of the like.
-// EG: httpClient.defaults.headers.common['Authorization'] = `Bearer ${token}`
-
