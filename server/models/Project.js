@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const { ObjectId } = Schema;
 
 const ProjectSchema = new Schema({
     user: {
@@ -37,4 +38,4 @@ const ProjectSchema = new Schema({
     }
 });
 
-module.exports = Project = mongoose.model("Project", ProjectSchema);
+module.exports = mongoose.model("Project", ProjectSchema);
