@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { MuiThemeProvider, makeStyles } from '@material-ui/core';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 
@@ -40,11 +40,7 @@ const App = () => {
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
         {/* Placeholder user object */}
-        <NavBar
-          user={{ name: 'Joe' }}
-          authenticated={userAuthenticated}
-          setAuthenticated={setAuthenticated}
-        />
+        <NavBar user={{ name: 'Joe' }} />
 
         {/* Routes */}
         {/*- Base route uses a Redirect Component to redirect to
@@ -64,6 +60,7 @@ const App = () => {
           path="/login"
           render={(routerProps) => <Login setAuthenticated={setAuthenticated} {...routerProps} />}
         />
+        <Route path="/profiles/:id" component={ProfilePage} />
       </BrowserRouter>
     </MuiThemeProvider>
   );
