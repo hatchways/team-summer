@@ -35,20 +35,15 @@ class ProfilePage extends Component {
           name={name}
           location={location}
           about={about}
-          expertise={expertise} />
+          expertise={expertise} 
+          buttonType={this.getButtonType()}/>
       </Fragment>
     );
   }
 
-  renderButton() {
+  getButtonType() {
     const { profile, currentUserId } = this.state;
-    const buttonType = profile.id === currentUserId ? 'edit' : 'message';
-
-    return (
-      <Button type="submit" variant="outlined" color="primary">
-        {buttonType}
-      </Button>
-    );
+    return profile.id === currentUserId ? 'edit' : 'message';
   }
 
   handleClick() {
@@ -83,7 +78,7 @@ class ProfilePage extends Component {
     ];
 
     return (
-        <Grid container spacing={1} justify="center">
+        <Grid container spacing={2} justify="center">
           {projects.map(({ id, name, funding, goal, imageUrl }, ix) => (
             <Grid item xs key={name}>
               <ProjectCard
@@ -102,7 +97,7 @@ class ProfilePage extends Component {
 
   render() {
     return (
-      <div className="profilePage">
+      <div className="profilePage" style={{display: 'flex'}}>
         {this.renderUserInfo()}
         {this.renderProjects()}
       </div>
