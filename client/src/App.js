@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MuiThemeProvider, makeStyles } from '@material-ui/core';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 
@@ -54,7 +54,7 @@ const App = () => {
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
         {/* Placeholder user object */}
-        <NavBar user={{ name: 'Joe' }} />
+        <NavBar user={{ name: 'Joe' }} authenticated={userAuthenticated} setAuthenticated={setAuthenticated}/>
 
         {/* Routes */}
         {/*- Base route uses a Redirect Component to redirect to
@@ -63,19 +63,19 @@ const App = () => {
         */}
         <ToastContext.Provider value={activateToast}>
           <Route
-          exact
-          path="/"
-          render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'} />}
-        />
-        <Route
-          path="/signup"
-          render={(routerProps) => <SignUp setAuthenticated={setAuthenticated} {...routerProps} />}
-        />
-        <Route
-          path="/login"
-          render={(routerProps) => <Login setAuthenticated={setAuthenticated} {...routerProps} />}
-        />
-          <Route path="/profiles/:id" component={ProfilePage} />
+            exact
+            path="/"
+            render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'}/>}
+          />
+          <Route
+            path="/signup"
+            render={(routerProps) => <SignUp setAuthenticated={setAuthenticated} {...routerProps} />}
+          />
+          <Route
+            path="/login"
+            render={(routerProps) => <Login setAuthenticated={setAuthenticated} {...routerProps} />}
+          />
+          <Route path="/profiles/:id" component={ProfilePage}/>
         </ToastContext.Provider>
         <Toast
           buttonText={toastProperties.button}
