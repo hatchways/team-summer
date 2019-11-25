@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 const styles = (muiBaseTheme) => ({
   card: {
     maxWidth: '700px',
-    margin: '30px',
+    margin: '10px',
     transition: '0.3s',
     boxShadow: '0 8px 40px -12px rgba(0,0,0,0.3)',
     '&:hover': {

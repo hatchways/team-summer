@@ -4,12 +4,14 @@ import ProfileDetailPanel from '../components/ProfileDetailPanel';
 import { withStyles, Button, Grid, Typography } from '@material-ui/core';
 import { getUser } from '../api/users';
 
+import './profile.css'
+
 class ProfilePage extends Component {
   state = {
     profile: {
-      id: this.props.match.params.id,
-      name: '',
-      location: '',
+      id: '',
+      name: 'tony',
+      location: 'orlando',
       about: '',
       expertise: '',
       projects: [],
@@ -19,7 +21,7 @@ class ProfilePage extends Component {
   };
 
   componentDidMount() {
-    const { id } = this.state.profile;
+    const { id } = this.props.match.params;
     const profile = getUser(id).then((profile) => {
       this.setState({ profile: profile.data });
     });
@@ -56,9 +58,9 @@ class ProfilePage extends Component {
     const { projects } = this.state.profile
 
     return (
-        <Grid container spacing={2} justify="center">
+        <Grid container spacing={1} justify="center">
           {projects.map(({ id, name, funding, goal, imageUrl }, ix) => (
-            <Grid item xs key={name}>
+            <Grid item xs={12} md={6} key={name}>
               <ProjectCard
                 key={ix}
                 id={id}
@@ -75,7 +77,7 @@ class ProfilePage extends Component {
 
   render() {
     return (
-      <div className="profilePage" style={{display: 'flex'}}>
+      <div className="profilePage">
         {this.renderUserInfo()}
         {this.renderProjects()}
       </div>

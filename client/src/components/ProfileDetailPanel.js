@@ -6,7 +6,9 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     textAlign: 'center',
-    width: '30%',
+    '@media (min-width: 990px)': {
+        width: '30%',
+    },
     minHeight: '100vh'
   },
   avatar: {
