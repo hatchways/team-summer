@@ -7,8 +7,8 @@ import { capitalize } from '@material-ui/core/utils';
 import { CustomOutlinedInput } from '../components/Inputs';
 import CenteredPageHeader from '../components/CenteredPageHeader';
 import FormValidator from '../helpers/form-validation';
-import { authenticateUser } from '../helpers/UserHelpers';
 import { withToast } from '../components/Toast';
+import { createOrLoginUser } from '../api/users';
 
 const styles = {
   pageContent: {
@@ -109,7 +109,7 @@ class SignUp extends React.Component {
     if (validation.isValid) {
       const { name, email, password } = this.state;
 
-      let userRegistration = await authenticateUser('register', { name, email, password });
+      let userRegistration = await createOrLoginUser('register', { name, email, password });
 
       if (userRegistration.hasOwnProperty('err')) {
         validation[userRegistration.property] = {

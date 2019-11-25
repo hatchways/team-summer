@@ -7,8 +7,8 @@ import validator from 'validator';
 import { CustomOutlinedInput } from '../components/Inputs';
 import CenteredPageHeader from '../components/CenteredPageHeader';
 import FormValidator from '../helpers/form-validation';
-import { authenticateUser } from '../helpers/UserHelpers';
 import { withToast } from '../components/Toast';
+import { createOrLoginUser } from '../api/users';
 
 const styles = {
   pageContent: {
@@ -94,7 +94,7 @@ class Login extends React.Component {
 
     if (validation.isValid) {
       const { email, password } = this.state;
-      const userLogin = await authenticateUser('login', { email, password });
+      const userLogin = await createOrLoginUser('login', { email, password });
 
       if (userLogin.hasOwnProperty('err')) {
         validation[userLogin.property] = {
