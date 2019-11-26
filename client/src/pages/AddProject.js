@@ -13,16 +13,20 @@ const styles = {
         display: 'flex',
         justifyContent: 'left'
     },
-    projectPreview: {
+    projectPreviewContainer: {
         display: 'flex',
         flexDirection: 'column',
-        margin: '10px',
-        padding: '20px',
-        boxShadow: '5px 5px 3px #D3D3D3',
+        margin: '0px 20px 0px 10px',
+        padding: '20px 50px 20px 30px',
+        boxShadow: '2px 0px 4px 2px #D3D3D3',
     },
     addProjectPage: {
         margin: '10px',
         padding: '20px',
+    },
+    formLine: {
+        paddingTop: '20px',
+        paddingBottom: '20px',
     },
     form: {
         display: 'flex',
@@ -30,9 +34,9 @@ const styles = {
         alignItems: 'left',
         width: '100%'
     },
-    button: {
-        padding: '10px',
-    }
+    fundingGoalContainer: {
+        marginBottom: '40px'
+    },
 }
 
 const industries = [
@@ -149,8 +153,8 @@ class AddProject extends Component {
 
         return (
             <main className={classes.pageContent}>
-                <div className={classes.projectPreview}>
-                    <h2>Product Preview Thing</h2>
+                <div className={classes.projectPreviewContainer}>
+                    <Typography variant="h3" align='left'>Product Preview</Typography>
                     <Button type="submit" variant="contained" color="primary" >
                         Preview
                     </Button>
@@ -158,10 +162,12 @@ class AddProject extends Component {
                 <div className={classes.addProjectPage}>
                     <Typography variant="h2" align='left'>Start with basics</Typography>
                     <form className={classes.form} onSubmit={this.handleSubmit} >
+
                         <Typography variant="h3">Title</Typography>
                         <TextField
                             name="title"
                             value={title}
+                            fullWidth={true}
                             onChange={this.handleInput}
                             type="title"
                             variant="outlined"
@@ -169,14 +175,18 @@ class AddProject extends Component {
                             error={validation.title.isInvalid}
                             helperText={validation.title.message}
                         />
+
+
                         <Typography variant="h3">Subtitle</Typography>
                         <TextField
                             name="subtitle"
                             value={subtitle}
+                            fullWidth={true}
                             onChange={this.handleInput}
                             type="subtitle"
                             variant="outlined"
                         />
+
                         <Typography variant="h3">Industry</Typography>
                         <OutlinedSelect
                             name="industry"
@@ -220,16 +230,19 @@ class AddProject extends Component {
                             }
                         </OutlinedSelect>
                         <UploadImages setImages={this.setImages} images={images} />
+                        <div className={classes.fundingGoalContainer}>
                         <Typography variant="h3">Funding Goal Amount</Typography>
                         <TextField
                             name="fundingGoal"
                             value={fundingGoal}
+                            fullWidth={true}
                             onChange={this.handleInput}
                             type="fundingGoal"
                             variant="outlined"
                             error={validation.fundingGoal.isInvalid}
                             helperText={validation.fundingGoal.message}
                         />
+                        </div>
                         <Button type="submit" variant="contained" color="primary" disabled={this.disableSubmit()}>
                             Submit
                         </Button>

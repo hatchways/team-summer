@@ -3,18 +3,24 @@ import { withStyles, Typography } from '@material-ui/core'
 import { useDropzone } from 'react-dropzone';
 
 const styles = {
-    uploadContainer: {
-        display: 'flex'
+    uploadImagesContainer: {
+        marginTop: '30px',
+        marginBottom: '10px'
+    },
+    dropzoneContainer: {
+        display: 'flex',
+        marginTop: '20px',
+        marginBottom: '20px'
     },
     dragBox: {
         display: 'flex',
-        border: '2px solid #bdbdbd',
+        boxShadow: '0px 0px 3px 2px #D3D3D3',
         height: '150px',
         width: '175px',
         margin: '2px',
         padding: '5px',
         cursor: 'pointer',
-        borderRadius: '5px',
+        borderRadius: '2px',
     },
     dragBoxText: {
         margin: 'auto',
@@ -23,18 +29,16 @@ const styles = {
     images: {
         display: 'flex',
         flexWrap: 'wrap',
-        border: '2px solid #bdbdbd',
-        borderRadius: '5px',
         height: '150px',
         width: '250px',
-        margin: '5px',
-        padding: '5px',
+        margin: 'auto',
         cursor: 'pointer'
     },
     image: {
         maxHeight: '75px',
         maxWidth: '75px',
-        padding: '2px'
+        padding: '4px',
+        borderRadius: '10px'
     }
 }
 
@@ -47,9 +51,9 @@ const UploadImages = (props) => {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
     return (
-        <React.Fragment>
+        <div className={classes.uploadImagesContainer}>
             <Typography variant='h3'>Upload images</Typography>
-            <div className={classes.uploadContainer} {...getRootProps()}>
+            <div className={classes.dropzoneContainer} {...getRootProps()}>
                 <input {...getInputProps()} />
                 <div className={classes.dragBox}>
                     {
@@ -76,7 +80,7 @@ const UploadImages = (props) => {
                     }
                 </div>
             </div>
-        </React.Fragment>
+        </div>
     )
 }
 
