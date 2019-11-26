@@ -26,20 +26,19 @@ exports.projectById = (req, res, next, id) => {
 }
 
 exports.getProjects = (req, res) => {
-    const cutoff = new Date();
     const order = req.query.order || 'asc';
     const sortBy = req.query.sortBy || 'fundingDeadline';
     const limit = parseInt(req.query.limit) || 6;
+    const cutoff = new Date();
 
     const filterOptions = {
         fundingDeadline: { $gt: cutoff },
     }
 
-    if (req.query.industry) filterOptions.industry = req.query.industry
-    if (req.query.location) filterOptions.location = req.query.location
+    if (req.query.industry) filterOptions.industry = req.query.industry;
+    if (req.query.location) filterOptions.location = req.query.location;
 
     console.log(order, sortBy, limit)
-    // Projects.find({ _id: { $nin: [ObjectId(id)] } }, { fundingDeadline: { $lt: cutoff } })
     Project.find(filterOptions)
         .sort([[sortBy, order]])
         .limit(limit)
