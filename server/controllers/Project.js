@@ -32,21 +32,25 @@ exports.addProject = (req, res) => {
                 title: 'File Upload Error', detail: err.message
             }]
         });
-        const { title, description, industry, location, fundingGoal } = req.body;
-        if (!title || !description || !industry || !location || !fundingGoal) {
+        const { title, subtitle, description, industry, location, fundingGoal, fundingDeadline } = req.body;
+        console.log(req.body);
+        if (!title || !industry || !location || !fundingGoal) {
             return res.status(400).json({
                 error: 'Please fill out the required fields.'
             });
         }
+        console.log('req.files', req.files)
         const images = req.files.map(file => file.location);
         const user = req.profile;
         const project = new Project({
             user,
             title,
+            subtitle,
             description,
             industry, location,
             images,
-            fundingGoal: parseInt(fundingGoal)
+            fundingGoal: parseInt(fundingGoal),
+            fundingDeadline
         })
         project.save((err, project) => {
             if (err) {

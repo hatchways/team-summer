@@ -31,7 +31,7 @@ const styles = {
 const industries = [
     { id: 0, name: '' },
     { id: 1321, name: 'Technology' },
-    { id: 21423, name: 'Marketting' },
+    { id: 21423, name: 'Marketing' },
     { id: 42342, name: 'Engineering' },
     { id: 21342, name: 'Art' },
     { id: 93082, name: 'Film' }
@@ -103,15 +103,17 @@ class AddProject extends Component {
         this.setState({ validation });
 
         if (validation.isValid) {
+            const { title, subtitle, industry, location, images, fundingGoal } = this.state;
+            // const formData = { title, subtitle, industry, location, images, fundingGoal }
             const { formData } = this.state;
             const id = '5ddc10c981160d471cc4918e';
             const newProject = await addProject(id, formData);
-            console.log(newProject);
+            console.log('newProject', newProject);
         }
         console.log(this.state)
-        for (const value of this.state.formData.values()) {
-            console.log(value)
-        }
+        // for (const pair of this.state.formData.entries()) {
+        //     console.log(pair[0], pair[1])
+        // }
     }
 
     setImages = (newImages) => {
