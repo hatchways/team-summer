@@ -44,7 +44,10 @@ const App = () => {
   });
   const [showToast, toggleToast] = useState(false);
   const [userAuthenticated, setAuthenticated] = useState(false);
-  const [userDetails, setUserDetails] = useState(null);
+  const [userDetails, setUserDetails] = useState({
+    id: null,
+    name: ''
+  });
 
   const activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
     setToastProperties({ text, variant, button });
@@ -65,7 +68,7 @@ const App = () => {
     if (jwtToken) {
       try {
         const data = jwtVerify(jwtToken, process.env.REACT_APP_JWT_SECRET).payload;
-        setUserDetails({ name: data.name, id: data.id });
+        setUserDetails({ name: data.name, id: data._id });
         setAuthenticated(true);
       } catch (error) {
         if (error.name === 'TokenExpiredError') localStorage.removeItem('jwtToken');

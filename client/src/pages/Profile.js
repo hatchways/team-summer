@@ -11,8 +11,8 @@ class ProfilePage extends Component {
   state = {
     profile: {
       _id: '',
-      name: 'tony',
-      location: 'orlando',
+      name: '',
+      location: '',
       projects: [
         {
           name: 'testname2',
