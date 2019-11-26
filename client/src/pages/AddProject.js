@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { withStyles, Button, TextField } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Typography, withStyles, Button, TextField } from '@material-ui/core';
 import validator from 'validator';
 
-import { CustomOutlinedInput, OutlinedSelect, handleSelect } from '../components/Inputs';
+import { OutlinedSelect } from '../components/Inputs';
 import UploadImages from '../components/UploadImages';
 import FormValidator from '../helpers/form-validation';
 import { withToast } from '../components/Toast';
@@ -12,13 +11,18 @@ import { addProject } from '../api/projects';
 const styles = {
     pageContent: {
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'left'
     },
     projectPreview: {
-        margin: "10px"
+        display: 'flex',
+        flexDirection: 'column',
+        margin: '10px',
+        padding: '20px',
+        boxShadow: '5px 5px 3px #D3D3D3',
     },
     addProjectPage: {
-        margin: "10px"
+        margin: '10px',
+        padding: '20px',
     },
     form: {
         display: 'flex',
@@ -26,6 +30,9 @@ const styles = {
         alignItems: 'left',
         width: '100%'
     },
+    button: {
+        padding: '10px',
+    }
 }
 
 const industries = [
@@ -106,14 +113,22 @@ class AddProject extends Component {
             const { formData } = this.state;
             const { id } = this.props.match.params; // will have to change eventually.
             const newProject = await addProject(id, formData);
-            console.log(newProject);
-            this.props.history.push('/profile');
-            this.props.activateToast('Upload Successful', 'success');
+            if (newProject.success) {
+                console.log(newProject);
+                this.props.history.push('/profile');
+                this.props.activateToast('Upload Successful', 'success');
+            } else if (newProject.err) {
+                console.log(newProject.err);
+            }
         }
     }
 
     setImages = (newImages) => {
         const { formData } = this.state;
+        if (this.state.images.length + newImages.length > 6) {
+            console.log('Cannot add anymore images.')
+            return;
+        }
         const addImage = [...this.state.images, ...newImages];
         for (const image of addImage) {
             formData.append('images', image);
@@ -131,18 +146,19 @@ class AddProject extends Component {
     render() {
         const { classes } = this.props;
         const { title, subtitle, industry, location, images, fundingGoal, validation } = this.state;
+
         return (
             <main className={classes.pageContent}>
-                {/* <div className={classes.projectPreview}>
+                <div className={classes.projectPreview}>
                     <h2>Product Preview Thing</h2>
                     <Button type="submit" variant="contained" color="primary" >
                         Preview
                     </Button>
-                </div> */}
+                </div>
                 <div className={classes.addProjectPage}>
-                    <h2>Start with basics</h2>
+                    <Typography variant="h2" align='left'>Start with basics</Typography>
                     <form className={classes.form} onSubmit={this.handleSubmit} >
-                        <h3>Title</h3>
+                        <Typography variant="h3">Title</Typography>
                         <TextField
                             name="title"
                             value={title}
@@ -153,7 +169,7 @@ class AddProject extends Component {
                             error={validation.title.isInvalid}
                             helperText={validation.title.message}
                         />
-                        <h3>Subtitle</h3>
+                        <Typography variant="h3">Subtitle</Typography>
                         <TextField
                             name="subtitle"
                             value={subtitle}
@@ -161,7 +177,7 @@ class AddProject extends Component {
                             type="subtitle"
                             variant="outlined"
                         />
-                        <h3>Industry</h3>
+                        <Typography variant="h3">Industry</Typography>
                         <OutlinedSelect
                             name="industry"
                             selectId="industry"
@@ -182,7 +198,7 @@ class AddProject extends Component {
                                 })
                             }
                         </OutlinedSelect>
-                        <h3>Project Location</h3>
+                        <Typography variant="h3">Project Location</Typography>
                         <OutlinedSelect
                             name="location"
                             selectId="location"
@@ -204,7 +220,7 @@ class AddProject extends Component {
                             }
                         </OutlinedSelect>
                         <UploadImages setImages={this.setImages} images={images} />
-                        <h3>Funding goal amount</h3>
+                        <Typography variant="h3">Funding Goal Amount</Typography>
                         <TextField
                             name="fundingGoal"
                             value={fundingGoal}
