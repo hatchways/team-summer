@@ -8,6 +8,7 @@ import NavBar from './components/NavBar';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import ProfilePage from './pages/Profile';
+import Project from './pages/Project';
 import Toast, { ToastContext } from './components/Toast';
 
 const globalStyles = makeStyles({
@@ -76,6 +77,7 @@ const App = () => {
             render={(routerProps) => <Login setAuthenticated={setAuthenticated} {...routerProps} />}
           />
           <Route path="/profiles/:id" component={ProfilePage}/>
+          <Route path="/project/:id" component={Project}/>
         </ToastContext.Provider>
         <Toast
           buttonText={toastProperties.button}

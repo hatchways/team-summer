@@ -9,9 +9,9 @@ export const theme = createMuiTheme({
       textAlign: 'center'
     },
     h2: {
-      fontSize: '2.75em',
+      fontSize: '2.2em',
       fontWeight: 'semi-bold',
-      textAlign: 'center'
+      textAlign: 'center',
     },
     h3: {
       fontSize: '2em',
@@ -24,6 +24,11 @@ export const theme = createMuiTheme({
     },
     body1: {
       margin: '10px 0'
+    },
+    subtitle2: {
+      color: '#d3d3d3',
+      fontSize: '1em',
+      fontWeight: 300
     }
   },
   breakpoints: {
