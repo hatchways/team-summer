@@ -5,7 +5,7 @@ const multiUpload = upload.array('images');
 
 
 exports.imageUpload = (req, res) => {
-    singleUpload(req, res, function (err) {
+    singleUpload(req, res, function(err) {
         if (err) return res.status(422).json({ errors: [{ title: 'File Upload Error', detail: err.message }] });
         return res.json({ 'imageUrl': req.file.location })
     })
@@ -25,8 +25,13 @@ exports.projectById = (req, res, next, id) => {
         })
 }
 
+exports.getProjects = () => {
+    const cutoff = new Date();
+    Projects.find({ _id: { $nin: [ObjectId(id)] } }, { fundingDeadline: { $lt: cutoff } })
+}
+
 exports.addProject = (req, res) => {
-    multiUpload(req, res, function (err) {
+    multiUpload(req, res, function(err) {
         if (err) return res.status(422).json({
             errors: [{
                 title: 'File Upload Error', detail: err.message
