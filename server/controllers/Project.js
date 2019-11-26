@@ -32,7 +32,7 @@ exports.getProjects = (req, res) => {
     const limit = parseInt(req.query.limit) || 6;
 
     console.log(order, sortBy, limit)
-    Project.find()
+    Project.find({ fundingDeadline: { $gt: cutoff } })
         .sort([[sortBy, order]])
         .limit(limit)
         .exec((err, projects) => {
