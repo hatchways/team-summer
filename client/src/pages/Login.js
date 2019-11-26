@@ -7,8 +7,8 @@ import validator from 'validator';
 import { CustomOutlinedInput } from '../components/Inputs';
 import CenteredPageHeader from '../components/CenteredPageHeader';
 import FormValidator from '../helpers/form-validation';
-import { withToast } from '../components/Toast';
 import { createOrLoginUser } from '../api/users';
+import { withPageContext } from '../components/pageContext';
 
 const styles = {
   pageContent: {
@@ -160,4 +160,4 @@ class Login extends React.Component {
   }
 }
 
-export default withToast(withStyles(styles)(Login));
+export default withPageContext(withStyles(styles)(Login));

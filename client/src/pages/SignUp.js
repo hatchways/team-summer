@@ -7,8 +7,8 @@ import { capitalize } from '@material-ui/core/utils';
 import { CustomOutlinedInput } from '../components/Inputs';
 import CenteredPageHeader from '../components/CenteredPageHeader';
 import FormValidator from '../helpers/form-validation';
-import { withToast } from '../components/Toast';
 import { createOrLoginUser } from '../api/users';
+import { withPageContext } from '../components/pageContext';
 
 const styles = {
   pageContent: {
@@ -192,4 +192,4 @@ class SignUp extends React.Component {
   }
 }
 
-export default withToast(withStyles(styles)(SignUp));
+export default withPageContext(withStyles(styles)(SignUp));

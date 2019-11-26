@@ -17,6 +17,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { Link, withRouter } from 'react-router-dom';
 
 import SvgProductLaunchLogo from './ProductLaunchLogo';
+import { withPageContext } from './pageContext';
 
 const useStyles = makeStyles((theme) => ({
   navBar: {
@@ -149,8 +150,8 @@ const Navigation = (props) => {
          * - Link is meant for both authenticated and unauthenticated
          * */
         if (
-          (link.show === 'authenticated' && props.authenticated) ||
-          (link.show === 'unauthenticated' && !props.authenticated) ||
+          (link.show === 'authenticated' && props.userAuthenticated) ||
+          (link.show === 'unauthenticated' && !props.userAuthenticated) ||
           link.show === 'both'
         ) {
           return (
@@ -164,13 +165,13 @@ const Navigation = (props) => {
       })}
 
       {/* User dropdown actions */}
-      {props.authenticated && (
+      {props.userAuthenticated && (
         <div id="account-dropdown">
           <IconButton
             aria-controls="user-dropdown"
             onClick={(event) => toggleUserDropdown(event.currentTarget)}>
-            <Avatar className={props.classes.userAvatar} src={props.user.avatar || null}>
-              {props.user.avatar || props.user.name.split('')[0]}
+            <Avatar className={props.classes.userAvatar} src={props.userDetails.avatar || null}>
+              {props.userDetails.avatar || props.userDetails.name.split('')[0]}
             </Avatar>
           </IconButton>
           <Menu

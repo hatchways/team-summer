@@ -3,6 +3,7 @@ import ProjectCard from '../components/projectCard';
 import ProfileDetailPanel from '../components/ProfileDetailPanel';
 import { withStyles, Button, Grid, Typography } from '@material-ui/core';
 import { getUser } from '../api/users';
+import { withPageContext } from '../components/pageContext';
 
 import './profile.css';
 
@@ -104,4 +105,4 @@ class ProfilePage extends Component {
   }
 }
 
-export default ProfilePage;
+export default withPageContext(ProfilePage);

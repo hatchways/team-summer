@@ -9,7 +9,8 @@ import NavBar from './components/NavBar';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import ProfilePage from './pages/Profile';
-import Toast, { ToastContext } from './components/Toast';
+import Toast from './components/Toast';
+import { PageContext } from './components/pageContext';
 
 require('dotenv').config();
 
@@ -50,6 +51,14 @@ const App = () => {
     toggleToast(true);
   };
 
+  const contextProps = {
+    activateToast,
+    userAuthenticated,
+    setAuthenticated,
+    userDetails,
+    setUserDetails
+  };
+
   useEffect(() => {
     const jwtToken = localStorage.getItem('jwtToken');
 
@@ -68,10 +77,9 @@ const App = () => {
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
-        {/* Placeholder user object */}
         <NavBar
-          user={{ name: 'Joe' }}
-          authenticated={userAuthenticated}
+          userDetails={userDetails}
+          userAuthenticated={userAuthenticated}
           setAuthenticated={setAuthenticated}
         />
 
@@ -79,25 +87,23 @@ const App = () => {
         {/*- Base route uses a Redirect Component to redirect to
             /signup. Change render to component with the home page
             component if changing landing page.
+
+          - wrap export in withPageContext to retrieve global state like:
+          - - Authentication
+          - - User details
+          - Other global variables can be put in the variable contextProps to pass it
+          - to each page.
         */}
-        <ToastContext.Provider value={activateToast}>
+        <PageContext.Provider value={contextProps}>
           <Route
             exact
             path="/"
             render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'} />}
           />
-          <Route
-            path="/signup"
-            render={(routerProps) => (
-              <SignUp setAuthenticated={setAuthenticated} {...routerProps} />
-            )}
-          />
-          <Route
-            path="/login"
-            render={(routerProps) => <Login setAuthenticated={setAuthenticated} {...routerProps} />}
-          />
+          <Route path="/signup" component={SignUp} />
+          <Route path="/login" component={Login} />
           <Route path="/profile/:id?" component={ProfilePage} />
-        </ToastContext.Provider>
+        </PageContext.Provider>
         <Toast
           buttonText={toastProperties.button}
           toastMessage={toastProperties.text}
