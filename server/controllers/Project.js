@@ -25,9 +25,25 @@ exports.projectById = (req, res, next, id) => {
         })
 }
 
-exports.getProjects = () => {
+exports.getProjects = (req, res) => {
     const cutoff = new Date();
-    Projects.find({ _id: { $nin: [ObjectId(id)] } }, { fundingDeadline: { $lt: cutoff } })
+    const order = req.query.order || 'asc';
+    const sortBy = req.query.sortBy || 'fundingDeadline';
+    const limit = parseInt(req.query.limit) || 6;
+
+    console.log(order, sortBy, limit)
+    Project.find()
+        .sort([[sortBy, order]])
+        .limit(limit)
+        .exec((err, projects) => {
+            if (err) {
+                return res.status(400).json({
+                    error: "Projects not found."
+                })
+            }
+            return res.status(200).json(projects);
+        })
+    // Projects.find({ _id: { $nin: [ObjectId(id)] } }, { fundingDeadline: { $lt: cutoff } })
 }
 
 exports.addProject = (req, res) => {
@@ -37,9 +53,10 @@ exports.addProject = (req, res) => {
                 title: 'File Upload Error', detail: err.message
             }]
         });
-        const { title, subtitle, description, industry, location, fundingGoal, fundingDeadline } = req.body;
-        console.log(req.body);
-        if (!title || !industry || !location || !fundingGoal) {
+        const { title, subtitle, description, industry, location, fundingGoal } = req.body;
+        const fundingDeadline = new Date(req.body.fundingDeadline)
+        console.log(fundingDeadline)
+        if (!title || !industry || !location || !fundingGoal || !fundingDeadline) {
             return res.status(400).json({
                 error: 'Please fill out the required fields.'
             });
