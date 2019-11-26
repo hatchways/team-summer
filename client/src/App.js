@@ -54,7 +54,11 @@ const App = () => {
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
         {/* Placeholder user object */}
-        <NavBar user={{ name: 'Joe' }} authenticated={userAuthenticated} setAuthenticated={setAuthenticated}/>
+        <NavBar
+          user={{ name: 'Joe' }}
+          authenticated={userAuthenticated}
+          setAuthenticated={setAuthenticated}
+        />
 
         {/* Routes */}
         {/*- Base route uses a Redirect Component to redirect to
@@ -65,17 +69,19 @@ const App = () => {
           <Route
             exact
             path="/"
-            render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'}/>}
+            render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'} />}
           />
           <Route
             path="/signup"
-            render={(routerProps) => <SignUp setAuthenticated={setAuthenticated} {...routerProps} />}
+            render={(routerProps) => (
+              <SignUp setAuthenticated={setAuthenticated} {...routerProps} />
+            )}
           />
           <Route
             path="/login"
             render={(routerProps) => <Login setAuthenticated={setAuthenticated} {...routerProps} />}
           />
-          <Route path="/profiles/:id" component={ProfilePage}/>
+          <Route path="/profile/:id?" component={ProfilePage} />
         </ToastContext.Provider>
         <Toast
           buttonText={toastProperties.button}

@@ -9,7 +9,7 @@ import './profile.css';
 class ProfilePage extends Component {
   state = {
     profile: {
-      id: '',
+      _id: '',
       name: 'tony',
       location: 'orlando',
       projects: [
@@ -35,13 +35,12 @@ class ProfilePage extends Component {
         }
       ],
       imageUrl: ''
-    },
-    currentUserId: localStorage.getItem('id') || ''
+    }
   };
 
   componentDidMount() {
-    const { id } = this.props.match.params;
-    const profile = getUser(id).then((profile) => {
+    const id = this.props.match.params.id || JSON.parse(localStorage.getItem('userData')).id;
+    getUser(id).then((profile) => {
       this.setState({ profile: profile.data });
     });
   }
@@ -57,14 +56,15 @@ class ProfilePage extends Component {
           location={location}
           about={about}
           expertise={expertise}
-          buttonType={this.getButtonType()}/>
+          buttonType={this.getButtonType()}
+        />
       </Fragment>
     );
   }
 
   getButtonType() {
-    const { profile, currentUserId } = this.state;
-    return profile.id === currentUserId ? 'edit' : 'message';
+    const { profile } = this.state;
+    return profile._id === JSON.parse(localStorage.getItem('userData')).id ? 'edit' : 'message';
   }
 
   handleClick() {
@@ -77,20 +77,20 @@ class ProfilePage extends Component {
     const { projects } = this.state.profile;
 
     return (
-        <Grid container classes={{root: 'project-section'}} spacing={3} justify="center">
-          {projects.map(({ id, name, funding, goal, imageUrl }, ix) => (
-            <Grid item xs={12} md={6} key={name}>
-              <ProjectCard
-                key={ix}
-                id={id}
-                name={name}
-                funding={funding}
-                goal={goal}
-                imageUrl={imageUrl}
-              />
-            </Grid>
-          ))}
-        </Grid>
+      <Grid container classes={{ root: 'project-section' }} spacing={3} justify="center">
+        {projects.map(({ id, name, funding, goal, imageUrl }, ix) => (
+          <Grid item xs={12} md={6} key={ix}>
+            <ProjectCard
+              key={ix}
+              id={id}
+              name={name}
+              funding={funding}
+              goal={goal}
+              imageUrl={imageUrl}
+            />
+          </Grid>
+        ))}
+      </Grid>
     );
   };
 

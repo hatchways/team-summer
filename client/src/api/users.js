@@ -1,7 +1,7 @@
 import httpClient from './httpClient';
 
 export const getUser = (id) => {
-  return httpClient.get(`/users/${id}`);
+  return httpClient.get(`/api/user/${id}`);
 };
 
 export const createOrLoginUser = async (method, userData) => {
@@ -15,6 +15,14 @@ export const createOrLoginUser = async (method, userData) => {
     if (response.data.hasOwnProperty('err')) return { ...response.data };
 
     localStorage.setItem('jwtToken', response.data.token);
+    localStorage.setItem(
+      'userData',
+      JSON.stringify({
+        id: response.data.user._id,
+        name: response.data.user.name
+      })
+    );
+
     return { success: true };
   } catch (error) {
     console.log(error);
