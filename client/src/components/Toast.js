@@ -40,8 +40,8 @@ export const Toast = (props) => {
   return (
     <Snackbar
       anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left'
+        vertical: 'top',
+        horizontal: 'center'
       }}
       open={props.showToast || false}
       autoHideDuration={2000}
