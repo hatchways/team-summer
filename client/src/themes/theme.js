@@ -4,18 +4,25 @@ export const theme = createMuiTheme({
   typography: {
     fontFamily: '"Roboto"',
     h1: {
-      fontSize: '1.5em',
+      fontSize: '1.7em',
       fontWeight: 'semi-bold',
       textAlign: 'center'
     },
     h2: {
-      fontSize: '2.75em',
-      fontWeight: 'semi-bold',
+      fontSize: '2.2em',
+      fontWeight: '500',
       textAlign: 'center'
     },
     h3: {
-      fontSize: '2em',
+      fontSize: '1.9em',
       fontWeight: 'semi-bold'
+    },
+    h4: {
+      fontSize: '1.6em',
+      fontWeight: 'semi-bold'
+    },
+    h5: {
+      fontSize: '1.3em'
     },
     h6: {
       fontSize: '1em',
