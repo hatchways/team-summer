@@ -103,22 +103,21 @@ class AddProject extends Component {
         this.setState({ validation });
 
         if (validation.isValid) {
-            const { title, subtitle, industry, location, images, fundingGoal } = this.state;
-            // const formData = { title, subtitle, industry, location, images, fundingGoal }
             const { formData } = this.state;
-            const id = '5ddc10c981160d471cc4918e';
+            const { id } = this.props.match.params; // will have to change eventually.
             const newProject = await addProject(id, formData);
-            console.log('newProject', newProject);
+            console.log(newProject);
+            this.props.history.push('/profile');
+            this.props.activateToast('Upload Successful', 'success');
         }
-        // console.log(this.state)
-        // for (const pair of this.state.formData.entries()) {
-        //     console.log(pair[0], pair[1])
-        // }
     }
 
     setImages = (newImages) => {
         const { formData } = this.state;
         const addImage = [...this.state.images, ...newImages];
+        for (const image of addImage) {
+            formData.append('images', image);
+        }
         formData.append('images', addImage);
         this.setState({ images: addImage });
     }

@@ -6,15 +6,22 @@ export const addProject = async (id, projectData) => {
     const authOptions = {
         headers: {
             Authorization: `Bearer ${token}`,
-            'content-type': 'multipart/form'
         }
     }
     try {
         const response = await httpClient.post(url, projectData, authOptions);
-        console.log(response.data)
         if (response.data.err) return { ...response.data }
 
-        localStorage.setItem('projects', response.data.projects);
+        if (typeof window !== 'undefined') {
+            let projects = [];
+
+            if (localStorage.getItem('projects')) {
+                projects = JSON.parse(localStorage.getItem('projects'));
+            }
+            projects.push(response.data);
+
+            localStorage.setItem('projects', JSON.stringify(projects))
+        }
         return { success: true };
     } catch (error) {
         console.log(error);

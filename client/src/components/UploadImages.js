@@ -5,7 +5,7 @@ const UploadImages = (props) => {
     const { setImages, images } = props;
 
     const onDrop = useCallback(acceptedFiles => {
-        setImages(acceptedFiles);
+        setImages(acceptedFiles)
     }, [setImages])
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
