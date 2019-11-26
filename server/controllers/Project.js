@@ -5,7 +5,7 @@ const multiUpload = upload.array('images');
 
 
 exports.imageUpload = (req, res) => {
-    singleUpload(req, res, function(err) {
+    singleUpload(req, res, function (err) {
         if (err) return res.status(422).json({ errors: [{ title: 'File Upload Error', detail: err.message }] });
         return res.json({ 'imageUrl': req.file.location })
     })
@@ -31,8 +31,16 @@ exports.getProjects = (req, res) => {
     const sortBy = req.query.sortBy || 'fundingDeadline';
     const limit = parseInt(req.query.limit) || 6;
 
+    const filterOptions = {
+        fundingDeadline: { $gt: cutoff },
+    }
+
+    if (req.query.industry) filterOptions.industry = req.query.industry
+    if (req.query.location) filterOptions.location = req.query.location
+
     console.log(order, sortBy, limit)
-    Project.find({ fundingDeadline: { $gt: cutoff } })
+    // Projects.find({ _id: { $nin: [ObjectId(id)] } }, { fundingDeadline: { $lt: cutoff } })
+    Project.find(filterOptions)
         .sort([[sortBy, order]])
         .limit(limit)
         .exec((err, projects) => {
@@ -43,11 +51,10 @@ exports.getProjects = (req, res) => {
             }
             return res.status(200).json(projects);
         })
-    // Projects.find({ _id: { $nin: [ObjectId(id)] } }, { fundingDeadline: { $lt: cutoff } })
 }
 
 exports.addProject = (req, res) => {
-    multiUpload(req, res, function(err) {
+    multiUpload(req, res, function (err) {
         if (err) return res.status(422).json({
             errors: [{
                 title: 'File Upload Error', detail: err.message
