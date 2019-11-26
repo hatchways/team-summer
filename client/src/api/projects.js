@@ -2,9 +2,15 @@ import httpClient from './httpClient';
 
 export const addProject = async (id, projectData) => {
     const url = `/api/projects/add/${id}`;
+    const token = localStorage.getItem('jwtToken')
+    const authOptions = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'content-type': 'multipart/form'
+        }
+    }
     try {
-        // projectData.set("user", id);
-        const response = await httpClient.post(url, projectData);
+        const response = await httpClient.post(url, projectData, authOptions);
         console.log(response.data)
         if (response.data.err) return { ...response.data }
 

@@ -110,7 +110,7 @@ class AddProject extends Component {
             const newProject = await addProject(id, formData);
             console.log('newProject', newProject);
         }
-        console.log(this.state)
+        // console.log(this.state)
         // for (const pair of this.state.formData.entries()) {
         //     console.log(pair[0], pair[1])
         // }
@@ -119,7 +119,7 @@ class AddProject extends Component {
     setImages = (newImages) => {
         const { formData } = this.state;
         const addImage = [...this.state.images, ...newImages];
-        formData.set('images', addImage);
+        formData.append('images', addImage);
         this.setState({ images: addImage });
     }
 
