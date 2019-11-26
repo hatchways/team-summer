@@ -29,7 +29,7 @@ const styles = {
 }
 
 const industries = [
-    // { id: 0, name: '' },
+    { id: 0, name: '' },
     { id: 1321, name: 'Technology' },
     { id: 21423, name: 'Marketting' },
     { id: 42342, name: 'Engineering' },
@@ -38,6 +38,7 @@ const industries = [
 ]
 
 const locations = [
+    { id: 0, name: '' },
     { id: 123, name: 'New York' },
     { id: 431, name: 'California' },
     { id: 903, name: 'Georgia' },
@@ -80,24 +81,44 @@ class AddProject extends Component {
             location: '',
             images: [],
             fundingGoal: 0,
+            formData: {},
             validation: this.validators.valid()
         }
     }
 
+    componentDidMount() {
+        this.setState({ formData: new FormData() })
+    }
+
     handleInput = (event) => {
         const { value, name } = event.target;
-        this.setState({ [name]: value })
+        const { formData } = this.state;
+        formData.set(name, value);
+        this.setState({ [name]: value, formData })
     }
 
     handleSubmit = async (event) => {
         event.preventDefault();
-        console.log('submitted')
+        const validation = this.validators.validate(this.state);
+        this.setState({ validation });
+
+        if (validation.isValid) {
+            const { formData } = this.state;
+            const id = '5ddc10c981160d471cc4918e';
+            const newProject = await addProject(id, formData);
+            console.log(newProject);
+        }
+        console.log(this.state)
+        for (const value of this.state.formData.values()) {
+            console.log(value)
+        }
     }
 
     setImages = (newImages) => {
-        console.log(newImages)
-        const addImage = [...this.state.images, ...newImages]
-        this.setState({ images: addImage })
+        const { formData } = this.state;
+        const addImage = [...this.state.images, ...newImages];
+        formData.set('images', addImage);
+        this.setState({ images: addImage });
     }
 
     disableSubmit = () => {
@@ -124,9 +145,9 @@ class AddProject extends Component {
                         <TextField
                             name="title"
                             value={title}
-                            label="title"
                             onChange={this.handleInput}
                             type="title"
+                            variant="outlined"
                             required
                             error={validation.title.isInvalid}
                             helperText={validation.title.message}
@@ -135,9 +156,9 @@ class AddProject extends Component {
                         <TextField
                             name="subtitle"
                             value={subtitle}
-                            label="subtitle"
                             onChange={this.handleInput}
                             type="subtitle"
+                            variant="outlined"
                         />
                         <h3>Industry</h3>
                         <OutlinedSelect
@@ -182,12 +203,13 @@ class AddProject extends Component {
                             }
                         </OutlinedSelect>
                         <UploadImages setImages={this.setImages} images={images} />
-                        <CustomOutlinedInput
+                        <h3>Funding goal amount</h3>
+                        <TextField
                             name="fundingGoal"
                             value={fundingGoal}
-                            label="fundingGoal"
                             onChange={this.handleInput}
                             type="fundingGoal"
+                            variant="outlined"
                             error={validation.fundingGoal.isInvalid}
                             helperText={validation.fundingGoal.message}
                         />

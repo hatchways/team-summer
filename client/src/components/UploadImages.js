@@ -10,27 +10,29 @@ const UploadImages = (props) => {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
     return (
-        <div {...getRootProps()}>
+        <React.Fragment>
             <h3>Upload images</h3>
-            <input {...getInputProps()} />
-            {
-                isDragActive ?
-                    <p>Drop the files here ...</p> :
-                    <p>Drag 'n' drop some files here, or click to select files</p>
-            }
-            {
-                images ?
-                    images.map(image => (
-                        <img
-                            key={image.name}
-                            src={URL.createObjectURL(image)}
-                            alt=""
-                            style={{ maxHeight: '100px', maxWidth: '100px' }}
-                        />
-                    )) :
-                    <p>Select images to see preview here.</p>
-            }
-        </div>
+            <div {...getRootProps()}>
+                <input {...getInputProps()} />
+                {
+                    isDragActive ?
+                        <p>Drop the files here ...</p> :
+                        <p>Drag 'n' drop some files here, or click to select files</p>
+                }
+                {
+                    images ?
+                        images.map(image => (
+                            <img
+                                key={image.name}
+                                src={URL.createObjectURL(image)}
+                                alt=""
+                                style={{ maxHeight: '100px', maxWidth: '100px' }}
+                            />
+                        )) :
+                        <p>Select images to see preview here.</p>
+                }
+            </div>
+        </React.Fragment>
     )
 }
 
