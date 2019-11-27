@@ -1,10 +1,24 @@
 import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core'
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 
 const styles = {
-  deleteIcon: {
-    margin: 'auto',
+  deleteIconContainer: {
     position: 'absolute',
+    height: '75px',
+    width: '75px',
+    backgroundColor: 'grey',
+    opacity: '50%',
+    borderRadius: '10px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  deleteIcon: {
+    height: '30px',
+    width: '30px',
+    margin: 'auto',
+    opacity: '100%'
   },
   imageContainer: {
     margin: '4px',
@@ -18,7 +32,6 @@ const styles = {
   }
 }
 
-
 const Image = (props) => {
   const { classes, image, deleteImage } = props;
   const [isHovering, setHovering] = useState(false);
@@ -31,19 +44,22 @@ const Image = (props) => {
     setHovering(!isHovering)
   }
 
+  // const opacityStyle = () => {
+  //   return isHovering ? { opacity: '75%'} : { opacity: '100%' };
+  // }
+
   return (
-    <div className={classes.imageContainer}>
+    <div className={classes.imageContainer} onMouseEnter={handleMouseHover} onMouseLeave={handleMouseHover}>
       {
-        isHovering && <sup className={classes.deleteIcon}>Click to delete</sup>
+        isHovering && <div className={classes.deleteIconContainer}><DeleteOutlinedIcon className={classes.deleteIcon} /></div>
       }
       <img
-        onMouseEnter={handleMouseHover}
-        onMouseLeave={handleMouseHover}
         onClick={() => deleteImage(image)}
         className={classes.image}
         key={image.name}
         src={URL.createObjectURL(image)}
         alt=""
+        // style={opacityStyle()}
       />
     </div>
   )
