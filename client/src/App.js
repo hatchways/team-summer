@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { MuiThemeProvider, makeStyles } from '@material-ui/core';
+import React from 'react';
+import { MuiThemeProvider, withStyles } from '@material-ui/core';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 
 import { theme } from './themes/theme';
@@ -9,9 +9,13 @@ import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import ProfilePage from './pages/Profile';
 import Project from './pages/Project';
-import Toast, { ToastContext } from './components/Toast';
+import Toast from './components/Toast';
+import { PageContext } from './components/pageContext';
+import jwTokenCheck from './helpers/JwtTokenHelper'
 
-const globalStyles = makeStyles({
+require('dotenv').config();
+
+const styles = {
   '@global': {
     '.MuiButton-root': {
       // Custom styling for buttons according to specs
@@ -29,66 +33,96 @@ const globalStyles = makeStyles({
       }
     }
   }
-});
-
-const App = () => {
-  globalStyles();
-
-  const [toastProperties, setToastProperties] = useState({
-    text: '',
-    button: 'CLOSE',
-    variant: 'neutral'
-  });
-  const [showToast, toggleToast] = useState(false);
-  const [userAuthenticated, setAuthenticated] = useState(false);
-
-  const activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
-    setToastProperties({ text, variant, button });
-    toggleToast(true);
-  };
-
-  useEffect(() => {
-    setAuthenticated(Boolean(localStorage.getItem('jwtToken')));
-  }, []);
-
-  return (
-    <MuiThemeProvider theme={theme}>
-      <BrowserRouter>
-        {/* Placeholder user object */}
-        <NavBar user={{ name: 'Joe' }} authenticated={userAuthenticated} setAuthenticated={setAuthenticated}/>
-
-        {/* Routes */}
-        {/*- Base route uses a Redirect Component to redirect to
-            /signup. Change render to component with the home page
-            component if changing landing page.
-        */}
-        <ToastContext.Provider value={activateToast}>
-          <Route
-            exact
-            path="/"
-            render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'}/>}
-          />
-          <Route
-            path="/signup"
-            render={(routerProps) => <SignUp setAuthenticated={setAuthenticated} {...routerProps} />}
-          />
-          <Route
-            path="/login"
-            render={(routerProps) => <Login setAuthenticated={setAuthenticated} {...routerProps} />}
-          />
-          <Route path="/profiles/:id" component={ProfilePage}/>
-          <Route path="/project/:id" component={Project}/>
-        </ToastContext.Provider>
-        <Toast
-          buttonText={toastProperties.button}
-          toastMessage={toastProperties.text}
-          variant={toastProperties.variant}
-          toggleToast={toggleToast}
-          showToast={showToast}
-        />
-      </BrowserRouter>
-    </MuiThemeProvider>
-  );
 };
 
-export default App;
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    // globalStyles();
+
+    this.state = {
+      toastProperties: {
+        text: '',
+        button: 'CLOSE',
+        variant: 'neutral'
+      },
+      showToast: false,
+      userAuthenticated: false,
+      userDetails: {
+        name: '',
+        id: null
+      }
+    };
+
+    // Authenticate users pre-render
+    jwTokenCheck(this.state)
+  }
+
+  activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
+    this.setState({
+      toastProperties: { text, variant, button },
+      showToast: true
+    });
+  };
+
+  setAuthenticated = (authenticated) => this.setState({ userAuthenticated: authenticated });
+  setUserDetails = (id, name) => this.setState({ userDetails: { id, name } });
+  toggleToast = () => this.setState((state) => ({ showToast: !state.showToast }));
+
+  render() {
+    const { toastProperties, userDetails, userAuthenticated, showToast } = this.state;
+
+    const contextProps = {
+      activateToast: this.activateToast,
+      userAuthenticated: userAuthenticated,
+      setAuthenticated: this.setAuthenticated,
+      userDetails: userDetails,
+      setUserDetails: this.setUserDetails
+    };
+
+    return (
+      <MuiThemeProvider theme={theme}>
+        <BrowserRouter>
+          <NavBar
+            userDetails={userDetails}
+            setUserDetails={this.setUserDetails}
+            userAuthenticated={userAuthenticated}
+            setAuthenticated={this.setAuthenticated}
+          />
+
+          {/* Routes */}
+          {/*- Base route uses a Redirect Component to redirect to
+            /signup. Change render to component with the home page
+            component if changing landing page.
+
+          - wrap export in withPageContext to retrieve global state like:
+          - - Authentication
+          - - User details
+          - Other global variables can be put in the variable contextProps to pass it
+          - to each page.
+        */}
+          <PageContext.Provider value={contextProps}>
+            <Route
+              exact
+              path="/"
+              render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'}/>}
+            />
+            <Route path="/signup" component={SignUp}/>
+            <Route path="/login" component={Login}/>
+            <Route path="/profile/:id?" component={ProfilePage}/>
+            <Route path="/project/:id" component={Project}/>
+          </PageContext.Provider>
+          <Toast
+            buttonText={toastProperties.button}
+            toastMessage={toastProperties.text}
+            variant={toastProperties.variant}
+            toggleToast={this.toggleToast}
+            showToast={showToast}
+          />
+        </BrowserRouter>
+      </MuiThemeProvider>
+    );
+  }
+};
+
+export default withStyles(styles)(App);
