@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
-import { withStyles, Typography } from '@material-ui/core'
+import { withStyles, Typography } from '@material-ui/core';
 import { useDropzone } from 'react-dropzone';
+import Image from './Image';
 
 const styles = {
     uploadImagesContainer: {
@@ -11,7 +12,6 @@ const styles = {
         display: 'flex',
         marginTop: '20px',
         marginBottom: '20px',
-        outline: "none"
     },
     dragBox: {
         display: 'flex',
@@ -22,10 +22,15 @@ const styles = {
         padding: '5px',
         cursor: 'pointer',
         borderRadius: '2px',
+        outline: 'none'
     },
     dragBoxText: {
         margin: 'auto',
         textAlign: 'center',
+    },
+    uploadImageIcon: {
+        height: '40px',
+        width: '40px',
     },
     images: {
         display: 'flex',
@@ -34,17 +39,17 @@ const styles = {
         width: '250px',
         margin: 'auto',
     },
-    image: {
-        maxHeight: '75px',
-        maxWidth: '75px',
-        padding: '4px',
-        borderRadius: '10px',
-        cursor: 'pointer'
-    }
+    // image: {
+    //     maxHeight: '75px',
+    //     maxWidth: '75px',
+    //     padding: '4px',
+    //     borderRadius: '10px',
+    //     cursor: 'pointer'
+    // }
 }
 
 const UploadImages = (props) => {
-    const { classes, setImages, images } = props;
+    const { classes, setImages, images, deleteImage } = props;
 
     const onDrop = useCallback(acceptedFiles => {
         setImages(acceptedFiles)
@@ -60,10 +65,11 @@ const UploadImages = (props) => {
                     <div className={classes.dragBox}>
                         {
                             isDragActive ?
-                                <Typography className={classes.dragBoxText} variant='subtitle1'>Drop the files here ...</Typography> :
+                                <Typography className={classes.dragBoxText} variant='subtitle2'>Drop the files here ...</Typography> :
                                 <span className={classes.dragBoxText}>
-                                    <Typography variant='subtitle1'>Drop an image here</Typography>
-                                    <Typography variant='subtitle1'>or select a file</Typography>
+                                    <img className={classes.uploadImageIcon} src={require('../assets/upload-icon.png')} alt='upload-icon' />
+                                    <Typography variant='subtitle2'>Drop an image here</Typography>
+                                    <Typography variant='subtitle2'>or select a file</Typography>
                                 </span>
                         }
                     </div>
@@ -72,10 +78,10 @@ const UploadImages = (props) => {
                     {
                         images.length ?
                             images.map(image => (
-                                <img
-                                    className={classes.image}
+                                <Image
+                                    image={image}
                                     key={image.name}
-                                    src={URL.createObjectURL(image)}
+                                    deleteImage={deleteImage}
                                     alt=""
                                 />
                             )) :

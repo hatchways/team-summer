@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Typography, withStyles, Button, TextField } from '@material-ui/core';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import validator from 'validator';
 
 import { OutlinedSelect } from '../components/Inputs';
@@ -114,6 +116,11 @@ class AddProject extends Component {
         const validation = this.validators.validate(this.state);
         this.setState({ validation });
 
+        const { images, formData } = this.state;
+        for (const image of images) {
+            formData.append('images', image);
+        }
+
         if (validation.isValid) {
             const { formData } = this.state;
             const { id } = this.props.match.params; // will have to change eventually.
@@ -128,17 +135,19 @@ class AddProject extends Component {
     }
 
     setImages = (newImages) => {
-        const { formData } = this.state;
         if (this.state.images.length + newImages.length > 6) {
             console.log('Cannot add anymore images.')
             return;
         }
         const addImage = [...this.state.images, ...newImages];
-        for (const image of addImage) {
-            formData.append('images', image);
-        }
-        formData.append('images', addImage);
+
         this.setState({ images: addImage });
+    }
+
+    deleteImage = (imgName) => {
+        const { images } = this.state;
+        const filteredImages = images.filter(image => image !== imgName)
+        this.setState({ images: filteredImages })
     }
 
     disableSubmit = () => {
@@ -231,9 +240,9 @@ class AddProject extends Component {
                                 })
                             }
                         </OutlinedSelect>
-                        <UploadImages setImages={this.setImages} images={images} />
+                        <UploadImages setImages={this.setImages} images={images} deleteImage={this.deleteImage} />
                         <Typography variant="h4">Funding Goal Amount</Typography>
-                        <TextField
+                        {/* <TextField
                             name="fundingGoal"
                             classes={{ root: classes.formLine }}
                             value={fundingGoal}
@@ -243,6 +252,19 @@ class AddProject extends Component {
                             variant="outlined"
                             error={validation.fundingGoal.isInvalid}
                             helperText={validation.fundingGoal.message}
+                        /> */}
+                        {/* <InputLabel htmlFor="funding-goal-amount"></InputLabel> */}
+                        <OutlinedInput
+                            name="fundingGoal"
+                            id="fundingGoal"
+                            value={fundingGoal}
+                            fullWidth={true}
+                            onChange={this.handleInput}
+                            type="fundingGoal"
+                            variant="outlined"
+                            error={validation.fundingGoal.isInvalid}
+                            helpertext={validation.fundingGoal.message}
+                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
                         />
                         <Button classes={{ root: classes.button }} type="submit" variant="contained" color="primary" disabled={this.disableSubmit()}>
                             Submit
