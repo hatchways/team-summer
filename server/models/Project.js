@@ -29,6 +29,16 @@ const ProjectSchema = new Schema({
       type: String
     }
   ],
+  funding: {
+    donorCount: {
+      type: Number,
+      default: 0
+    },
+    fundingTotal: {
+      type: Number,
+      default: 0
+    }
+  },
   fundingGoal: {
     type: Number,
     required: true,
@@ -37,24 +47,7 @@ const ProjectSchema = new Schema({
   date: {
     type: Date,
     default: Date.now
-  },
-  investments: [
-    {
-      type: ObjectId,
-      ref: 'Investment'
-    }
-  ]
-});
-
-ProjectSchema.methods.totalInvestments = async function() {
-  try {
-    const {investments} = await this.model('Project')
-      .findOne({ _id: this._id })
-      .populate('investments');
-    return investments.reduce((a, b) => a + b.value, 0);
-  } catch (err) {
-    return 0;
   }
-};
+});
 
 module.exports = mongoose.model('Project', ProjectSchema);

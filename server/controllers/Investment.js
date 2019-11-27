@@ -6,9 +6,20 @@ exports.addInvestment = async (req, res) => {
   const user = req.profile._id;
 
   try {
-    const investment = await Investment.create({ user, project: ObjectId(projectId), value: parseInt(value) });
+    const investment = await Investment.create(
+      { user, project: ObjectId(projectId), 
+        value: parseInt(value) }
+    );
     await User.updateOne({ _id: user._id }, { $push: { investments: investment._id } });
-    await Project.updateOne({ _id: project._id }, { $push: { investments: investment._id } });
+    await Project.updateOne(
+      { _id: projectId },
+      {
+        $inc: {
+          'funding.donorCount': 1,
+          'funding.fundingTotal': parseInt(value)
+        }
+      }
+    );
     res.status(201).send(investment);
   } catch (err) {
     res.status(400).json({
