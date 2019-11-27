@@ -242,18 +242,6 @@ class AddProject extends Component {
                         </OutlinedSelect>
                         <UploadImages setImages={this.setImages} images={images} deleteImage={this.deleteImage} />
                         <Typography variant="h4">Funding Goal Amount</Typography>
-                        {/* <TextField
-                            name="fundingGoal"
-                            classes={{ root: classes.formLine }}
-                            value={fundingGoal}
-                            fullWidth={true}
-                            onChange={this.handleInput}
-                            type="fundingGoal"
-                            variant="outlined"
-                            error={validation.fundingGoal.isInvalid}
-                            helperText={validation.fundingGoal.message}
-                        /> */}
-                        {/* <InputLabel htmlFor="funding-goal-amount"></InputLabel> */}
                         <OutlinedInput
                             name="fundingGoal"
                             id="fundingGoal"

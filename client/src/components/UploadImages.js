@@ -38,14 +38,7 @@ const styles = {
         height: '150px',
         width: '250px',
         margin: 'auto',
-    },
-    // image: {
-    //     maxHeight: '75px',
-    //     maxWidth: '75px',
-    //     padding: '4px',
-    //     borderRadius: '10px',
-    //     cursor: 'pointer'
-    // }
+    }
 }
 
 const UploadImages = (props) => {

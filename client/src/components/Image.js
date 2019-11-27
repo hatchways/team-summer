@@ -11,8 +11,6 @@ const styles = {
     opacity: '50%',
     borderRadius: '10px',
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
   },
   deleteIcon: {
     height: '30px',
