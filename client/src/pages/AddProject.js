@@ -17,7 +17,7 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         margin: '0px 20px 0px 10px',
-        padding: '20px 50px 20px 30px',
+        padding: '30px 50px 20px 30px',
         boxShadow: '2px 0px 4px 2px #D3D3D3',
     },
     addProjectPage: {
@@ -25,18 +25,22 @@ const styles = {
         padding: '20px',
     },
     formLine: {
-        paddingTop: '20px',
-        paddingBottom: '20px',
+        // paddingTop: '20px',
+        marginBottom: '20px',
     },
     form: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'left',
-        width: '100%'
+        width: '100%',
+        marginTop: '30px'
     },
     fundingGoalContainer: {
         marginBottom: '40px'
     },
+    button: {
+        margin: '20px 0px 10px 0px'
+    }
 }
 
 const industries = [
@@ -155,7 +159,7 @@ class AddProject extends Component {
             <main className={classes.pageContent}>
                 <div className={classes.projectPreviewContainer}>
                     <Typography variant="h3" align='left'>Product Preview</Typography>
-                    <Button type="submit" variant="contained" color="primary" >
+                    <Button classes={{ root: classes.button }} type="submit" variant="contained" color="primary" >
                         Preview
                     </Button>
                 </div>
@@ -166,6 +170,7 @@ class AddProject extends Component {
                         <Typography variant="h3">Title</Typography>
                         <TextField
                             name="title"
+                            classes={{ root: classes.formLine }}
                             value={title}
                             fullWidth={true}
                             onChange={this.handleInput}
@@ -180,6 +185,7 @@ class AddProject extends Component {
                         <Typography variant="h3">Subtitle</Typography>
                         <TextField
                             name="subtitle"
+                            classes={{ root: classes.formLine }}
                             value={subtitle}
                             fullWidth={true}
                             onChange={this.handleInput}
@@ -230,10 +236,10 @@ class AddProject extends Component {
                             }
                         </OutlinedSelect>
                         <UploadImages setImages={this.setImages} images={images} />
-                        <div className={classes.fundingGoalContainer}>
                         <Typography variant="h3">Funding Goal Amount</Typography>
                         <TextField
                             name="fundingGoal"
+                            classes={{ root: classes.formLine }}
                             value={fundingGoal}
                             fullWidth={true}
                             onChange={this.handleInput}
@@ -242,8 +248,7 @@ class AddProject extends Component {
                             error={validation.fundingGoal.isInvalid}
                             helperText={validation.fundingGoal.message}
                         />
-                        </div>
-                        <Button type="submit" variant="contained" color="primary" disabled={this.disableSubmit()}>
+                        <Button classes={{ root: classes.button }} type="submit" variant="contained" color="primary" disabled={this.disableSubmit()}>
                             Submit
                         </Button>
                     </form>
