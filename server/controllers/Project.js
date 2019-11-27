@@ -33,13 +33,11 @@ exports.addProject = (req, res) => {
             }]
         });
         const { title, subtitle, description, industry, location, fundingGoal, fundingDeadline } = req.body;
-        console.log(req.body);
         if (!title || !industry || !location || !fundingGoal) {
             return res.status(400).json({
                 error: 'Please fill out the required fields.'
             });
         }
-        console.log('req.files', req.files)
         const images = req.files.map(file => file.location);
         const user = req.profile;
         const project = new Project({
