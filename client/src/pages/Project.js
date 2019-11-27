@@ -1,14 +1,13 @@
 import React from 'react';
 import {
   Typography,
-  styled,
-  withStyles,
   Grid,
-  Paper,
   Card,
   CardMedia,
-  CardContent
+  CardContent,
+  LinearProgress
 } from '@material-ui/core';
+import { lighten, styled, withStyles } from '@material-ui/core/styles';
 
 const styles = (theme) => ({
   pageTitle: {
@@ -16,6 +15,18 @@ const styles = (theme) => ({
   },
   projectDetailsContent: {
     padding: theme.spacing(5)
+  },
+  fundraisingBar: {
+    height: 8,
+    width: 250,
+    borderRadius: 100,
+    margin: '0 auto'
+  },
+  fundraisingBarPrimary: {
+    backgroundColor: theme.palette.primary.main
+  },
+  fundraisingBarSecondary: {
+    backgroundColor: lighten(theme.palette.secondary.main, 0.8)
   }
 });
 
@@ -64,7 +75,9 @@ const FundraisingAmounts = styled('div')(({ theme }) => ({
   // Alignment
   display: 'flex',
   justifyContent: 'center',
+  // Container spacing
   padding: '0 30px 0 30px',
+  marginBottom: 40,
 
   '& > h5:first-child': {
     marginRight: 5,
@@ -95,7 +108,7 @@ class Project extends React.Component {
     description: 'Coffee shop will make its best effort to create a unique place where customers can socialize with each other in a comfortable and relaxing environment while enjoying the best brewed coffee or espresso and pastries in town. We will be in the business of helping our customers to relieve their daily stresses by providing piece of mind through great ambience, convenient location, friendly customer service, and products of consistently high quality.',
     industry: 'Food and Craft',
     location: 'San Jose, CA',
-    fundingRaised: 23550,
+    fundingRaised: 30550,
     fundingGoal: 52000,
     images: [
       '/images/placeholder-sunset.jpg'
@@ -141,7 +154,14 @@ class Project extends React.Component {
   }
 
   projectFundraisingCard() {
+    const { classes } = this.props;
     const { fundingRaised, fundingGoal } = this.state;
+
+    const calculateCompleted = () => {
+      const percentageComplete = Math.round((fundingRaised * 100) / fundingGoal);
+      return Math.min(percentageComplete, 100);
+    };
+
     return (
       <Card elevation={0}>
         <CardLine/>
@@ -151,6 +171,12 @@ class Project extends React.Component {
           <Typography variant="h5" color="secondary">/</Typography>
           <Typography variant="h5" color="secondary">{fundingGoal.toLocaleString()}</Typography>
         </FundraisingAmounts>
+        <LinearProgress variant="determinate" value={calculateCompleted()}
+                        className={classes.fundraisingBar}
+                        classes={{
+                          root: classes.fundraisingBarSecondary,
+                          bar: classes.fundraisingBarPrimary
+                        }}/>
       </Card>
     );
   }
