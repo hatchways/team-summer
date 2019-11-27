@@ -35,8 +35,7 @@ exports.addProject = (req, res) => {
         industry,
         location,
         images,
-        fundingGoal: parseInt(fundingGoal),
-        funding: {donorCount: 0, fundingTotal: 0} //this has to be auto-setting
+        fundingGoal: parseInt(fundingGoal)
       });
       await User.updateOne({ _id: user._id }, { $push: { projects: project._id } });
       res.json(project);
