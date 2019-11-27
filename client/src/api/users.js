@@ -1,7 +1,7 @@
 import httpClient from './httpClient';
 
 export const getUser = (id) => {
-  return httpClient.get(`/api/user/${id}`);
+  return httpClient.get(`/api/users/${id}`);
 };
 
 export const createOrLoginUser = async (method, userData) => {
