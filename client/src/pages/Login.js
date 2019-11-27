@@ -106,7 +106,6 @@ class Login extends React.Component {
 
       if (userLogin.hasOwnProperty('success')) {
         this.props.activateToast('Login Successful', 'success');
-        console.log(userLogin);
         this.props.setUserDetails(userLogin.id, userLogin.name);
         this.props.setAuthenticated(true);
         this.props.history.push('/profile');
