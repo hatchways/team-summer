@@ -33,11 +33,10 @@ export const theme = createMuiTheme({
     h6: {
       fontSize: '1em',
       fontWeight: '500',
-      textAlign: 'center',
       margin: `${headerMargin}`
     },
     body1: {
-      margin: '10px 0'
+      margin: '5px 0'
     },
     subtitle2: {
       color: '#d3d3d3',
