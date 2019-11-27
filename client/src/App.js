@@ -1,7 +1,6 @@
 import React from 'react';
 import { MuiThemeProvider, withStyles } from '@material-ui/core';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
-import { verify as jwtVerify } from 'jsonwebtoken';
 
 import { theme } from './themes/theme';
 
@@ -11,6 +10,7 @@ import Login from './pages/Login';
 import ProfilePage from './pages/Profile';
 import Toast from './components/Toast';
 import { PageContext } from './components/pageContext';
+import jwTokenCheck from './helpers/JwtTokenHelper'
 
 require('dotenv').config();
 
@@ -53,31 +53,8 @@ class App extends React.Component {
       }
     };
 
-    // Authenticate user pre-render
-    const jwtToken = localStorage.getItem('jwtToken');
-
-    if (jwtToken) {
-      try {
-        const data = jwtVerify(jwtToken, process.env.REACT_APP_JWT_SECRET).payload;
-        this.state.userDetails = { name: data.name, id: data._id };
-        this.state.userAuthenticated = true;
-      } catch (error) {
-        if (error.name === 'TokenExpiredError') {
-          localStorage.removeItem('jwtToken');
-          this.state = {
-            showToast: true,
-            toastDetails: {
-              text: 'Your session has expired, please log in again.',
-              variant: 'error',
-              ...this.state.toastDetails
-            },
-            ...this.state
-          };
-        } else {
-          console.log(error);
-        }
-      }
-    }
+    // Authenticate users pre-render
+    jwTokenCheck(this.state)
   }
 
   activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
