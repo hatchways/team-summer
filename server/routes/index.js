@@ -1,13 +1,10 @@
-var express = require("express");
+var express = require('express');
 var router = express.Router();
-// const auth = require('../controllers/authController.api.js');
 const authRoutes = require('./auth');
 const projectRoutes = require('./project');
 
-const { verifyJwt } = require('../middlewares');
-
-router.get("/welcome", function (req, res, next) {
-  res.status(200).send({ welcomeMessage: "Step 1 (completed)" });
+router.get('/welcome', function (req, res, next) {
+  res.status(200).send({ welcomeMessage: 'Step 1 (completed)' });
 });
 
 router.use('/api', authRoutes);
