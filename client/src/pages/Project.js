@@ -5,7 +5,8 @@ import {
   Card,
   CardMedia,
   CardContent,
-  LinearProgress
+  LinearProgress,
+  Button
 } from '@material-ui/core';
 import { lighten, styled, withStyles } from '@material-ui/core/styles';
 
@@ -20,7 +21,7 @@ const styles = (theme) => ({
     height: 8,
     width: 250,
     borderRadius: 100,
-    margin: '0 auto'
+    margin: '30px auto'
   },
   fundraisingBarPrimary: {
     backgroundColor: theme.palette.primary.main
@@ -100,6 +101,28 @@ const FundraisingAmounts = styled('div')(({ theme }) => ({
   }
 }));
 
+const FundraisingStatContainer = styled('div')(({ theme }) => ({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, 1fr)',
+  borderTop: `1px solid ${lighten(theme.palette.secondary.main, 0.5)}`,
+  borderBottom: `1px solid ${lighten(theme.palette.secondary.main, 0.5)}`
+}));
+
+const FundraisingStat = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  padding: 25,
+
+  '&:first-of-type': {
+    borderRight: `1px solid ${lighten(theme.palette.secondary.main, 0.5)}`
+  },
+
+  '& > h4, & > h6': {
+    margin: 0,
+    textAlign: 'center'
+  }
+}));
 
 class Project extends React.Component {
   state = {
@@ -110,6 +133,8 @@ class Project extends React.Component {
     location: 'San Jose, CA',
     fundingRaised: 30550,
     fundingGoal: 52000,
+    backers: 22,
+    daysLeft: 200,
     images: [
       '/images/placeholder-sunset.jpg'
     ]
@@ -134,11 +159,11 @@ class Project extends React.Component {
 
   projectDetailsCard() {
     const { classes } = this.props;
-    const { description, location } = this.state;
+    const { description, location, images } = this.state;
 
     return (
       <Card elevation={4}>
-        <CardMedia component="img" image="/images/placeholder-sunset.jpg"
+        <CardMedia component="img" image={images[0]}
                    title="Project image"
                    height="460"/>
         <CardContent className={classes.projectDetailsContent}>
@@ -155,7 +180,7 @@ class Project extends React.Component {
 
   projectFundraisingCard() {
     const { classes } = this.props;
-    const { fundingRaised, fundingGoal } = this.state;
+    const { fundingRaised, fundingGoal, backers, daysLeft } = this.state;
 
     const calculateCompleted = () => {
       const percentageComplete = Math.round((fundingRaised * 100) / fundingGoal);
@@ -177,6 +202,17 @@ class Project extends React.Component {
                           root: classes.fundraisingBarSecondary,
                           bar: classes.fundraisingBarPrimary
                         }}/>
+        <FundraisingStatContainer>
+          <FundraisingStat>
+            <Typography variant="h4">{backers}</Typography>
+            <Typography variant="h6" color="secondary">Backers</Typography>
+          </FundraisingStat>
+          <FundraisingStat>
+            <Typography variant="h4">{daysLeft}</Typography>
+            <Typography variant="h6" color="secondary">Days to go</Typography>
+          </FundraisingStat>
+        </FundraisingStatContainer>
+        <Button variant="outlined" color="secondary">Send Message</Button>
       </Card>
     );
   }
