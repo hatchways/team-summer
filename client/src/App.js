@@ -92,7 +92,7 @@ class App extends React.Component {
   toggleToast = () => this.setState((state) => ({ showToast: !state.showToast }));
 
   render() {
-    const { toastProperties, userDetails, userAuthenticated } = this.state;
+    const { toastProperties, userDetails, userAuthenticated, showToast } = this.state;
 
     const contextProps = {
       activateToast: this.activateToast,
@@ -138,7 +138,7 @@ class App extends React.Component {
             toastMessage={toastProperties.text}
             variant={toastProperties.variant}
             toggleToast={this.toggleToast}
-            showToast={this.showToast}
+            showToast={showToast}
           />
         </BrowserRouter>
       </MuiThemeProvider>
