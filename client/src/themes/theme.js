@@ -47,7 +47,8 @@ export const theme = createMuiTheme({
   breakpoints: {
     values: {
       sm: 415,
-      md: 800
+      md: 800,
+      lg: 1060
     }
   },
   palette: {
@@ -56,7 +57,7 @@ export const theme = createMuiTheme({
       contrastText: '#ffffff'
     },
     secondary: {
-      main: '#1f1f1f'
+      main: '#BDBDBD'
     }
   },
   primary: '#69E781',
