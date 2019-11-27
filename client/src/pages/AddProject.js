@@ -15,6 +15,7 @@ const styles = {
     },
     projectPreviewContainer: {
         display: 'flex',
+        width: '25%',
         flexDirection: 'column',
         margin: '0px 20px 0px 10px',
         padding: '30px 50px 20px 30px',
@@ -119,7 +120,6 @@ class AddProject extends Component {
             const newProject = await addProject(id, formData);
             if (newProject.success) {
                 console.log(newProject);
-                this.props.history.push('/profile');
                 this.props.activateToast('Upload Successful', 'success');
             } else if (newProject.err) {
                 console.log(newProject.err);
@@ -154,7 +154,7 @@ class AddProject extends Component {
         return (
             <main className={classes.pageContent}>
                 <div className={classes.projectPreviewContainer}>
-                    <Typography variant="h3" align='left'>Product Preview</Typography>
+                    <Typography variant="h3" align='left'>{title}</Typography>
                     <Button classes={{ root: classes.button }} type="submit" variant="contained" color="primary" >
                         Preview
                     </Button>

@@ -10,7 +10,8 @@ const styles = {
     dropzoneContainer: {
         display: 'flex',
         marginTop: '20px',
-        marginBottom: '20px'
+        marginBottom: '20px',
+        outline: "none"
     },
     dragBox: {
         display: 'flex',
@@ -32,13 +33,13 @@ const styles = {
         height: '150px',
         width: '250px',
         margin: 'auto',
-        cursor: 'pointer'
     },
     image: {
         maxHeight: '75px',
         maxWidth: '75px',
         padding: '4px',
-        borderRadius: '10px'
+        borderRadius: '10px',
+        cursor: 'pointer'
     }
 }
 
@@ -53,21 +54,23 @@ const UploadImages = (props) => {
     return (
         <div className={classes.uploadImagesContainer}>
             <Typography variant='h4'>Upload images</Typography>
-            <div className={classes.dropzoneContainer} {...getRootProps()}>
-                <input {...getInputProps()} />
-                <div className={classes.dragBox}>
-                    {
-                        isDragActive ?
-                            <Typography className={classes.dragBoxText} variant='subtitle1'>Drop the files here ...</Typography> :
-                            <span className={classes.dragBoxText}>
-                                <Typography variant='subtitle1'>Drag 'n' drop some files here,</Typography>
-                                <Typography variant='subtitle1'>or click to select files</Typography>
-                            </span>
-                    }
+            <div className={classes.dropzoneContainer}>
+                <div {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    <div className={classes.dragBox}>
+                        {
+                            isDragActive ?
+                                <Typography className={classes.dragBoxText} variant='subtitle1'>Drop the files here ...</Typography> :
+                                <span className={classes.dragBoxText}>
+                                    <Typography variant='subtitle1'>Drop an image here</Typography>
+                                    <Typography variant='subtitle1'>or select a file</Typography>
+                                </span>
+                        }
+                    </div>
                 </div>
                 <div className={classes.images}>
                     {
-                        images ?
+                        images.length ?
                             images.map(image => (
                                 <img
                                     className={classes.image}
@@ -76,7 +79,7 @@ const UploadImages = (props) => {
                                     alt=""
                                 />
                             )) :
-                            <Typography variant='subtitle1'>Select images to see preview here.</Typography>
+                            null
                     }
                 </div>
             </div>
