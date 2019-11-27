@@ -17,7 +17,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { Link, withRouter } from 'react-router-dom';
 
 import SvgProductLaunchLogo from './ProductLaunchLogo';
-import { withPageContext } from './pageContext';
 
 const useStyles = makeStyles((theme) => ({
   navBar: {
@@ -132,6 +131,7 @@ const Navigation = (props) => {
   const handleDropdownClick = (route) => () => {
     if (route === '/logout') {
       props.setAuthenticated(false);
+      props.setUserDetails(null, '');
       localStorage.removeItem('jwtToken');
       props.history.push('/login');
     } else {

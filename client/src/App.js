@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { MuiThemeProvider, makeStyles } from '@material-ui/core';
+import React from 'react';
+import { MuiThemeProvider, withStyles } from '@material-ui/core';
 import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import { verify as jwtVerify } from 'jsonwebtoken';
 
@@ -14,7 +14,7 @@ import { PageContext } from './components/pageContext';
 
 require('dotenv').config();
 
-const globalStyles = makeStyles({
+const styles = {
   '@global': {
     '.MuiButton-root': {
       // Custom styling for buttons according to specs
@@ -32,62 +32,88 @@ const globalStyles = makeStyles({
       }
     }
   }
-});
+};
 
-const App = () => {
-  globalStyles();
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    // globalStyles();
 
-  const [toastProperties, setToastProperties] = useState({
-    text: '',
-    button: 'CLOSE',
-    variant: 'neutral'
-  });
-  const [showToast, toggleToast] = useState(false);
-  const [userAuthenticated, setAuthenticated] = useState(false);
-  const [userDetails, setUserDetails] = useState({
-    id: null,
-    name: ''
-  });
+    this.state = {
+      toastProperties: {
+        text: '',
+        button: 'CLOSE',
+        variant: 'neutral'
+      },
+      showToast: false,
+      userAuthenticated: false,
+      userDetails: {
+        name: '',
+        id: null
+      }
+    };
 
-  const activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
-    setToastProperties({ text, variant, button });
-    toggleToast(true);
-  };
-
-  const contextProps = {
-    activateToast,
-    userAuthenticated,
-    setAuthenticated,
-    userDetails,
-    setUserDetails
-  };
-
-  useEffect(() => {
+    // Authenticate user pre-render
     const jwtToken = localStorage.getItem('jwtToken');
 
     if (jwtToken) {
       try {
         const data = jwtVerify(jwtToken, process.env.REACT_APP_JWT_SECRET).payload;
-        setUserDetails({ name: data.name, id: data._id });
-        setAuthenticated(true);
+        this.state.userDetails = { name: data.name, id: data._id };
+        this.state.userAuthenticated = true;
       } catch (error) {
-        if (error.name === 'TokenExpiredError') localStorage.removeItem('jwtToken');
-        activateToast('Your session has expired, please log in again.', 'error');
+        if (error.name === 'TokenExpiredError') {
+          localStorage.removeItem('jwtToken');
+          this.state = {
+            showToast: true,
+            toastDetails: {
+              text: 'Your session has expired, please log in again.',
+              variant: 'error',
+              ...this.state.toastDetails
+            },
+            ...this.state
+          };
+        } else {
+          console.log(error);
+        }
       }
     }
-  }, []);
+  }
 
-  return (
-    <MuiThemeProvider theme={theme}>
-      <BrowserRouter>
-        <NavBar
-          userDetails={userDetails}
-          userAuthenticated={userAuthenticated}
-          setAuthenticated={setAuthenticated}
-        />
+  activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
+    this.setState({
+      toastProperties: { text, variant, button },
+      showToast: true
+    });
+  };
 
-        {/* Routes */}
-        {/*- Base route uses a Redirect Component to redirect to
+  setAuthenticated = (authenticated) => this.setState({ userAuthenticated: authenticated });
+  setUserDetails = (id, name) => this.setState({ userDetails: { id, name } });
+  toggleToast = () => this.setState((state) => ({ showToast: !state.showToast }));
+
+  render() {
+    const { toastProperties, userDetails, userAuthenticated } = this.state;
+
+    const contextProps = {
+      activateToast: this.activateToast,
+      userAuthenticated: userAuthenticated,
+      setAuthenticated: this.setAuthenticated,
+      userDetails: userDetails,
+      setUserDetails: this.setUserDetails
+    };
+
+    return (
+      <MuiThemeProvider theme={theme}>
+        <BrowserRouter>
+          <NavBar
+            userDetails={userDetails}
+            setUserDetails={this.setUserDetails}
+            userAuthenticated={userAuthenticated}
+            setAuthenticated={this.setAuthenticated}
+          />
+
+          {/* Routes */}
+          {/*- Base route uses a Redirect Component to redirect to
             /signup. Change render to component with the home page
             component if changing landing page.
 
@@ -97,26 +123,27 @@ const App = () => {
           - Other global variables can be put in the variable contextProps to pass it
           - to each page.
         */}
-        <PageContext.Provider value={contextProps}>
-          <Route
-            exact
-            path="/"
-            render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'} />}
+          <PageContext.Provider value={contextProps}>
+            <Route
+              exact
+              path="/"
+              render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'}/>}
+            />
+            <Route path="/signup" component={SignUp}/>
+            <Route path="/login" component={Login}/>
+            <Route path="/profile/:id?" component={ProfilePage}/>
+          </PageContext.Provider>
+          <Toast
+            buttonText={toastProperties.button}
+            toastMessage={toastProperties.text}
+            variant={toastProperties.variant}
+            toggleToast={this.toggleToast}
+            showToast={this.showToast}
           />
-          <Route path="/signup" component={SignUp} />
-          <Route path="/login" component={Login} />
-          <Route path="/profile/:id?" component={ProfilePage} />
-        </PageContext.Provider>
-        <Toast
-          buttonText={toastProperties.button}
-          toastMessage={toastProperties.text}
-          variant={toastProperties.variant}
-          toggleToast={toggleToast}
-          showToast={showToast}
-        />
-      </BrowserRouter>
-    </MuiThemeProvider>
-  );
+        </BrowserRouter>
+      </MuiThemeProvider>
+    );
+  }
 };
 
-export default App;
+export default withStyles(styles)(App);

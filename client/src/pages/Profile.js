@@ -40,7 +40,12 @@ class ProfilePage extends Component {
   };
 
   componentDidMount() {
-    const id = this.props.match.params.id || JSON.parse(localStorage.getItem('userData')).id;
+    if (!this.props.userAuthenticated) {
+      this.props.activateToast('Please log in to view profiles', 'error');
+      return this.props.history.push('/login');
+    }
+
+    const id = this.props.match.params.id || this.props.userDetails.id;
     getUser(id).then((profile) => {
       this.setState({ profile: profile.data });
     });
@@ -65,7 +70,7 @@ class ProfilePage extends Component {
 
   getButtonType() {
     const { profile } = this.state;
-    return profile._id === JSON.parse(localStorage.getItem('userData')).id ? 'edit' : 'message';
+    return this.props.userAuthenticated && profile._id === this.props.userDetails.id ? 'edit' : 'message';
   }
 
   handleClick() {
