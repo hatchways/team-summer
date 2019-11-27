@@ -24,10 +24,6 @@ const styles = {
         margin: '10px',
         padding: '20px',
     },
-    formLine: {
-        // paddingTop: '20px',
-        marginBottom: '20px',
-    },
     form: {
         display: 'flex',
         flexDirection: 'column',
@@ -35,8 +31,8 @@ const styles = {
         width: '100%',
         marginTop: '30px'
     },
-    fundingGoalContainer: {
-        marginBottom: '40px'
+    formLine: {
+        marginBottom: '20px',
     },
     button: {
         margin: '20px 0px 10px 0px'
@@ -167,7 +163,7 @@ class AddProject extends Component {
                     <Typography variant="h2" align='left'>Start with basics</Typography>
                     <form className={classes.form} onSubmit={this.handleSubmit} >
 
-                        <Typography variant="h3">Title</Typography>
+                        <Typography variant="h4">Title</Typography>
                         <TextField
                             name="title"
                             classes={{ root: classes.formLine }}
@@ -182,7 +178,7 @@ class AddProject extends Component {
                         />
 
 
-                        <Typography variant="h3">Subtitle</Typography>
+                        <Typography variant="h4">Subtitle</Typography>
                         <TextField
                             name="subtitle"
                             classes={{ root: classes.formLine }}
@@ -193,9 +189,9 @@ class AddProject extends Component {
                             variant="outlined"
                         />
 
-                        <Typography variant="h3">Industry</Typography>
                         <OutlinedSelect
                             name="industry"
+                            labelText="Industry"
                             selectId="industry"
                             setState={this.handleInput}
                             selectName="industry"
@@ -214,9 +210,9 @@ class AddProject extends Component {
                                 })
                             }
                         </OutlinedSelect>
-                        <Typography variant="h3">Project Location</Typography>
                         <OutlinedSelect
                             name="location"
+                            labelText="Location"
                             selectId="location"
                             setState={this.handleInput}
                             selectName="location"
@@ -236,7 +232,7 @@ class AddProject extends Component {
                             }
                         </OutlinedSelect>
                         <UploadImages setImages={this.setImages} images={images} />
-                        <Typography variant="h3">Funding Goal Amount</Typography>
+                        <Typography variant="h4">Funding Goal Amount</Typography>
                         <TextField
                             name="fundingGoal"
                             classes={{ root: classes.formLine }}

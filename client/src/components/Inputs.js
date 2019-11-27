@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { InputLabel, OutlinedInput, Select, TextField } from '@material-ui/core';
+import { Typography, InputLabel, OutlinedInput, Select, TextField } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 const handleSelect = (callback) => event => callback(event);
@@ -14,10 +14,9 @@ const OutlinedSelect = (props) => {
 
     return (
         <React.Fragment>
-            <InputLabel ref={inputLabel} htmlFor={props.selectId} {...props.inputProps}>{props.labelText}</InputLabel>
+            <InputLabel ref={inputLabel} htmlFor={props.selectId} {...props.inputProps}><Typography variant="h4">{props.labelText}</Typography></InputLabel>
             <Select
                 native
-                classes={props.classes}
                 onChange={handleSelect(props.setState)}
                 input={
                     <OutlinedInput

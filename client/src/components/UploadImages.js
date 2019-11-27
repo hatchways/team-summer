@@ -52,7 +52,7 @@ const UploadImages = (props) => {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
     return (
         <div className={classes.uploadImagesContainer}>
-            <Typography variant='h3'>Upload images</Typography>
+            <Typography variant='h4'>Upload images</Typography>
             <div className={classes.dropzoneContainer} {...getRootProps()}>
                 <input {...getInputProps()} />
                 <div className={classes.dragBox}>
