@@ -1,26 +1,40 @@
 import { createMuiTheme } from '@material-ui/core';
 
+const headerMargin = '10px 0';
+
 export const theme = createMuiTheme({
   typography: {
     fontFamily: '"Roboto"',
     h1: {
-      fontSize: '1.5em',
-      fontWeight: 'semi-bold',
-      textAlign: 'center'
-    },
-    h2: {
-      fontSize: '2.2em',
+      fontSize: '1.7em',
       fontWeight: 'semi-bold',
       textAlign: 'center',
     },
+    h2: {
+      fontSize: '2.2em',
+      fontWeight: '500',
+      textAlign: 'center',
+      margin: `${headerMargin}`
+    },
     h3: {
-      fontSize: '2em',
-      fontWeight: 'semi-bold'
+      fontSize: '1.9em',
+      fontWeight: 'semi-bold',
+      margin: `${headerMargin}`
+    },
+    h4: {
+      fontSize: '1.6em',
+      fontWeight: '500',
+      margin: `${headerMargin}`
+    },
+    h5: {
+      fontSize: '1.3em',
+      margin: `${headerMargin}`
     },
     h6: {
       fontSize: '1em',
       fontWeight: '500',
-      textAlign: 'center'
+      textAlign: 'center',
+      margin: `${headerMargin}`
     },
     body1: {
       margin: '10px 0'
