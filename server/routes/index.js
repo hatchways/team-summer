@@ -3,6 +3,7 @@ var router = express.Router();
 const authRoutes = require('./auth');
 const projectRoutes = require('./project');
 const userRoutes = require('./users');
+const { makePayment } = require('./payments');
 
 router.get('/welcome', function(req, res, next) {
   res.status(200).send({ welcomeMessage: 'Step 1 (completed)' });
@@ -11,6 +12,7 @@ router.get('/welcome', function(req, res, next) {
 router.use('/api', authRoutes);
 router.use('/api', projectRoutes);
 router.use('/api', userRoutes);
+router.use('/api', payments.makePayment);
 
 // EG usage of verifyJwt middleware for protected routes
 // Works with header format:  authorization: {bearer} {token}
