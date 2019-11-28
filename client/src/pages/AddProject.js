@@ -7,9 +7,9 @@ import validator from 'validator';
 import { OutlinedSelect } from '../components/Inputs';
 import UploadImages from '../components/UploadImages';
 import FormValidator from '../helpers/form-validation';
-import { withToast } from '../components/Toast';
 import { addProject } from '../api/projects';
-import { locations, industries} from '../dummyData/dropDownItems'
+import { locations, industries } from '../dummyData/dropDownItems'
+import { withPageContext } from '../components/pageContext';
 
 const styles = {
     pageContent: {
@@ -248,4 +248,4 @@ class AddProject extends Component {
     }
 }
 
-export default withToast(withStyles(styles)(AddProject));
+export default withPageContext(withStyles(styles)(AddProject));

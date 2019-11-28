@@ -7,8 +7,8 @@ import { capitalize } from '@material-ui/core/utils';
 import { CustomOutlinedInput } from '../components/Inputs';
 import CenteredPageHeader from '../components/CenteredPageHeader';
 import FormValidator from '../helpers/form-validation';
-import { withToast } from '../components/Toast';
 import { createOrLoginUser } from '../api/users';
+import { withPageContext } from '../components/pageContext';
 
 const styles = {
   pageContent: {
@@ -121,6 +121,7 @@ class SignUp extends React.Component {
 
       if (userRegistration.hasOwnProperty('success')) {
         this.props.activateToast('Successful registration', 'success');
+        this.props.setUserDetails(userRegistration.id, userRegistration.name);
         this.props.setAuthenticated(true);
         this.props.history.push('/profile');
       }
@@ -192,4 +193,4 @@ class SignUp extends React.Component {
   }
 }
 
-export default withToast(withStyles(styles)(SignUp));
+export default withPageContext(withStyles(styles)(SignUp));

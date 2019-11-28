@@ -3,15 +3,16 @@ import ProjectCard from '../components/projectCard';
 import ProfileDetailPanel from '../components/ProfileDetailPanel';
 import { withStyles, Button, Grid, Typography } from '@material-ui/core';
 import { getUser } from '../api/users';
+import { withPageContext } from '../components/pageContext';
 
 import './profile.css';
 
 class ProfilePage extends Component {
   state = {
     profile: {
-      id: '',
-      name: 'tony',
-      location: 'orlando',
+      _id: '',
+      name: '',
+      location: '',
       projects: [
         {
           name: 'testname2',
@@ -35,13 +36,17 @@ class ProfilePage extends Component {
         }
       ],
       imageUrl: ''
-    },
-    currentUserId: localStorage.getItem('id') || ''
+    }
   };
 
   componentDidMount() {
-    const { id } = this.props.match.params;
-    const profile = getUser(id).then((profile) => {
+    if (!this.props.userAuthenticated) {
+      this.props.activateToast('Please log in to view profiles', 'error');
+      return this.props.history.push('/login');
+    }
+
+    const id = this.props.match.params.id || this.props.userDetails.id;
+    getUser(id).then((profile) => {
       this.setState({ profile: profile.data });
     });
   }
@@ -57,14 +62,15 @@ class ProfilePage extends Component {
           location={location}
           about={about}
           expertise={expertise}
-          buttonType={this.getButtonType()} />
+          buttonType={this.getButtonType()}
+        />
       </Fragment>
     );
   }
 
   getButtonType() {
-    const { profile, currentUserId } = this.state;
-    return profile.id === currentUserId ? 'edit' : 'message';
+    const { profile } = this.state;
+    return this.props.userAuthenticated && profile._id === this.props.userDetails.id ? 'edit' : 'message';
   }
 
   handleClick() {
@@ -79,7 +85,7 @@ class ProfilePage extends Component {
     return (
       <Grid container classes={{ root: 'project-section' }} spacing={3} justify="center">
         {projects.map(({ id, name, funding, goal, imageUrl }, ix) => (
-          <Grid item xs={12} md={6} key={name}>
+          <Grid item xs={12} md={6} key={ix}>
             <ProjectCard
               key={ix}
               id={id}
@@ -104,4 +110,4 @@ class ProfilePage extends Component {
   }
 }
 
-export default ProfilePage;
+export default withPageContext(ProfilePage);
