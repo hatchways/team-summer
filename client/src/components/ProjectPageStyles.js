@@ -1,5 +1,5 @@
 import { lighten, styled } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 
 export const styles = (theme) => ({
   pageTitle: {
@@ -12,13 +12,17 @@ export const styles = (theme) => ({
     height: 8,
     width: 250,
     borderRadius: 100,
-    margin: '30px auto'
+    margin: '0 auto 30px auto'
   },
   fundraisingBarPrimary: {
     backgroundColor: theme.palette.primary.main
   },
   fundraisingBarSecondary: {
     backgroundColor: lighten(theme.palette.secondary.main, 0.8)
+  },
+  fundraisingEquity: {
+    textAlign: 'center',
+    marginBottom: 30
   }
 });
 
@@ -92,6 +96,26 @@ export const FundraisingAmounts = styled('div')(({ theme }) => ({
   }
 }));
 
+export const FundraisingPercentContainer = styled('div')(({theme}) => ({
+  position: 'relative',
+  width: 283,
+  margin: '0 auto'
+}));
+
+export const FundraisingPercentBubble = styled('div')(({theme}) => ({
+  display: 'flex',
+  alignItems: 'center',
+  position: 'relative',
+  margin: '0 auto'
+}));
+
+export const FundraisingPercentage = styled(Typography)(({theme}) => ({
+  position: 'absolute',
+  left: '50%',
+  color: '#ffffff',
+  fontSize: '0.7em'
+}));
+
 export const FundraisingStatContainer = styled('div')(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, 1fr)',
@@ -110,7 +134,7 @@ export const FundraisingStat = styled('div')(({ theme }) => ({
     borderRight: `1px solid ${lighten(theme.palette.secondary.main, 0.5)}`
   },
 
-  '& > h4, & > h6': {
+  '& > h4, & > p': {
     margin: 0,
     textAlign: 'center'
   }

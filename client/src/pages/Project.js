@@ -12,24 +12,30 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 
 import * as ProjectStyles from '../components/ProjectPageStyles';
+import SvgSmallSpeechBubble from '../components/SvgSmallSpeechBubble';
+import CardCarousel from '../components/CardCarousel';
 
 class Project extends React.Component {
   state = {
     project: {
+      id: this.props.match.params.id,
       title: 'Urban Jungle: eco-friendly coffee shop',
       subtitle: 'Fresh Coffee. Community. All rolled into one cup.',
       description: 'Coffee shop will make its best effort to create a unique place where customers can socialize with each other in a comfortable and relaxing environment while enjoying the best brewed coffee or espresso and pastries in town. We will be in the business of helping our customers to relieve their daily stresses by providing piece of mind through great ambience, convenient location, friendly customer service, and products of consistently high quality.',
       industry: 'Food and Craft',
       location: 'San Jose, CA',
-      fundingRaised: 30550,
+      fundingRaised: 22000,
       fundingGoal: 52000,
       backers: 22,
       daysLeft: 200,
+      equalityExchange: 10,
       images: [
+        '/images/placeholder-sunset.jpg',
         '/images/placeholder-sunset.jpg'
       ]
     },
     creator: {
+      id: '222',
       name: 'James Hampton',
       location: 'Toronto, Canada',
       avatar: ''
@@ -59,9 +65,7 @@ class Project extends React.Component {
 
     return (
       <Card elevation={4}>
-        <CardMedia component="img" image={images[0]}
-                   title="Project image"
-                   height="460"/>
+        <CardCarousel images={images}/>
         <CardContent className={classes.projectDetailsContent}>
           <ProjectStyles.DetailsCardAbout>
             <Typography variant="h3">About</Typography>
@@ -77,11 +81,25 @@ class Project extends React.Component {
   projectFundraisingCard() {
     const { classes } = this.props;
     const { creator } = this.state;
-    const { fundingRaised, fundingGoal, backers, daysLeft } = this.state.project;
+    const { fundingRaised, fundingGoal, backers, daysLeft, equalityExchange } = this.state.project;
 
     const calculateCompleted = () => {
       const percentageComplete = Math.round((fundingRaised * 100) / fundingGoal);
       return Math.min(percentageComplete, 100);
+    };
+
+    const handleSendMessage = () => {
+      this.props.history.push(`/messages/${creator.id}`);
+    };
+
+    const handleFundProject = () => {
+      //TODO: Implement fund logic
+    };
+
+    const disableFunding = () => {
+      // TODO: Logic to handle disabling funding of project, maybe if project fund period has ended
+      // Disabled by default for now until funding logic is added
+      return true;
     };
 
     return (
@@ -93,21 +111,32 @@ class Project extends React.Component {
           <Typography variant="h5" color="secondary">/</Typography>
           <Typography variant="h5" color="secondary">{fundingGoal.toLocaleString()}</Typography>
         </ProjectStyles.FundraisingAmounts>
+        <ProjectStyles.FundraisingPercentContainer>
+          <ProjectStyles.FundraisingPercentBubble>
+            <ProjectStyles.FundraisingPercentage
+              variant="subtitle1">{calculateCompleted()}%</ProjectStyles.FundraisingPercentage>
+            <SvgSmallSpeechBubble/>
+          </ProjectStyles.FundraisingPercentBubble>
+        </ProjectStyles.FundraisingPercentContainer>
         <LinearProgress variant="determinate" value={calculateCompleted()}
                         className={classes.fundraisingBar}
                         classes={{
                           root: classes.fundraisingBarSecondary,
                           bar: classes.fundraisingBarPrimary
                         }}/>
+
+        <Typography variant="body1" className={classes.fundraisingEquity}>Equity
+          Exchange: {equalityExchange}% </Typography>
+
         <ProjectStyles.FundraisingStatContainer>
           <ProjectStyles.FundraisingStat>
             <Typography variant="h4">{backers}</Typography>
-            <Typography variant="h6" color="secondary">Backers</Typography>
+            <Typography variant="body1" color="secondary">Backers</Typography>
           </ProjectStyles.FundraisingStat>
 
           <ProjectStyles.FundraisingStat>
             <Typography variant="h4">{daysLeft}</Typography>
-            <Typography variant="h6" color="secondary">Days to go</Typography>
+            <Typography variant="body1" color="secondary">Days to go</Typography>
           </ProjectStyles.FundraisingStat>
         </ProjectStyles.FundraisingStatContainer>
 
@@ -123,8 +152,10 @@ class Project extends React.Component {
         </ProjectStyles.CreatorProfile>
 
         <ProjectStyles.ProjectActionButtons>
-          <Button variant="outlined" color="secondary">Send Message</Button>
-          <Button variant="contained" color="primary">Fund This Project</Button>
+          <Button variant="outlined" color="secondary" onClick={handleSendMessage}>Send Message</Button>
+          {!disableFunding() && (
+            <Button variant="contained" color="primary" onClick={handleFundProject}>Fund This Project</Button>
+          )}
         </ProjectStyles.ProjectActionButtons>
       </Card>
     );
