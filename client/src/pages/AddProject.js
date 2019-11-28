@@ -20,7 +20,6 @@ const styles = {
         display: 'flex',
         width: '25%',
         flexDirection: 'column',
-        // margin: '0px 20px 0px 10px',
         marginRight: '20px',
         marginLeft: '10px',
         padding: '30px 50px 20px 30px',
@@ -109,7 +108,7 @@ class AddProject extends Component {
 
         if (validation.isValid) {
             const { formData } = this.state;
-            const { id } = this.props.match.params; // will have to change eventually.
+            const { id } = this.props.userDetails;
             const newProject = await addProject(id, formData);
             if (newProject.success) {
                 console.log(newProject);
