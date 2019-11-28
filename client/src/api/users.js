@@ -6,8 +6,8 @@ export const getUser = (id) => {
 
 export const createOrLoginUser = async (method, userData) => {
   const url = {
-    login: '/api/authenticate',
-    register: '/api/register'
+    login: '/users/authenticate',
+    register: '/users/register'
   };
 
   try {
