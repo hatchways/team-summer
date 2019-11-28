@@ -6,160 +6,56 @@ import {
   CardMedia,
   CardContent,
   LinearProgress,
-  Button
+  Button,
+  Avatar
 } from '@material-ui/core';
-import { lighten, styled, withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 
-const styles = (theme) => ({
-  pageTitle: {
-    marginBottom: theme.spacing(1.2)
-  },
-  projectDetailsContent: {
-    padding: theme.spacing(5)
-  },
-  fundraisingBar: {
-    height: 8,
-    width: 250,
-    borderRadius: 100,
-    margin: '30px auto'
-  },
-  fundraisingBarPrimary: {
-    backgroundColor: theme.palette.primary.main
-  },
-  fundraisingBarSecondary: {
-    backgroundColor: lighten(theme.palette.secondary.main, 0.8)
-  }
-});
-
-const Main = styled('main')(() => ({
-  //Spacing & Page width
-  padding: 40
-}), { withTheme: false });
-
-const ProjectHeaderWrapper = styled('header')(({ theme }) => ({
-  textAlign: 'center',
-  marginBottom: theme.spacing(8)
-}));
-
-const IndustryLabel = styled('div')(({ theme }) => ({
-  backgroundColor: theme.palette.primary.main,
-  color: theme.palette.primary.contrastText,
-  borderRadius: 100,
-  padding: '5px 20px',
-  marginBottom: theme.spacing(1)
-}), { withTheme: true });
-
-const ProjectGrid = styled(Grid)(({ theme }) => ({
-  display: 'grid',
-  maxWidth: '100%',
-  margin: '0 auto',
-  gridGap: 40,
-
-  [theme.breakpoints.up('lg')]: {
-    maxWidth: '65%',
-    gridTemplateColumns: '2fr 1fr'
-  }
-}), { withTheme: true });
-
-const DetailsCardAbout = styled('div')(({ theme }) => ({
-  marginBottom: theme.spacing(4)
-}));
-
-const CardLine = styled('div')(({ theme }) => ({
-  width: '100%',
-  height: 7,
-  backgroundColor: '#000000',
-  marginBottom: theme.spacing(6)
-}));
-
-const FundraisingAmounts = styled('div')(({ theme }) => ({
-  // Alignment
-  display: 'flex',
-  justifyContent: 'center',
-  // Container spacing
-  padding: '0 30px 0 30px',
-  marginBottom: 40,
-
-  '& > h5:first-child': {
-    marginRight: 5,
-    marginTop: 0,
-    fontWeight: 500
-  },
-
-  '& > h3': {
-    marginTop: 5
-  },
-
-  '& > h5:nth-child(3)': {
-    marginTop: 8,
-    marginLeft: 5,
-    marginRight: 5
-  },
-
-  '& > h5:last-child': {
-    marginTop: 10
-  }
-}));
-
-const FundraisingStatContainer = styled('div')(({ theme }) => ({
-  display: 'grid',
-  gridTemplateColumns: 'repeat(2, 1fr)',
-  borderTop: `1px solid ${lighten(theme.palette.secondary.main, 0.5)}`,
-  borderBottom: `1px solid ${lighten(theme.palette.secondary.main, 0.5)}`
-}));
-
-const FundraisingStat = styled('div')(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  padding: 25,
-
-  '&:first-of-type': {
-    borderRight: `1px solid ${lighten(theme.palette.secondary.main, 0.5)}`
-  },
-
-  '& > h4, & > h6': {
-    margin: 0,
-    textAlign: 'center'
-  }
-}));
+import * as ProjectStyles from '../components/ProjectPageStyles';
 
 class Project extends React.Component {
   state = {
-    title: 'Urban Jungle: eco-friendly coffee shop',
-    subtitle: 'Fresh Coffee. Community. All rolled into one cup.',
-    description: 'Coffee shop will make its best effort to create a unique place where customers can socialize with each other in a comfortable and relaxing environment while enjoying the best brewed coffee or espresso and pastries in town. We will be in the business of helping our customers to relieve their daily stresses by providing piece of mind through great ambience, convenient location, friendly customer service, and products of consistently high quality.',
-    industry: 'Food and Craft',
-    location: 'San Jose, CA',
-    fundingRaised: 30550,
-    fundingGoal: 52000,
-    backers: 22,
-    daysLeft: 200,
-    images: [
-      '/images/placeholder-sunset.jpg'
-    ]
+    project: {
+      title: 'Urban Jungle: eco-friendly coffee shop',
+      subtitle: 'Fresh Coffee. Community. All rolled into one cup.',
+      description: 'Coffee shop will make its best effort to create a unique place where customers can socialize with each other in a comfortable and relaxing environment while enjoying the best brewed coffee or espresso and pastries in town. We will be in the business of helping our customers to relieve their daily stresses by providing piece of mind through great ambience, convenient location, friendly customer service, and products of consistently high quality.',
+      industry: 'Food and Craft',
+      location: 'San Jose, CA',
+      fundingRaised: 30550,
+      fundingGoal: 52000,
+      backers: 22,
+      daysLeft: 200,
+      images: [
+        '/images/placeholder-sunset.jpg'
+      ]
+    },
+    creator: {
+      name: 'James Hampton',
+      location: 'Toronto, Canada',
+      avatar: ''
+    }
   };
 
   projectHeaderContent() {
     const { classes } = this.props;
-    const { industry, subtitle, title } = this.state;
+    const { industry, subtitle, title } = this.state.project;
 
     return (
-      <ProjectHeaderWrapper>
+      <ProjectStyles.ProjectHeaderWrapper>
         <Grid container direction="column" alignItems="center">
-          <IndustryLabel>
+          <ProjectStyles.IndustryLabel>
             <Typography variant="body1">{industry}</Typography>
-          </IndustryLabel>
+          </ProjectStyles.IndustryLabel>
           <Typography variant="h2" className={classes.pageTitle}>{title}</Typography>
           <Typography variant="subtitle2">{subtitle}</Typography>
         </Grid>
-      </ProjectHeaderWrapper>
+      </ProjectStyles.ProjectHeaderWrapper>
     );
   }
 
   projectDetailsCard() {
     const { classes } = this.props;
-    const { description, location, images } = this.state;
+    const { description, location, images } = this.state.project;
 
     return (
       <Card elevation={4}>
@@ -167,10 +63,10 @@ class Project extends React.Component {
                    title="Project image"
                    height="460"/>
         <CardContent className={classes.projectDetailsContent}>
-          <DetailsCardAbout>
+          <ProjectStyles.DetailsCardAbout>
             <Typography variant="h3">About</Typography>
             <Typography variant="body1">{description}</Typography>
-          </DetailsCardAbout>
+          </ProjectStyles.DetailsCardAbout>
           <Typography variant="h4">Location: </Typography>
           <Typography variant="h5">{location}</Typography>
         </CardContent>
@@ -180,7 +76,8 @@ class Project extends React.Component {
 
   projectFundraisingCard() {
     const { classes } = this.props;
-    const { fundingRaised, fundingGoal, backers, daysLeft } = this.state;
+    const { creator } = this.state;
+    const { fundingRaised, fundingGoal, backers, daysLeft } = this.state.project;
 
     const calculateCompleted = () => {
       const percentageComplete = Math.round((fundingRaised * 100) / fundingGoal);
@@ -189,45 +86,61 @@ class Project extends React.Component {
 
     return (
       <Card elevation={0}>
-        <CardLine/>
-        <FundraisingAmounts>
+        <ProjectStyles.CardLine/>
+        <ProjectStyles.FundraisingAmounts>
           <Typography variant="h5">$</Typography>
           <Typography variant="h3">{fundingRaised.toLocaleString()}</Typography>
           <Typography variant="h5" color="secondary">/</Typography>
           <Typography variant="h5" color="secondary">{fundingGoal.toLocaleString()}</Typography>
-        </FundraisingAmounts>
+        </ProjectStyles.FundraisingAmounts>
         <LinearProgress variant="determinate" value={calculateCompleted()}
                         className={classes.fundraisingBar}
                         classes={{
                           root: classes.fundraisingBarSecondary,
                           bar: classes.fundraisingBarPrimary
                         }}/>
-        <FundraisingStatContainer>
-          <FundraisingStat>
+        <ProjectStyles.FundraisingStatContainer>
+          <ProjectStyles.FundraisingStat>
             <Typography variant="h4">{backers}</Typography>
             <Typography variant="h6" color="secondary">Backers</Typography>
-          </FundraisingStat>
-          <FundraisingStat>
+          </ProjectStyles.FundraisingStat>
+
+          <ProjectStyles.FundraisingStat>
             <Typography variant="h4">{daysLeft}</Typography>
             <Typography variant="h6" color="secondary">Days to go</Typography>
-          </FundraisingStat>
-        </FundraisingStatContainer>
-        <Button variant="outlined" color="secondary">Send Message</Button>
+          </ProjectStyles.FundraisingStat>
+        </ProjectStyles.FundraisingStatContainer>
+
+        <ProjectStyles.CreatorProfile>
+          <Avatar>
+            {creator.avatar
+              ? <img src={creator.avatar} alt="Project creator avatar"/>
+              : creator.name.split('')[0]
+            }
+          </Avatar>
+          <Typography variant="h6">{creator.name}</Typography>
+          <Typography variant="subtitle2" color="secondary">{creator.location}</Typography>
+        </ProjectStyles.CreatorProfile>
+
+        <ProjectStyles.ProjectActionButtons>
+          <Button variant="outlined" color="secondary">Send Message</Button>
+          <Button variant="contained" color="primary">Fund This Project</Button>
+        </ProjectStyles.ProjectActionButtons>
       </Card>
     );
   }
 
   render() {
     return (
-      <Main>
+      <ProjectStyles.Main>
         {this.projectHeaderContent()}
-        <ProjectGrid>
+        <ProjectStyles.ProjectGrid>
           {this.projectDetailsCard()}
           {this.projectFundraisingCard()}
-        </ProjectGrid>
-      </Main>
+        </ProjectStyles.ProjectGrid>
+      </ProjectStyles.Main>
     );
   }
 }
 
-export default withStyles(styles)(Project);
+export default withStyles(ProjectStyles.styles)(Project);

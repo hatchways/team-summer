@@ -28,12 +28,12 @@ export const theme = createMuiTheme({
     },
     h5: {
       fontSize: '1.3em',
-      margin: `${headerMargin}`
+      margin: '2px 0'
     },
     h6: {
       fontSize: '1em',
       fontWeight: '500',
-      margin: `${headerMargin}`
+      margin: `2px 0`
     },
     body1: {
       margin: '5px 0'
