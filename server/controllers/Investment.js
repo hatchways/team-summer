@@ -3,13 +3,14 @@ const {User, Project, Investment} = require('../models');
 
 exports.addInvestment = async (req, res) => {
   const { value, projectId } = req.body;
-  const user = req.profile._id;
+  const user = req.user
 
   try {
-    const investment = await Investment.create(
-      { user, project: ObjectId(projectId), 
-        value: parseInt(value) }
-    );
+    const investment = await Investment.create({
+      user: ObjectId(user._id),
+      project: ObjectId(projectId),
+      value: parseInt(value)
+    });
     await User.updateOne({ _id: user._id }, { $push: { investments: investment._id } });
     await Project.updateOne(
       { _id: projectId },
