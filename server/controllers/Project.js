@@ -1,4 +1,6 @@
 const { User, Project } = require('../models');
+const { popUserProjects } = require('../utils');
+
 const upload = require('../services/file-upload');
 const singleUpload = upload.single('image');
 const multiUpload = upload.array('images');
@@ -26,7 +28,7 @@ exports.addProject = (req, res) => {
       });
     const { title, description, industry, location, fundingGoal } = req.body;
     const images = req.files ? req.files.map((file) => file.location) : [];
-    const user = req.profile;
+    const user = req.user
     try {
       const project = await Project.create({
         user,
