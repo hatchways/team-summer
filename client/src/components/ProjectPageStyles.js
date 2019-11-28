@@ -12,7 +12,6 @@ export const styles = (theme) => ({
     height: 8,
     width: 250,
     borderRadius: 100,
-    margin: '0 auto 30px auto'
   },
   fundraisingBarPrimary: {
     backgroundColor: theme.palette.primary.main
@@ -98,20 +97,20 @@ export const FundraisingAmounts = styled('div')(({ theme }) => ({
 
 export const FundraisingPercentContainer = styled('div')(({theme}) => ({
   position: 'relative',
-  width: 283,
-  margin: '0 auto'
+  width: '250px',
+  margin: '0 auto 30px auto'
 }));
 
-export const FundraisingPercentBubble = styled('div')(({theme}) => ({
+export const FundraisingPercentBubble = styled('div')(({theme, ...props}) => ({
   display: 'flex',
   alignItems: 'center',
   position: 'relative',
-  margin: '0 auto'
+  left: `${Math.min((props.percent - 8),100)}%`
 }));
 
 export const FundraisingPercentage = styled(Typography)(({theme}) => ({
   position: 'absolute',
-  left: '50%',
+  left: 8,
   color: '#ffffff',
   fontSize: '0.7em'
 }));

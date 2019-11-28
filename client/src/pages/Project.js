@@ -24,7 +24,7 @@ class Project extends React.Component {
       description: 'Coffee shop will make its best effort to create a unique place where customers can socialize with each other in a comfortable and relaxing environment while enjoying the best brewed coffee or espresso and pastries in town. We will be in the business of helping our customers to relieve their daily stresses by providing piece of mind through great ambience, convenient location, friendly customer service, and products of consistently high quality.',
       industry: 'Food and Craft',
       location: 'San Jose, CA',
-      fundingRaised: 22000,
+      fundingRaised: 1000,
       fundingGoal: 52000,
       backers: 22,
       daysLeft: 200,
@@ -65,7 +65,7 @@ class Project extends React.Component {
 
     return (
       <Card elevation={4}>
-        <CardCarousel images={images} />
+        <CardCarousel images={images}/>
         <CardContent className={classes.projectDetailsContent}>
           <ProjectStyles.DetailsCardAbout>
             <Typography variant="h3">About</Typography>
@@ -111,19 +111,24 @@ class Project extends React.Component {
           <Typography variant="h5" color="secondary">/</Typography>
           <Typography variant="h5" color="secondary">{fundingGoal.toLocaleString()}</Typography>
         </ProjectStyles.FundraisingAmounts>
+
         <ProjectStyles.FundraisingPercentContainer>
-          <ProjectStyles.FundraisingPercentBubble>
-            <ProjectStyles.FundraisingPercentage
-              variant="subtitle1">{calculateCompleted()}%</ProjectStyles.FundraisingPercentage>
+
+          <ProjectStyles.FundraisingPercentBubble percent={calculateCompleted()}>
+            <ProjectStyles.FundraisingPercentage variant="subtitle1">
+              {calculateCompleted()}%
+            </ProjectStyles.FundraisingPercentage>
             <SvgSmallSpeechBubble/>
           </ProjectStyles.FundraisingPercentBubble>
+
+          <LinearProgress variant="determinate" value={calculateCompleted()}
+                          className={classes.fundraisingBar}
+                          classes={{
+                            root: classes.fundraisingBarSecondary,
+                            bar: classes.fundraisingBarPrimary
+                          }}/>
+
         </ProjectStyles.FundraisingPercentContainer>
-        <LinearProgress variant="determinate" value={calculateCompleted()}
-                        className={classes.fundraisingBar}
-                        classes={{
-                          root: classes.fundraisingBarSecondary,
-                          bar: classes.fundraisingBarPrimary
-                        }}/>
 
         <Typography variant="body1" className={classes.fundraisingEquity}>Equity
           Exchange: {equalityExchange}% </Typography>
