@@ -60,7 +60,7 @@ const UploadImages = (props) => {
                             isDragActive ?
                                 <Typography className={classes.dragBoxText} variant='subtitle2'>Drop the files here ...</Typography> :
                                 <span className={classes.dragBoxText}>
-                                    <img className={classes.uploadImageIcon} src={require('../assets/upload-icon.png')} alt='upload-icon' />
+                                    <img className={classes.uploadImageIcon} src='/images/upload-icon.png' alt='upload-icon' />
                                     <Typography variant='subtitle2'>Drop an image here</Typography>
                                     <Typography variant='subtitle2'>or select a file</Typography>
                                 </span>
