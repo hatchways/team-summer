@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Typography,
   Grid,
@@ -31,7 +31,7 @@ class Project extends React.Component {
       equalityExchange: 10,
       images: [
         '/images/placeholder-sunset.jpg',
-        '/images/placeholder-sunset.jpg'
+        '/images/placeholder-ocean.jpg'
       ]
     },
     creator: {
@@ -65,7 +65,7 @@ class Project extends React.Component {
 
     return (
       <Card elevation={4}>
-        <CardCarousel images={images}/>
+        <CardCarousel images={images} />
         <CardContent className={classes.projectDetailsContent}>
           <ProjectStyles.DetailsCardAbout>
             <Typography variant="h3">About</Typography>
