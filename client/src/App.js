@@ -110,7 +110,7 @@ class App extends React.Component {
             <Route path="/signup" component={SignUp} />
             <Route path="/login" component={Login} />
             <Route path="/profile/:id?" component={ProfilePage} />
-            <Route path="/profile/:id/projects/add" component={AddProject} />
+            <Route path="/projects/add/:id" component={AddProject} />
           </PageContext.Provider>
           <Toast
             buttonText={toastProperties.button}
