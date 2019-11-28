@@ -15,10 +15,12 @@ const InvestmentSchema = new Schema({
     },
     user: {
         type: ObjectId,
+        required: true,
         ref: 'User'
     },
     project: {
         type: ObjectId,
+        required: true,
         ref: 'Project'
     }
 });
