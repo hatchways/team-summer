@@ -5,27 +5,27 @@ import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 const styles = {
   deleteIconContainer: {
     position: 'absolute',
-    height: '75px',
-    width: '75px',
+    height: '75',
+    width: '75',
     backgroundColor: 'grey',
     opacity: '50%',
-    borderRadius: '10px',
+    borderRadius: '10',
     display: 'flex',
   },
   deleteIcon: {
-    height: '30px',
-    width: '30px',
+    height: '30',
+    width: '30',
     margin: 'auto',
     opacity: '100%'
   },
   imageContainer: {
-    margin: '4px',
-    maxHeight: '75px',
+    margin: '4',
+    maxHeight: '75',
   },
   image: {
-    maxHeight: '75px',
-    maxWidth: '75px',
-    borderRadius: '10px',
+    maxHeight: '75',
+    maxWidth: '75',
+    borderRadius: '10',
     cursor: 'pointer'
   }
 }
@@ -42,10 +42,6 @@ const Image = (props) => {
     setHovering(!isHovering)
   }
 
-  // const opacityStyle = () => {
-  //   return isHovering ? { opacity: '75%'} : { opacity: '100%' };
-  // }
-
   return (
     <div className={classes.imageContainer} onMouseEnter={handleMouseHover} onMouseLeave={handleMouseHover}>
       {
@@ -57,7 +53,6 @@ const Image = (props) => {
         key={image.name}
         src={URL.createObjectURL(image)}
         alt=""
-        // style={opacityStyle()}
       />
     </div>
   )

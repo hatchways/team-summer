@@ -17,6 +17,7 @@ const OutlinedSelect = (props) => {
             <InputLabel ref={inputLabel} htmlFor={props.selectId} {...props.inputProps}><Typography variant="h4">{props.labelText}</Typography></InputLabel>
             <Select
                 native
+                value={props.value}
                 onChange={handleSelect(props.setState)}
                 input={
                     <OutlinedInput
