@@ -5,27 +5,27 @@ import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 const styles = {
   deleteIconContainer: {
     position: 'absolute',
-    height: '75',
-    width: '75',
+    height: '75px',
+    width: '75px',
     backgroundColor: 'grey',
     opacity: '50%',
-    borderRadius: '10',
+    borderRadius: '10px',
     display: 'flex',
   },
   deleteIcon: {
-    height: '30',
-    width: '30',
+    height: '30px',
+    width: '30px',
     margin: 'auto',
     opacity: '100%'
   },
   imageContainer: {
-    margin: '4',
-    maxHeight: '75',
+    margin: '4px',
+    maxHeight: '75px',
   },
   image: {
-    maxHeight: '75',
-    maxWidth: '75',
-    borderRadius: '10',
+    maxHeight: '75px',
+    maxWidth: '75px',
+    borderRadius: '10px',
     cursor: 'pointer'
   }
 }

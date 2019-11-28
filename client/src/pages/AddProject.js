@@ -20,21 +20,22 @@ const styles = {
         display: 'flex',
         width: '25%',
         flexDirection: 'column',
-        marginRight: '20',
-        marginLeft: '10',
+        // margin: '0px 20px 0px 10px',
+        marginRight: '20px',
+        marginLeft: '10px',
         padding: '30px 50px 20px 30px',
         boxShadow: '2px 0px 4px 2px #D3D3D3',
     },
     addProjectPage: {
-        margin: '10',
-        padding: '20',
+        margin: '10px',
+        padding: '20px',
     },
     form: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'left',
         width: '100%',
-        marginTop: '30'
+        marginTop: '30px'
     },
     formLine: {
         marginBottom: '20',
