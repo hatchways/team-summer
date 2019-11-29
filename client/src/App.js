@@ -8,6 +8,7 @@ import NavBar from './components/NavBar';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import ProfilePage from './pages/Profile';
+import AddProject from './pages/AddProject';
 import Toast from './components/Toast';
 import { PageContext } from './components/pageContext';
 import jwTokenCheck from './helpers/JwtTokenHelper'
@@ -104,11 +105,12 @@ class App extends React.Component {
             <Route
               exact
               path="/"
-              render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'}/>}
+              render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'} />}
             />
-            <Route path="/signup" component={SignUp}/>
-            <Route path="/login" component={Login}/>
-            <Route path="/profile/:id?" component={ProfilePage}/>
+            <Route path="/signup" component={SignUp} />
+            <Route path="/login" component={Login} />
+            <Route path="/profile/:id?" component={ProfilePage} />
+            <Route path="/projects/add/:id" component={AddProject} />
           </PageContext.Provider>
           <Toast
             buttonText={toastProperties.button}

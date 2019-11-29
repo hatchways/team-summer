@@ -32,8 +32,8 @@ exports.addProject = (req, res) => {
                 title: 'File Upload Error', detail: err.message
             }]
         });
-        const { title, description, industry, location, fundingGoal } = req.body;
-        if (!title || !description || !industry || !location || !fundingGoal) {
+        const { title, subtitle, description, industry, location, fundingGoal, fundingDeadline } = req.body;
+        if (!title || !industry || !location || !fundingGoal) {
             return res.status(400).json({
                 error: 'Please fill out the required fields.'
             });
@@ -43,10 +43,12 @@ exports.addProject = (req, res) => {
         const project = new Project({
             user,
             title,
+            subtitle,
             description,
             industry, location,
             images,
-            fundingGoal: parseInt(fundingGoal)
+            fundingGoal: parseInt(fundingGoal),
+            fundingDeadline
         })
         project.save((err, project) => {
             if (err) {
