@@ -41,7 +41,7 @@ export const theme = createMuiTheme({
     subtitle2: {
       color: '#d3d3d3',
       fontSize: '1em',
-      fontWeight: 300
+      fontWeight: 300,
       margin: '10px 0'
     },
     overline: {
