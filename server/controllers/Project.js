@@ -59,15 +59,12 @@ exports.addProject = (req, res) => {
                 title: 'File Upload Error', detail: err.message
             }]
         });
-        const { title, subtitle, description, industry, location, fundingGoal } = req.body;
-        const fundingDeadline = new Date(req.body.fundingDeadline)
-        console.log(fundingDeadline)
-        if (!title || !industry || !location || !fundingGoal || !fundingDeadline) {
+        const { title, subtitle, description, industry, location, fundingGoal, fundingDeadline } = req.body;
+        if (!title || !industry || !location || !fundingGoal) {
             return res.status(400).json({
                 error: 'Please fill out the required fields.'
             });
         }
-        console.log('req.files', req.files)
         const images = req.files.map(file => file.location);
         const user = req.profile;
         const project = new Project({

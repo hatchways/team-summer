@@ -22,7 +22,7 @@ instance.interceptors.response.use(
     const { response } = error;
 
     // Duplicate user or invalid email/password
-    if (response.code === 409 || response.data['err'] === 'Invalid email/password') {
+    if (response.status === 409 || response.data['err'] === 'Invalid email/password') {
       return Promise.resolve({ data: response.data });
     }
 

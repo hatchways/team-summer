@@ -2,8 +2,6 @@ import React from 'react';
 import { makeStyles, Snackbar } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
-export const ToastContext = React.createContext(null);
-
 const useStyles = makeStyles((theme) => ({
   success: {
     color: '#3b3b3b',
@@ -40,8 +38,8 @@ export const Toast = (props) => {
   return (
     <Snackbar
       anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left'
+        vertical: 'top',
+        horizontal: 'center'
       }}
       open={props.showToast || false}
       autoHideDuration={2000}
@@ -67,16 +65,5 @@ Toast.propTypes = {
   showToast: PropTypes.bool,
   variant: PropTypes.oneOf(['success', 'neutral', 'warning', 'error'])
 };
-
-export const withToast = (Component) =>
-  class WrappedComponent extends React.Component {
-    render() {
-      return (
-        <ToastContext.Consumer>
-          {(activateToast) => <Component {...this.props} activateToast={activateToast} />}
-        </ToastContext.Consumer>
-      );
-    }
-  };
 
 export default Toast;
