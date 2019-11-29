@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, lighten } from '@material-ui/core/styles';
 import {
   Card,
   CardMedia,
@@ -17,12 +17,29 @@ const styles = (theme) => ({
       boxShadow: '0 16px 70px -12.125px rgba(0,0,0,0.3)'
     }
   },
+  cardHead: {
+    minHeight: 75,
+    padding: '20px 30px 10px 30px'
+  },
+  cardBody: {
+    minHeight: 65,
+    padding: '10px 30px 20px 30px'
+  },
+  cardFooter: {
+    minHeight: 65,
+    borderTop: `1px solid ${lighten(theme.palette.secondary.main, 0.5)}`,
+    padding: '10px 30px 20px 30px'
+  },
   media: {
     height: 250
   },
   content: {
+    padding: 0,
     textAlign: 'left',
-    padding: '10px 30px'
+
+    '&:last-child': {
+      padding: 0
+    }
   },
   fundingAmounts: {
     display: 'flex',
@@ -74,13 +91,19 @@ const ProjectBody = ({ classes, funding, goal, equality, daysLeft }) => (
   </div>
 );
 
-const ProjectFooter = ({ classes }) => (
+const ProjectFooter = ({ creator, location, classes }) => (
   <div className={classes.cardFooter}>
-    Placeholder
+    <Typography variant="h6">
+      {creator.name}
+    </Typography>
+    <Typography variant="body2" color="secondary">
+      {creator.location}
+    </Typography>
   </div>
 );
 
 const ProjectCard = (props) => {
+  console.log(props);
   return (
     <Card elevation={3}>
       <CardMedia
@@ -91,7 +114,9 @@ const ProjectCard = (props) => {
       <CardContent className={props.classes.content}>
         <ProjectHead {...props}/>
         <ProjectBody {...props}/>
-        <ProjectFooter {...props}/>
+        {props.creator && (
+          <ProjectFooter {...props}/>
+        )}
       </CardContent>
     </Card>
   );

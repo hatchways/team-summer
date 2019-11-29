@@ -10,9 +10,48 @@ import { withPageContext } from '../components/pageContext';
 class Explore extends React.Component {
   state = {
     projects: [
-      { name: 'Urban Jungle: eco-friendly coffee shop', funding: 23874, goal: 40000, equality: 10, daysLeft: 44 },
-      { name: 'An Easy-to-use, Powerful AI Camera', funding: 34912, goal: 55000, equality: 10, daysLeft: 12 },
-      { name: 'test', funding: 200, goal: 500, equality: 10, daysLeft: 10 }
+      {
+        name: 'Urban Jungle: eco-friendly coffee shop',
+        funding: 23874,
+        goal: 40000,
+        equality: 10,
+        daysLeft: 44,
+        creator: {
+          name: 'James Hampton',
+          location: 'Toronto, Canada'
+        }
+      },
+      {
+        name: 'An Easy-to-use, Powerful AI Camera',
+        funding: 34912,
+        goal: 55000,
+        equality: 10,
+        daysLeft: 12,
+        creator: {
+          name: 'Todd Biggerstaff',
+          location: 'Melbourne, AU'
+        }
+      },
+      { name: 'test',
+        funding: 200,
+        goal: 500,
+        equality: 10,
+        daysLeft: 10,
+        creator: {
+          name: 'Zack Newman',
+          location: 'London, UK'
+        }
+      },
+      { name: 'test2',
+        funding: 200,
+        goal: 500,
+        equality: 10,
+        daysLeft: 300,
+        creator: {
+          name: 'Zack Newman',
+          location: 'London, UK'
+        }
+      }
     ]
   };
 
@@ -27,11 +66,7 @@ class Explore extends React.Component {
           {projects.map((project) => (
             <ProjectCard
               key={project.name}
-              name={project.name}
-              funding={project.funding}
-              goal={project.goal}
-              equality={project.equality}
-              daysLeft={project.daysLeft}
+              {...project}
             />
           ))}
         </ExploreStyles.Grid>
