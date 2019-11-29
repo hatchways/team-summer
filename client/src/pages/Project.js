@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Typography,
   Grid,
   Card,
-  CardMedia,
   CardContent,
   LinearProgress,
   Button,
@@ -14,6 +13,7 @@ import { withStyles } from '@material-ui/core/styles';
 import * as ProjectStyles from '../components/ProjectPageStyles';
 import SvgSmallSpeechBubble from '../components/SvgSmallSpeechBubble';
 import CardCarousel from '../components/CardCarousel';
+import PercentageProgressBar from '../components/PercentageProgressBar';
 
 class Project extends React.Component {
   state = {
@@ -24,7 +24,7 @@ class Project extends React.Component {
       description: 'Coffee shop will make its best effort to create a unique place where customers can socialize with each other in a comfortable and relaxing environment while enjoying the best brewed coffee or espresso and pastries in town. We will be in the business of helping our customers to relieve their daily stresses by providing piece of mind through great ambience, convenient location, friendly customer service, and products of consistently high quality.',
       industry: 'Food and Craft',
       location: 'San Jose, CA',
-      fundingRaised: 1000,
+      fundingRaised: 21000,
       fundingGoal: 52000,
       backers: 22,
       daysLeft: 200,
@@ -112,23 +112,7 @@ class Project extends React.Component {
           <Typography variant="h5" color="secondary">{fundingGoal.toLocaleString()}</Typography>
         </ProjectStyles.FundraisingAmounts>
 
-        <ProjectStyles.FundraisingPercentContainer>
-
-          <ProjectStyles.FundraisingPercentBubble percent={calculateCompleted()}>
-            <ProjectStyles.FundraisingPercentage variant="subtitle1">
-              {calculateCompleted()}%
-            </ProjectStyles.FundraisingPercentage>
-            <SvgSmallSpeechBubble/>
-          </ProjectStyles.FundraisingPercentBubble>
-
-          <LinearProgress variant="determinate" value={calculateCompleted()}
-                          className={classes.fundraisingBar}
-                          classes={{
-                            root: classes.fundraisingBarSecondary,
-                            bar: classes.fundraisingBarPrimary
-                          }}/>
-
-        </ProjectStyles.FundraisingPercentContainer>
+        <PercentageProgressBar value={calculateCompleted()}/>
 
         <Typography variant="body1" className={classes.fundraisingEquity}>Equity
           Exchange: {equalityExchange}% </Typography>

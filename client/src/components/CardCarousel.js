@@ -7,7 +7,8 @@ import ChevronLeft from '@material-ui/icons/ChevronLeft';
 const CarouselBase = styled('div')(({ theme }) => ({
   position: 'relative',
   width: '100%',
-  height: 420
+  height: 400,
+  marginBottom: 20
 }));
 
 const arrowStyles = makeStyles({
@@ -35,15 +36,22 @@ const Arrow = ({ direction, onClick, ...props }) => {
 
 const ThumbnailContainer = styled('div')(({ theme }) => ({
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, 10px)',
-  width: '100%'
+  gridTemplateColumns: 'repeat(auto-fit, 100px)',
+  gridGap: 20,
+  alignItems: 'center',
+  justifyItems: 'center',
+  width: '100%',
+  padding: '0 20px'
 }));
 
-const ThumbnailImage = styled('img')(({ theme }) => ({
-  height: 'auto',
-  width: 100
+const ThumbnailImage = styled('div')(({ theme, ...props }) => ({
+  height: 70,
+  width: '100%',
+  cursor: 'pointer',
+  backgroundImage: `url(${props.image})`,
+  backgroundPosition: 'center',
+  backgroundSize: 'cover'
 }));
-
 
 
 export default (props) => {
@@ -63,7 +71,7 @@ export default (props) => {
   };
 
   return (
-    <React.Fragment>
+    <div>
       <CarouselBase>
         <Arrow direction="left" onClick={handleNavigate('left')}/>
         <CardMedia component="img" image={images[currentImage]}
@@ -71,9 +79,9 @@ export default (props) => {
                    height="400"/>
         <Arrow direction="right" onClick={handleNavigate('right')}/>
       </CarouselBase>
-      <ThumbnailContainer style={{width: '100%'}}>
-        {images.map((image) => <ThumbnailImage src={image} alt="Project image"/>)}
+      <ThumbnailContainer style={{ width: '100%' }}>
+        {images.map((image, index) => <ThumbnailImage key={`img-${index}`} image={image} onClick={() => setCurrentImage(index)}/>)}
       </ThumbnailContainer>
-    </React.Fragment>
+    </div>
   );
 }
