@@ -28,14 +28,20 @@ export const theme = createMuiTheme({
     },
     h5: {
       fontSize: '1.3em',
-      margin: `${headerMargin}`
+      margin: '2px 0'
     },
     h6: {
       fontSize: '1em',
       fontWeight: '500',
-      margin: `${headerMargin}`
+      margin: `2px 0`
     },
     body1: {
+      margin: '5px 0'
+    },
+    subtitle2: {
+      color: '#d3d3d3',
+      fontSize: '1em',
+      fontWeight: 300
       margin: '10px 0'
     },
     overline: {
@@ -47,7 +53,8 @@ export const theme = createMuiTheme({
   breakpoints: {
     values: {
       sm: 415,
-      md: 800
+      md: 800,
+      lg: 1060
     }
   },
   palette: {

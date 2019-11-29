@@ -12,12 +12,6 @@ export default (globalAppState) => {
       if (error.name === 'TokenExpiredError') {
         localStorage.removeItem('jwtToken');
         // TODO: work on showing toast when expired
-        globalAppState.toastDetails = {
-          text: 'Your session has expired, please log in again.',
-          button: 'CLOSE',
-          variant: 'error'
-        };
-        globalAppState.showToast = true;
       } else {
         console.log(error);
       }
