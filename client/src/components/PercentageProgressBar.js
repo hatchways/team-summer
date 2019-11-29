@@ -3,6 +3,7 @@ import { LinearProgress, styled, Typography, withStyles } from '@material-ui/cor
 import { lighten } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
+import {withPageContext} from './pageContext';
 import SvgSmallSpeechBubble from './SvgSmallSpeechBubble';
 
 const styles = (theme) => ({
@@ -65,4 +66,4 @@ PercentageProgressBar.propTypes = {
   className:PropTypes.object
 };
 
-export default withStyles(styles)(PercentageProgressBar);
+export default withPageContext(withStyles(styles)(PercentageProgressBar));
