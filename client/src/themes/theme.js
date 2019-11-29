@@ -33,11 +33,15 @@ export const theme = createMuiTheme({
     h6: {
       fontSize: '1em',
       fontWeight: '500',
-      textAlign: 'center',
       margin: `${headerMargin}`
     },
     body1: {
       margin: '10px 0'
+    },
+    overline: {
+      fontWeight: 500,
+      fontSize: '0.9em',
+      marginRight: 3
     }
   },
   breakpoints: {
@@ -52,7 +56,8 @@ export const theme = createMuiTheme({
       contrastText: '#ffffff'
     },
     secondary: {
-      main: '#1f1f1f'
+      main: '#BDBDBD',
+      contrastText: '#000000'
     }
   },
   primary: '#69E781',

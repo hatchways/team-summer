@@ -1,26 +1,42 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography
+} from '@material-ui/core';
 
-const styles = (muiBaseTheme) => ({
+const styles = (theme) => ({
   card: {
-    maxWidth: '700px',
-    margin: '10px',
+    minWidth: 200,
+    margin: 10,
     transition: '0.3s',
-    boxShadow: '0 8px 40px -12px rgba(0,0,0,0.3)',
+
     '&:hover': {
       boxShadow: '0 16px 70px -12.125px rgba(0,0,0,0.3)'
     }
   },
   media: {
-    paddingTop: '56.25%'
+    height: 250
   },
   content: {
     textAlign: 'left',
-    padding: muiBaseTheme.spacing.unit * 3
+    padding: '10px 30px'
+  },
+  fundingAmounts: {
+    display: 'flex',
+
+    '& :nth-child(2), & :nth-child(3)': {
+      marginRight: 5
+    }
+  },
+  projectMeta: {
+    display: 'flex',
+
+    '& :first-child': {
+      marginRight: 15
+    }
   },
   heading: {
     fontWeight: 'bold'
@@ -30,36 +46,55 @@ const styles = (muiBaseTheme) => ({
   }
 });
 
+const ProjectHead = ({ classes, name }) => (
+  <div className={classes.cardHead}>
+    <Typography variant="h5">{name}</Typography>
+  </div>
+);
 
-const ProjectCard = ({name, funding, goal, imageUrl, classes}) => {
+const ProjectBody = ({ classes, funding, goal, equality, daysLeft }) => (
+  <div className={classes.cardBody}>
+    <div className={classes.fundingAmounts}>
+      <Typography variant="overline">$</Typography>
 
-  return(
-    <div>
-      <Card className={classes.card}>
-        <CardMedia
-          className={classes.media}
-          image={
-            "https://image.freepik.com/free-photo/river-foggy-mountains-landscape_1204-511.jpg"
-          }
-        />
-        <CardContent className={classes.content}>
-          <Typography
-            className={"MuiTypography--heading"}
-            variant={"h6"}
-            gutterBottom
-          >
-            {name}
-          </Typography>
-          <Typography
-            className={"MuiTypography--subheading"}
-            variant={"caption"}
-          >
-            {`${funding} / ${goal}`}
-          </Typography>
-        </CardContent>
-      </Card>
+      <Typography variant="h6">
+        {funding.toLocaleString()}
+      </Typography>
+
+      <Typography variant="h6" color="secondary">/</Typography>
+
+      <Typography variant="h6" color="secondary">
+        {goal.toLocaleString()}
+      </Typography>
     </div>
-  )
-}
+    <div className={classes.projectMeta}>
+      <Typography variant="body2" color="secondary">Equality exchange: {equality}%</Typography>
+      <Typography variant="body2" color="secondary">Days left: {daysLeft}</Typography>
+    </div>
+  </div>
+);
+
+const ProjectFooter = ({ classes }) => (
+  <div className={classes.cardFooter}>
+    Placeholder
+  </div>
+);
+
+const ProjectCard = (props) => {
+  return (
+    <Card elevation={3}>
+      <CardMedia
+        className={props.classes.media}
+        image={
+          'https://image.freepik.com/free-photo/river-foggy-mountains-landscape_1204-511.jpg'
+        }/>
+      <CardContent className={props.classes.content}>
+        <ProjectHead {...props}/>
+        <ProjectBody {...props}/>
+        <ProjectFooter {...props}/>
+      </CardContent>
+    </Card>
+  );
+};
 
 export default withStyles(styles)(ProjectCard);
