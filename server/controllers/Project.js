@@ -26,12 +26,14 @@ exports.projectById = (req, res, next, id) => {
 }
 
 exports.getProjects = (req, res) => {
+    const { _id } = req.profile;
     const order = req.query.order || 'asc';
     const sortBy = req.query.sortBy || 'fundingDeadline';
     const limit = parseInt(req.query.limit) || 6;
     const cutoff = new Date();
 
     const filterOptions = {
+        user: { $ne: _id },
         fundingDeadline: { $gt: cutoff },
     }
 

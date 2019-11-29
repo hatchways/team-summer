@@ -5,7 +5,7 @@ const { imageUpload, getProjects, addProject } = require('../controllers/project
 const auth = require('../controllers/authController.api');
 const { isAuth, userById } = auth;
 
-router.get('/projects', getProjects);
+router.get('/projects/:userId', getProjects);
 router.post('/projects/image-upload', imageUpload);
 router.post('/projects/add/:userId', isAuth, addProject);
 
