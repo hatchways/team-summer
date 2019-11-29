@@ -13,8 +13,11 @@ const ProjectSchema = new Schema({
     },
     description: {
         type: String,
-        required: true,
         maxlength: 2000
+    },
+    subtitle: {
+        type: String,
+        maxlength: 500
     },
     industry: {
         type: String,
@@ -29,8 +32,10 @@ const ProjectSchema = new Schema({
     }],
     fundingGoal: {
         type: Number,
-        required: true,
         trim: true
+    },
+    fundingDeadline: {
+        type: Date
     },
     date: {
         type: Date,
