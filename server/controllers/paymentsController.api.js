@@ -1,7 +1,12 @@
 'use strict';
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const { User } = require('../models');
-const { Investment } = require('../models');
+// const { Investment } = require('../models');
+
+
+exports.sendKey = (req, res) => {
+  res.send({ publicKey: process.env.STRIPE_PUBLISHABLE_KEY });
+};
 
 
 const calculateOrderAmount = items => {
@@ -24,7 +29,7 @@ exports.pay = async (req, res) => {
       source: token
     });
 
-    The payment was processed
+    // The payment was processed
     res.send(charge);
   } catch (e) {
     // Handle "hard declines" e.g. insufficient funds, expired card, etc
