@@ -6,6 +6,7 @@ import {
   CardContent,
   Typography
 } from '@material-ui/core';
+import { IndustryLabel } from './ProjectPageStyles';
 
 const styles = (theme) => ({
   card: {
@@ -17,6 +18,14 @@ const styles = (theme) => ({
     '&:hover': {
       boxShadow: '0 16px 70px -12.125px rgba(0,0,0,0.3)'
     }
+  },
+  cardImgContainer: {
+    width: '100%',
+    height: 250,
+    position: 'relative'
+  },
+  media: {
+    height: '100%'
   },
   content: {
     display: 'flex',
@@ -41,9 +50,6 @@ const styles = (theme) => ({
   cardFooter: {
     borderTop: `1px solid ${lighten(theme.palette.secondary.main, 0.5)}`,
     padding: '20px 30px 20px 30px'
-  },
-  media: {
-    height: 250
   },
   fundingAmounts: {
     display: 'flex',
@@ -107,14 +113,23 @@ const ProjectFooter = ({ creator, location, classes }) => (
 );
 
 const ProjectCard = (props) => {
-  // console.log(props)
   return (
     <Card elevation={4} className={props.classes.card}>
-      <CardMedia
-        className={props.classes.media}
-        image={
-          'https://image.freepik.com/free-photo/river-foggy-mountains-landscape_1204-511.jpg'
-        }/>
+      <div className={props.classes.cardImgContainer}>
+        <IndustryLabel
+          style={{
+            position: 'absolute',
+            top: 15,
+            left: 15
+          }}>
+          {props.industry}
+        </IndustryLabel>
+        <CardMedia
+          className={props.classes.media}
+          image={
+            'https://image.freepik.com/free-photo/river-foggy-mountains-landscape_1204-511.jpg'
+          }/>
+      </div>
       <CardContent className={props.classes.content}>
         <ProjectHead {...props}/>
         <ProjectBody {...props}/>
