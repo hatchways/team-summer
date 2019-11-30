@@ -65,19 +65,19 @@ const styles = (theme) => ({
   }
 });
 
-const ProjectHead = ({ classes, name }) => (
+const ProjectHead = ({ classes, title }) => (
   <div className={classes.cardHead}>
-    <Typography variant="h5">{name}</Typography>
+    <Typography variant="h5">{title}</Typography>
   </div>
 );
 
-const ProjectBody = ({ classes, funding, goal, equality, daysLeft }) => (
+const ProjectBody = ({ classes, funding, fundingGoal: goal, equality, daysLeft }) => (
   <div className={classes.cardBody}>
     <div className={classes.fundingAmounts}>
       <Typography variant="overline">$</Typography>
 
       <Typography variant="h6">
-        {funding.toLocaleString()}
+        {funding ? funding.toLocaleString() : 0}
       </Typography>
 
       <Typography variant="h6" color="secondary">/</Typography>
@@ -105,7 +105,7 @@ const ProjectFooter = ({ creator, location, classes }) => (
 );
 
 const ProjectCard = (props) => {
-  console.log(props);
+  // console.log(props)
   return (
     <Card elevation={4} className={props.classes.card}>
       <CardMedia

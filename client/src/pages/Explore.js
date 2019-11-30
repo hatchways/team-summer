@@ -11,9 +11,9 @@ class Explore extends React.Component {
   state = {
     projects: [
       {
-        name: 'Urban Jungle: eco-friendly coffee shop',
+        title: 'Urban Jungle: eco-friendly coffee shop',
         funding: 23874,
-        goal: 40000,
+        fundingGoal: 40000,
         equality: 10,
         daysLeft: 44,
         creator: {
@@ -22,9 +22,9 @@ class Explore extends React.Component {
         }
       },
       {
-        name: 'An Easy-to-use, Powerful AI Camera',
+        title: 'An Easy-to-use, Powerful AI Camera',
         funding: 34912,
-        goal: 55000,
+        fundingGoal: 55000,
         equality: 10,
         daysLeft: 12,
         creator: {
@@ -32,9 +32,10 @@ class Explore extends React.Component {
           location: 'Melbourne, AU'
         }
       },
-      { name: 'test',
+      {
+        title: 'test',
         funding: 200,
-        goal: 500,
+        fundingGoal: 500,
         equality: 10,
         daysLeft: 10,
         creator: {
@@ -42,9 +43,9 @@ class Explore extends React.Component {
           location: 'London, UK'
         }
       },
-      { name: 'test2',
+      { title: 'test2',
         funding: 200,
-        goal: 500,
+        fundingGoal: 500,
         equality: 10,
         daysLeft: 300,
         creator: {
@@ -63,9 +64,9 @@ class Explore extends React.Component {
       <ExploreStyles.Main>
         <Typography variant="h2" className={classes.pageTitle}>Explore Projects</Typography>
         <ExploreStyles.Grid>
-          {projects.map((project) => (
+          {projects.map((project, index) => (
             <ProjectCard
-              key={project.name}
+              key={index}
               {...project}
             />
           ))}
