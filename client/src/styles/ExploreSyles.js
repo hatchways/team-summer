@@ -20,3 +20,8 @@ export const Grid = styled('div')(({ theme, ...props }) => ({
   gridGap: 30,
   margin: '0 auto'
 }));
+
+export const FilterContainer = styled('div')(({ theme, ...props }) => ({
+  width: '50%',
+  margin: '0 auto'
+}));
