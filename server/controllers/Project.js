@@ -25,6 +25,35 @@ exports.projectById = (req, res, next, id) => {
         })
 }
 
+exports.getProjects = (req, res) => {
+    const { _id } = req.profile;
+    const order = req.query.order || 'asc';
+    const sortBy = req.query.sortBy || 'fundingDeadline';
+    const limit = parseInt(req.query.limit) || 6;
+    const cutoff = new Date();
+
+    const filterOptions = {
+        user: { $ne: _id },
+        fundingDeadline: { $gt: cutoff },
+    }
+
+    if (req.query.industry) filterOptions.industry = req.query.industry;
+    if (req.query.location) filterOptions.location = req.query.location;
+
+    console.log(order, sortBy, limit)
+    Project.find(filterOptions)
+        .sort([[sortBy, order]])
+        .limit(limit)
+        .exec((err, projects) => {
+            if (err) {
+                return res.status(400).json({
+                    error: "Projects not found."
+                })
+            }
+            return res.status(200).json(projects);
+        })
+}
+
 exports.addProject = (req, res) => {
     multiUpload(req, res, function (err) {
         if (err) return res.status(422).json({
