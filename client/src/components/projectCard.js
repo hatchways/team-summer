@@ -9,37 +9,39 @@ import {
 
 const styles = (theme) => ({
   card: {
-    minWidth: 200,
-    margin: 10,
+    display: 'flex',
+    flexDirection: 'column',
     transition: '0.3s',
 
     '&:hover': {
       boxShadow: '0 16px 70px -12.125px rgba(0,0,0,0.3)'
     }
   },
-  cardHead: {
-    minHeight: 75,
-    padding: '20px 30px 10px 30px'
-  },
-  cardBody: {
-    minHeight: 65,
-    padding: '10px 30px 20px 30px'
-  },
-  cardFooter: {
-    minHeight: 65,
-    borderTop: `1px solid ${lighten(theme.palette.secondary.main, 0.5)}`,
-    padding: '10px 30px 20px 30px'
-  },
-  media: {
-    height: 250
-  },
   content: {
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+
     padding: 0,
-    textAlign: 'left',
 
     '&:last-child': {
       padding: 0
     }
+  },
+  cardHead: {
+    padding: '20px 30px 20px 30px'
+  },
+  cardBody: {
+    height: '5%',
+    padding: '20px 30px 20px 30px'
+  },
+  cardFooter: {
+    borderTop: `1px solid ${lighten(theme.palette.secondary.main, 0.5)}`,
+    padding: '20px 30px 20px 30px'
+  },
+  media: {
+    height: 250
   },
   fundingAmounts: {
     display: 'flex',
@@ -105,7 +107,7 @@ const ProjectFooter = ({ creator, location, classes }) => (
 const ProjectCard = (props) => {
   console.log(props);
   return (
-    <Card elevation={3}>
+    <Card elevation={4} className={props.classes.card}>
       <CardMedia
         className={props.classes.media}
         image={
