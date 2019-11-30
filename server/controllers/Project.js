@@ -32,8 +32,9 @@ exports.getProject = (req, res) => {
   });
 };
 
-exports.getProjects = (req, res) => {
-    const { _id } = req.profile;
+exports.getUserProjects = (req, res) => {
+    let { _id } = req.query.userId;
+
     const order = req.query.order || 'asc';
     const sortBy = req.query.sortBy || 'fundingDeadline';
     const limit = parseInt(req.query.limit) || 6;
@@ -47,7 +48,6 @@ exports.getProjects = (req, res) => {
     if (req.query.industry) filterOptions.industry = req.query.industry;
     if (req.query.location) filterOptions.location = req.query.location;
 
-    console.log(order, sortBy, limit)
     Project.find(filterOptions)
         .sort([[sortBy, order]])
         .limit(limit)

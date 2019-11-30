@@ -18,3 +18,11 @@ export const addProject = async (id, projectData) => {
         return { success: false };
     }
 }
+
+export const getUserProjects = (userId) => {
+    return httpClient.get(`/projects/?userId=${userId}`);
+}
+
+export const getProject = (projectId) => {
+  return httpClient.get(`/projects/projectId`);
+};
