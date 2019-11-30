@@ -16,6 +16,7 @@ class Explore extends React.Component {
         fundingGoal: 40000,
         equality: 10,
         daysLeft: 44,
+        industry: 'Entertainment',
         creator: {
           name: 'James Hampton',
           location: 'Toronto, Canada'
@@ -27,6 +28,7 @@ class Explore extends React.Component {
         fundingGoal: 55000,
         equality: 10,
         daysLeft: 12,
+        industry: 'Arts & Craft',
         creator: {
           name: 'Todd Biggerstaff',
           location: 'Melbourne, AU'
@@ -38,16 +40,7 @@ class Explore extends React.Component {
         fundingGoal: 500,
         equality: 10,
         daysLeft: 10,
-        creator: {
-          name: 'Zack Newman',
-          location: 'London, UK'
-        }
-      },
-      { title: 'test2',
-        funding: 200,
-        fundingGoal: 500,
-        equality: 10,
-        daysLeft: 300,
+        industry: 'Production',
         creator: {
           name: 'Zack Newman',
           location: 'London, UK'
