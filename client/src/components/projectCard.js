@@ -12,6 +12,7 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'column',
     transition: '0.3s',
+    cursor: 'pointer',
 
     '&:hover': {
       boxShadow: '0 16px 70px -12.125px rgba(0,0,0,0.3)'
@@ -30,6 +31,7 @@ const styles = (theme) => ({
     }
   },
   cardHead: {
+    height: '5%',
     padding: '20px 30px 20px 30px'
   },
   cardBody: {
@@ -74,7 +76,7 @@ const ProjectHead = ({ classes, title }) => (
 const ProjectBody = ({ classes, funding, fundingGoal: goal, equality, daysLeft }) => (
   <div className={classes.cardBody}>
     <div className={classes.fundingAmounts}>
-      <Typography variant="overline">$</Typography>
+      <Typography variant="overline" component="p">$</Typography>
 
       <Typography variant="h6">
         {funding ? funding.toLocaleString() : 0}
@@ -83,7 +85,7 @@ const ProjectBody = ({ classes, funding, fundingGoal: goal, equality, daysLeft }
       <Typography variant="h6" color="secondary">/</Typography>
 
       <Typography variant="h6" color="secondary">
-        {goal.toLocaleString()}
+        {goal ? goal.toLocaleString() : 0}
       </Typography>
     </div>
     <div className={classes.projectMeta}>

@@ -47,7 +47,8 @@ export const theme = createMuiTheme({
     overline: {
       fontWeight: 500,
       fontSize: '0.9em',
-      marginRight: 3
+      marginRight: 3,
+      lineHeight: 'unset'
     }
   },
   breakpoints: {
