@@ -1,29 +1,36 @@
 const { User, Project } = require('../models');
+const { popUserProjects } = require('../utils');
+
 const upload = require('../services/file-upload');
 const singleUpload = upload.single('image');
 const multiUpload = upload.array('images');
 
-
 exports.imageUpload = (req, res) => {
-    singleUpload(req, res, function (err) {
-        if (err) return res.status(422).json({ errors: [{ title: 'File Upload Error', detail: err.message }] });
-        return res.json({ 'imageUrl': req.file.location })
-    })
-}
+  singleUpload(req, res, function(err) {
+    if (err)
+      return res
+        .status(422)
+        .json({ errors: [{ title: 'File Upload Error', detail: err.message }] });
+    return res.json({ imageUrl: req.file.location });
+  });
+};
 
-exports.projectById = (req, res, next, id) => {
-    Project.findById(id)
-        .populate('user')
-        .exec((err, project) => {
-            if (err || !project) {
-                return res.status(400).json({
-                    error: 'Project not found.'
-                });
-            }
-            req.project = project;
-            next();
-        })
-}
+exports.getProject = (req, res) => {
+  const { id } = req.params;
+  Project.findOne({ _id: id }, async (err, project) => {
+    if (err) {
+      res.json({
+        status: 500,
+        err
+      });
+    } else {
+      res.json({
+        status: 200,
+        project: project
+      });
+    }
+  });
+};
 
 exports.getProjects = (req, res) => {
     const { _id } = req.profile;
@@ -55,49 +62,38 @@ exports.getProjects = (req, res) => {
 }
 
 exports.addProject = (req, res) => {
-    multiUpload(req, res, function (err) {
-        if (err) return res.status(422).json({
-            errors: [{
-                title: 'File Upload Error', detail: err.message
-            }]
-        });
-        const { title, subtitle, description, industry, location, fundingGoal, fundingDeadline } = req.body;
-        if (!title || !industry || !location || !fundingGoal) {
-            return res.status(400).json({
-                error: 'Please fill out the required fields.'
-            });
-        }
-        const images = req.files.map(file => file.location);
-        const user = req.profile;
-        const project = new Project({
-            user,
-            title,
-            subtitle,
-            description,
-            industry, location,
-            images,
-            fundingGoal: parseInt(fundingGoal),
-            fundingDeadline
-        })
-        project.save((err, project) => {
-            if (err) {
-                return res.status(400).json({
-                    error: 'Project could not be created.'
-                })
-            }
-            User.updateOne(
-                { "_id": user._id },
-                { "$push": { "projects": project._id } },
-                (err, project) => {
-                    if (err) {
-                        return res.status(400).json({
-                            error: "User project\'s could not be updated."
-                        });
-                    }
-                    console.log(project);
-                }
-            )
-            return res.json(project);
-        })
-    })
-}
+  multiUpload(req, res, async (err) => {
+    if (err)
+      return res.status(422).json({
+        errors: [
+          {
+            title: 'File Upload Error',
+            detail: err.message
+          }
+        ]
+      });
+    const { title, subtitle, description, industry, location, fundingGoal, fundingDeadline } = req.body;
+
+    const images = req.files ? req.files.map((file) => file.location) : [];
+    const user = req.user
+    try {
+      const project = await Project.create({
+        user,
+        title,
+        subtitle,
+        description,
+        industry, location,
+        images,
+        fundingGoal: parseInt(fundingGoal),
+        fundingDeadline
+      });
+      await User.updateOne({ _id: user._id }, { $push: { projects: project._id } });
+      res.json(project);
+    } catch (err) {
+      res.status(400).json({
+        error: "User project's could not be updated.",
+        err
+      });
+    }
+  });
+};
