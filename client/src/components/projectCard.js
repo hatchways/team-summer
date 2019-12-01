@@ -1,12 +1,20 @@
 import React from 'react';
-import { withStyles, lighten } from '@material-ui/core/styles';
+import { withStyles, lighten, styled } from '@material-ui/core/styles';
 import {
   Card,
   CardMedia,
   CardContent,
   Typography
 } from '@material-ui/core';
-import { IndustryLabel } from './ProjectPageStyles';
+import PropTypes from 'prop-types';
+
+const IndustryLabel = styled('div')(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.primary.contrastText,
+  borderRadius: 100,
+  padding: '5px 20px',
+  marginBottom: theme.spacing(1)
+}), { withTheme: true });
 
 const styles = (theme) => ({
   card: {
@@ -101,7 +109,7 @@ const ProjectBody = ({ classes, funding, fundingGoal: goal, equality, daysLeft }
   </div>
 );
 
-const ProjectFooter = ({ creator, location, classes }) => (
+const ProjectFooter = ({ creator, classes }) => (
   <div className={classes.cardFooter}>
     <Typography variant="h6">
       {creator.name}
@@ -114,7 +122,7 @@ const ProjectFooter = ({ creator, location, classes }) => (
 
 const ProjectCard = (props) => {
   return (
-    <Card elevation={4} className={props.classes.card}>
+    <Card elevation={4} className={props.classes.card} onClick={props.onClick}>
       <div className={props.classes.cardImgContainer}>
         <IndustryLabel
           style={{
@@ -139,6 +147,18 @@ const ProjectCard = (props) => {
       </CardContent>
     </Card>
   );
+};
+
+ProjectCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  funding: PropTypes.number.isRequired,
+  fundingGoal: PropTypes.number.isRequired,
+  equality: PropTypes.number.isRequired,
+  daysLeft: PropTypes.number.isRequired,
+  creator: PropTypes.shape({
+    name: PropTypes.string,
+    location: PropTypes.string
+  })
 };
 
 export default withStyles(styles)(ProjectCard);

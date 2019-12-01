@@ -74,27 +74,29 @@ class Explore extends React.Component {
   };
 
   projectFilter = () => {
-    const {industrySelect, locationSelect} = this.state;
+    const { industrySelect, locationSelect } = this.state;
 
     return this.state.projects.filter((project) => {
       const industryCondition = project.industry === industrySelect;
       const locationCondition = project.creator.location.includes(locationSelect);
 
       if (industrySelect !== 'All Industries' && locationSelect !== 'Everywhere') {
-        return industryCondition && locationCondition
+        return industryCondition && locationCondition;
       }
 
       if (industrySelect !== 'All Industries') return industryCondition;
 
       if (locationSelect !== 'Everywhere') return locationCondition;
 
-      return project
-    })
+      return project;
+    });
   };
 
   render() {
     const { classes } = this.props;
-    const { projects, industries, locations, industrySelect, locationSelect } = this.state;
+    const { industries, locations, industrySelect, locationSelect } = this.state;
+
+    const filteredPosts = this.projectFilter();
 
     return (
       <ExploreStyles.Main>
@@ -128,16 +130,18 @@ class Explore extends React.Component {
           </OutlinedSelect>
         </ExploreStyles.FilterContainer>
 
-        {!this.projectFilter() && (
-          <Typography variant="h3" component="p">
+        {filteredPosts.length === 0 && (
+          <Typography variant="h4" component="p" color="secondary" style={{ textAlign: 'center' }}>
             No Projects found
           </Typography>
         )}
+
         {/* Project Grid */}
         <ExploreStyles.Grid>
-          {this.projectFilter().map((project, index) => (
+          {filteredPosts.map((project, index) => (
             <ProjectCard
               key={index}
+              onClick={() => console.log('project click')}
               {...project}
             />
           ))}
