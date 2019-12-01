@@ -40,8 +40,8 @@ class EditProfile extends React.Component {
     super(props);
     this.state = {
       name: '',
-      about: '',
-      image: '',
+      description: '',
+      image: [],
       location: '',
       formData: {}
     }
@@ -61,7 +61,7 @@ class EditProfile extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     const { image, formData } = this.state;
-    formData.set('image', image);
+    formData.set('image', image[0]);
     const { id } = this.props.userDetails;
     const newUserData = await editUser(id, formData);
     if (newUserData.success) {
@@ -78,13 +78,10 @@ class EditProfile extends React.Component {
       return;
     }
     this.setState({ image });
-    console.log('state image', this.state.image)
   }
 
-  deleteImage = (imgName) => {
-    const { images } = this.state;
-    const filteredImages = images.filter(image => image !== imgName)
-    this.setState({ image: filteredImages })
+  deleteImage = () => {
+    this.setState({ image: '' })
   }
 
   disableSubmit = () => {
@@ -95,7 +92,7 @@ class EditProfile extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { name, image, location, about } = this.state;
+    const { name, image, location, description } = this.state;
 
     return (
       <main className={classes.pageContent}>
@@ -116,12 +113,12 @@ class EditProfile extends React.Component {
             />
             <Typography variant="h4">About</Typography>
             <TextField
-              name="about"
+              name="description"
               classes={{ root: classes.formLine }}
-              value={about}
+              value={description}
               fullWidth={true}
               onChange={this.handleInput}
-              type="about"
+              type="description"
               variant="outlined"
             />
             <UploadImages setImages={this.setImages} images={image} deleteImage={this.deleteImage} />

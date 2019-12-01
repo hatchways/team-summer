@@ -42,10 +42,9 @@ const styles = {
 }
 
 const UploadImages = (props) => {
-    const { classes, setImages, images, deleteImage } = props;
+    const { classes, showMany, setImages, images, deleteImage } = props;
 
     const onDrop = useCallback(acceptedFiles => {
-        console.log(acceptedFiles)
         setImages(acceptedFiles)
     }, [setImages])
 
@@ -70,7 +69,7 @@ const UploadImages = (props) => {
                 </div>
                 <div className={classes.images}>
                     {
-                        images.length ?
+                        showMany ?
                             images.map(image => (
                                 <Image
                                     image={image}
@@ -78,15 +77,15 @@ const UploadImages = (props) => {
                                     deleteImage={deleteImage}
                                     alt={image.name}
                                 />
-                            )) : ''
-                        // images ? <Image
-                        //     image={images}
-                        //     key={images.name}
-                        //     deleteImage={deleteImage}
-                        //     alt={images.name}
-                        //     showBig={true}
-                        // />
-                        //     : ''
+                            )) :
+                            images.length === 1 ? <Image
+                                image={images[0]}
+                                key={images[0].name}
+                                deleteImage={deleteImage}
+                                alt={images[0].name}
+                                showBig={true}
+                            />
+                                : ''
                     }
                 </div>
             </div>

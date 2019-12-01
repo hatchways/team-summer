@@ -225,7 +225,7 @@ class AddProject extends Component {
                                 })
                             }
                         </OutlinedSelect>
-                        <UploadImages setImages={this.setImages} images={images} deleteImage={this.deleteImage} />
+                        <UploadImages setImages={this.setImages} showMany={true} images={images} deleteImage={this.deleteImage} />
                         <Typography variant="h4">Funding Goal Amount</Typography>
                         <OutlinedInput
                             name="fundingGoal"
