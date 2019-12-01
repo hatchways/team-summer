@@ -6,14 +6,15 @@ import validator from 'validator';
 
 import { OutlinedSelect } from '../components/Inputs';
 import FormValidator from '../helpers/form-validation';
+import { editUser } from '../api/users';
 import { locations } from '../dummyData/dropDownItems'
 import { withPageContext } from '../components/pageContext';
 
 const styles = {
-  // pageContent: {
-  //   display: 'flex',
-  //   justifyContent: 'left'
-  // },
+  pageContent: {
+    display: 'flex',
+    justifyContent: 'left'
+  },
   // projectPreviewContainer: {
   //   display: 'flex',
   //   width: '25%',
@@ -49,13 +50,43 @@ class EditProfile extends React.Component {
       name: '',
       image: '',
       location: '',
-      about: ''
+      about: '',
+      formData: {}
+    }
+  }
+
+  componentDidMount() {
+    this.setState({ formData: new FormData() });
+  }
+
+  handleInput = (event) => {
+    const { value, name } = event.target;
+    const { formData } = this.state;
+    formData.set(name, value);
+    this.setState({ [name]: value, formData });
+  }
+
+  handleSubmit = async (event) => {
+    event.preventDefault();
+    const { image, formData } = this.state;
+    formData.append('image', image);
+    const { id } = this.props.userDetails;
+    const newUserData = await editUser(id, formData);
+    if (newUserData.success) {
+      console.log(newUserData);
+      this.props.activateToast('Edit Successful', 'success');
+    } else if (newUserData.err) {
+      console.log(newUserData.err)
     }
   }
 
   render() {
-    return(
-      <div>Heyheyhey</div>
+    const { classes } = this.props;
+    const { name, image, location, about } = this.state;
+    return (
+      <main className={classes.pageContent}>
+
+      </main>
     )
   }
 }
