@@ -22,3 +22,17 @@ export const createOrLoginUser = async (method, userData) => {
     return { success: false };
   }
 };
+
+export const editUser = async (userData) => {
+  try {
+    const { id } = userData
+    let response = await httpClient.put(`/api/${id}`)
+    if (response.data.hasOwnProperty('err')) return { ...response.data };
+    return {
+      success: true,
+    }
+  } catch (error) {
+    console.log(error);
+    return { success: false };
+  }
+}
