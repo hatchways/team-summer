@@ -1,10 +1,11 @@
 import React from 'react';
-import { Typography } from '@material-ui/core';
+import { CircularProgress, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 
 import * as ExploreStyles from '../styles/ExploreSyles';
 import ProjectCard from '../components/ProjectCard';
+import Loading from '../components/Loading';
 import { withPageContext } from '../components/pageContext';
 import { OutlinedSelect } from '../components/Inputs';
 import { getUserProjects } from '../api/projects';
@@ -74,7 +75,9 @@ class Explore extends React.Component {
     const getProjects = await getUserProjects(this.props.userDetails.id);
     const projects = getProjects.data;
 
-    this.setState({ projects, loading: false });
+    this.setState({ projects }, () => {
+      setTimeout(() => this.setState({loading: false}), 1000)
+    });
   }
 
   handleFilterSelects = (event) => {
@@ -105,11 +108,7 @@ class Explore extends React.Component {
   renderGrid() {
     const filteredPosts = this.projectFilter();
 
-    if (this.state.loading) {
-      return (
-        <div>Loading</div>
-      )
-    }
+    if (this.state.loading) return <Loading />;
 
     return (
       <ExploreStyles.Grid>
