@@ -52,7 +52,9 @@ class App extends React.Component {
       userAuthenticated: false,
       userDetails: {
         name: '',
-        id: null
+        id: null,
+        description: '',
+        avatar: ''
       }
     };
 
@@ -68,7 +70,7 @@ class App extends React.Component {
   };
 
   setAuthenticated = (authenticated) => this.setState({ userAuthenticated: authenticated });
-  setUserDetails = (id, name) => this.setState({ userDetails: { id, name } });
+  setUserDetails = (id, name, description, avatar) => this.setState({ userDetails: { id, name, description, avatar } });
   toggleToast = () => this.setState((state) => ({ showToast: !state.showToast }));
 
   render() {
