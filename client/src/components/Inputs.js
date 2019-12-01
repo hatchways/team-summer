@@ -1,9 +1,17 @@
 import React from 'react';
 import { InputLabel, Select, TextField, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+
+const outlinedSelectStyles = makeStyles({
+  select: {
+    marginRight: 50
+  }
+});
 
 const OutlinedSelect = (props) => {
   const handleSelect = (callback) => (event) => callback(event);
+  const classes = outlinedSelectStyles();
 
   return (
     <React.Fragment>
@@ -23,6 +31,9 @@ const OutlinedSelect = (props) => {
         onChange={handleSelect(props.setState)}
         variant="outlined"
         disabled={props.disabled || false}
+        classes={{
+          select: classes.select
+        }}
         {...props.selectProps}
       >
         {props.children}

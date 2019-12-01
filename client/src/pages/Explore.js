@@ -17,7 +17,7 @@ class Explore extends React.Component {
         fundingGoal: 40000,
         equality: 10,
         daysLeft: 44,
-        industry: 'Marketing',
+        industry: 'Technology',
         creator: {
           name: 'James Hampton',
           location: 'Toronto, Canada'
@@ -32,7 +32,7 @@ class Explore extends React.Component {
         industry: 'Art',
         creator: {
           name: 'Todd Biggerstaff',
-          location: 'Melbourne, AU'
+          location: 'California, USA'
         }
       },
       {
@@ -44,7 +44,7 @@ class Explore extends React.Component {
         industry: 'Technology',
         creator: {
           name: 'Zack Newman',
-          location: 'London, UK'
+          location: 'California, USA'
         }
       }
     ],
@@ -63,7 +63,7 @@ class Explore extends React.Component {
       'Georgia',
       'Florida'
     ],
-    industrySelect: 'all',
+    industrySelect: 'All Industries',
     locationSelect: 'Everywhere'
   };
 
@@ -73,6 +73,25 @@ class Explore extends React.Component {
     this.setState({ [name]: value });
   };
 
+  projectFilter = () => {
+    const {industrySelect, locationSelect} = this.state;
+
+    return this.state.projects.filter((project) => {
+      const industryCondition = project.industry === industrySelect;
+      const locationCondition = project.creator.location.includes(locationSelect);
+
+      if (industrySelect !== 'All Industries' && locationSelect !== 'Everywhere') {
+        return industryCondition && locationCondition
+      }
+
+      if (industrySelect !== 'All Industries') return industryCondition;
+
+      if (locationSelect !== 'Everywhere') return locationCondition;
+
+      return project
+    })
+  };
+
   render() {
     const { classes } = this.props;
     const { projects, industries, locations, industrySelect, locationSelect } = this.state;
@@ -80,7 +99,9 @@ class Explore extends React.Component {
     return (
       <ExploreStyles.Main>
         <Typography variant="h2" className={classes.pageTitle}>Explore Projects</Typography>
+        {/* Filtering Projects */}
         <ExploreStyles.FilterContainer>
+          {/* Industry Filter */}
           <OutlinedSelect
             labelText="Industry"
             selectName="industrySelect"
@@ -93,6 +114,7 @@ class Explore extends React.Component {
             ))}
           </OutlinedSelect>
 
+          {/* Location filter*/}
           <OutlinedSelect
             labelText="Location"
             selectName="locationSelect"
@@ -105,13 +127,21 @@ class Explore extends React.Component {
             ))}
           </OutlinedSelect>
         </ExploreStyles.FilterContainer>
+
+        {!this.projectFilter() && (
+          <Typography variant="h3" component="p">
+            No Projects found
+          </Typography>
+        )}
+        {/* Project Grid */}
         <ExploreStyles.Grid>
-          {projects.map((project, index) => (
+          {this.projectFilter().map((project, index) => (
             <ProjectCard
               key={index}
               {...project}
             />
           ))}
+
         </ExploreStyles.Grid>
       </ExploreStyles.Main>
     );

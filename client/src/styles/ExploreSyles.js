@@ -22,6 +22,9 @@ export const Grid = styled('div')(({ theme, ...props }) => ({
 }));
 
 export const FilterContainer = styled('div')(({ theme, ...props }) => ({
-  width: '50%',
-  margin: '0 auto'
+  display: 'flex',
+  justifyContent: 'space-evenly',
+
+  width: '30%',
+  margin: '0 auto 70px auto',
 }));
