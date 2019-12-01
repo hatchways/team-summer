@@ -7,7 +7,7 @@ const saltRounds = 12; // defaults to 10
 const UserSchema = new Schema({
   name: {
     type: String,
-    required: true,
+    required: true
   },
   email: {
     type: String,
@@ -23,10 +23,18 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  projects: [{
-    type: ObjectId,
-    ref: 'Project'
-  }]
+  projects: [
+    {
+      type: ObjectId,
+      ref: 'Project'
+    }
+  ],
+  investments: [
+    {
+      type: ObjectId,
+      ref: 'Investment'
+    }
+  ]
 });
 
 UserSchema.pre('save', function (next) {
@@ -48,6 +56,11 @@ UserSchema.pre('save', function (next) {
     return next();
   }
 });
+
+// CASCADE DELETE INVESTMENTS 
+// userSchema.pre('remove', function(next) {
+//   this.model('Investment').deleteMany({ user: this._id }, next);
+// });
 
 UserSchema.methods.comparePassword = function (pw) {
   return bcrypt.compareSync(pw, this.password);
