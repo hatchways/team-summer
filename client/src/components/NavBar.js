@@ -97,7 +97,7 @@ const Navigation = (props) => {
   const links = [
     { label: 'Explore', url: '/explore', show: 'authenticated' },
     { label: 'Messages', url: '/messages', show: 'authenticated' },
-    { label: 'Launch', url: '/projects/add', show: 'authenticated' },
+    { label: 'Launch', url: '/launch', show: 'authenticated' },
     { label: 'Login', url: '/login', show: 'unauthenticated' }
   ];
 

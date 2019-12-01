@@ -114,7 +114,7 @@ class App extends React.Component {
               <Route path="/signup" component={SignUp}/>
               <Route path="/login" component={Login}/>
               <Route path="/profile/:id?" component={ProfilePage}/>
-              <Route path="/projects/add" component={AddProject}/>
+              <Route path="/launch" component={AddProject}/>
               <Route path="/projects/:id" component={Project}/>
               <Route path="/explore" component={Explore}/>
             </Switch>
