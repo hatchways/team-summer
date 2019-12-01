@@ -66,14 +66,15 @@ class Explore extends React.Component {
       'Florida'
     ],
     industrySelect: 'All Industries',
-    locationSelect: 'Everywhere'
+    locationSelect: 'Everywhere',
+    loading: true
   };
 
   async componentDidMount() {
     const getProjects = await getUserProjects(this.props.userDetails.id);
     const projects = getProjects.data;
 
-    this.setState({ projects });
+    this.setState({ projects, loading: false });
   }
 
   handleFilterSelects = (event) => {
@@ -101,10 +102,40 @@ class Explore extends React.Component {
     });
   };
 
+  renderGrid() {
+    const filteredPosts = this.projectFilter();
+
+    if (this.state.loading) {
+      return (
+        <div>Loading</div>
+      )
+    }
+
+    return (
+      <ExploreStyles.Grid>
+          {filteredPosts.map(({_id: id, ...project}, index) => (
+            <ProjectCard
+              key={index}
+              onClick={() => this.props.history.push(`/projects/${id}`)}
+              creator={{
+                name: project.user.name,
+                location: project.location
+              }}
+              title={project.title}
+              funding={project.funding.fundingTotal}
+              fundingGoal={project.fundingGoal}
+              industry={project.industry}
+              daysLeft={parseInt(moment(project.fundingDeadline).fromNow().split(' ')[1])}
+            />
+          ))}
+
+        </ExploreStyles.Grid>
+    )
+  }
+
   render() {
     const { classes } = this.props;
     const { industries, locations, industrySelect, locationSelect } = this.state;
-
     const filteredPosts = this.projectFilter();
 
     return (
@@ -146,24 +177,7 @@ class Explore extends React.Component {
         )}
 
         {/* Project Grid */}
-        <ExploreStyles.Grid>
-          {filteredPosts.map(({_id: id, ...project}, index) => (
-            <ProjectCard
-              key={index}
-              onClick={() => this.props.history.push(`/projects/${id}`)}
-              creator={{
-                name: project.user.name,
-                location: project.location
-              }}
-              title={project.title}
-              funding={project.funding.fundingTotal}
-              fundingGoal={project.fundingGoal}
-              industry={project.industry}
-              daysLeft={parseInt(moment(project.fundingDeadline).fromNow().split(' ')[1])}
-            />
-          ))}
-
-        </ExploreStyles.Grid>
+        {this.renderGrid()}
       </ExploreStyles.Main>
     );
   }
