@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import ProjectCard from '../components/projectCard';
+import ProjectCard from '../components/ProjectCard';
 import ProfileDetailPanel from '../components/ProfileDetailPanel';
-import { withStyles, Button, Grid, Typography } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { getUser } from '../api/users';
 import { withPageContext } from '../components/pageContext';
 

@@ -1,53 +1,55 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import moment from 'moment';
 
 import * as ExploreStyles from '../styles/ExploreSyles';
-import ProjectCard from '../components/projectCard';
+import ProjectCard from '../components/ProjectCard';
 import { withPageContext } from '../components/pageContext';
 import { OutlinedSelect } from '../components/Inputs';
+import { getUserProjects } from '../api/projects';
 
+// Placeholder projects = {
+// {
+//         title: 'Urban Jungle: eco-friendly coffee shop',
+//         funding: 23874,
+//         fundingGoal: 40000,
+//         equality: 10,
+//         daysLeft: 44,
+//         industry: 'Technology',
+//         creator: {
+//           name: 'James Hampton',
+//           location: 'Toronto, Canada'
+//         }
+//       },
+//       {
+//         title: 'An Easy-to-use, Powerful AI Camera',
+//         funding: 34912,
+//         fundingGoal: 55000,
+//         equality: 10,
+//         daysLeft: 12,
+//         industry: 'Art',
+//         creator: {
+//           name: 'Todd Biggerstaff',
+//           location: 'California, USA'
+//         }
+//       },
+//       {
+//         title: 'test',
+//         funding: 200,
+//         fundingGoal: 500,
+//         equality: 10,
+//         daysLeft: 10,
+//         industry: 'Technology',
+//         creator: {
+//           name: 'Zack Newman',
+//           location: 'California, USA'
+//         }
+//       }}
 
 class Explore extends React.Component {
   state = {
-    projects: [
-      {
-        title: 'Urban Jungle: eco-friendly coffee shop',
-        funding: 23874,
-        fundingGoal: 40000,
-        equality: 10,
-        daysLeft: 44,
-        industry: 'Technology',
-        creator: {
-          name: 'James Hampton',
-          location: 'Toronto, Canada'
-        }
-      },
-      {
-        title: 'An Easy-to-use, Powerful AI Camera',
-        funding: 34912,
-        fundingGoal: 55000,
-        equality: 10,
-        daysLeft: 12,
-        industry: 'Art',
-        creator: {
-          name: 'Todd Biggerstaff',
-          location: 'California, USA'
-        }
-      },
-      {
-        title: 'test',
-        funding: 200,
-        fundingGoal: 500,
-        equality: 10,
-        daysLeft: 10,
-        industry: 'Technology',
-        creator: {
-          name: 'Zack Newman',
-          location: 'California, USA'
-        }
-      }
-    ],
+    projects: [],
     industries: [
       'All Industries',
       'Technology',
@@ -67,6 +69,13 @@ class Explore extends React.Component {
     locationSelect: 'Everywhere'
   };
 
+  async componentDidMount() {
+    const getProjects = await getUserProjects(this.props.userDetails.id);
+    const projects = getProjects.data;
+
+    this.setState({ projects });
+  }
+
   handleFilterSelects = (event) => {
     const { target: { name, value } } = event;
 
@@ -78,7 +87,7 @@ class Explore extends React.Component {
 
     return this.state.projects.filter((project) => {
       const industryCondition = project.industry === industrySelect;
-      const locationCondition = project.creator.location.includes(locationSelect);
+      const locationCondition = project.location.includes(locationSelect);
 
       if (industrySelect !== 'All Industries' && locationSelect !== 'Everywhere') {
         return industryCondition && locationCondition;
@@ -138,11 +147,19 @@ class Explore extends React.Component {
 
         {/* Project Grid */}
         <ExploreStyles.Grid>
-          {filteredPosts.map((project, index) => (
+          {filteredPosts.map(({_id: id, ...project}, index) => (
             <ProjectCard
               key={index}
-              onClick={() => console.log('project click')}
-              {...project}
+              onClick={() => this.props.history.push(`/projects/${id}`)}
+              creator={{
+                name: project.user.name,
+                location: project.location
+              }}
+              title={project.title}
+              funding={project.funding.fundingTotal}
+              fundingGoal={project.fundingGoal}
+              industry={project.industry}
+              daysLeft={parseInt(moment(project.fundingDeadline).fromNow().split(' ')[1])}
             />
           ))}
 

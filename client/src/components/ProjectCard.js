@@ -103,7 +103,7 @@ const ProjectBody = ({ classes, funding, fundingGoal: goal, equality, daysLeft }
       </Typography>
     </div>
     <div className={classes.projectMeta}>
-      <Typography variant="body2" color="secondary">Equality exchange: {equality}%</Typography>
+      <Typography variant="body2" color="secondary">Equality exchange: {equality || 0}%</Typography>
       <Typography variant="body2" color="secondary">Days left: {daysLeft}</Typography>
     </div>
   </div>
@@ -153,7 +153,8 @@ ProjectCard.propTypes = {
   title: PropTypes.string.isRequired,
   funding: PropTypes.number.isRequired,
   fundingGoal: PropTypes.number.isRequired,
-  equality: PropTypes.number.isRequired,
+  industry: PropTypes.string.isRequired,
+  equality: PropTypes.number,
   daysLeft: PropTypes.number.isRequired,
   creator: PropTypes.shape({
     name: PropTypes.string,
