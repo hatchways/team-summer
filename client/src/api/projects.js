@@ -1,7 +1,7 @@
 import httpClient from './httpClient';
 
 export const addProject = async (id, projectData) => {
-    const url = `/api/projects/add/${id}`;
+    const url = `/projects/${id}`;
     const token = localStorage.getItem('jwtToken')
     const authOptions = {
         headers: {
@@ -18,3 +18,11 @@ export const addProject = async (id, projectData) => {
         return { success: false };
     }
 }
+
+export const getUserProjects = (userId) => {
+    return httpClient.get(`/projects/?userId=${userId}`);
+}
+
+export const getProject = (projectId) => {
+  return httpClient.get(`/projects/projectId`);
+};

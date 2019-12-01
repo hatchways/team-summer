@@ -1,6 +1,6 @@
 'use strict';
 const { User } = require('../models');
-const { encodeToken, decodeToken, mongoDbErrorHandler } = require('../utils');
+const { encodeToken, mongoDbErrorHandler } = require('../utils');
 
 exports.register = (req, res) => {
   User.create(req.body, (err, user) => {
@@ -48,38 +48,4 @@ exports.login = (req, res) => {
         return res.status(400).json({ err: 'Invalid email/password', property: 'email' });
       }
     });
-};
-
-exports.userById = (req, res, next, id) => {
-  User.findById(id)
-    .populate('projects')
-    .exec((err, user) => {
-      if (err || !user) {
-        return res.status(400).json({
-          error: 'User not found'
-        });
-      }
-      const { _id, name, email, projects, description, profilePic } = user;
-      req.profile = { _id, name, email, projects, description, profilePic };
-      next();
-    });
-};
-
-exports.isAuth = (req, res, next) => {
-  const { authorization } = req.headers;
-  if (authorization) {
-    const token = authorization.split(' ')[1];
-    const decodedToken = decodeToken(token);
-    req.user = decodedToken.payload;
-  } else {
-    return res.status(403).send({ error: 'Access denied' });
-  }
-
-  let user = req.profile && req.user._id && req.profile._id == req.user._id;
-  if (!user) {
-    return res.status(403).json({
-      error: 'Access denied'
-    });
-  }
-  next();
 };

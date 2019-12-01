@@ -1,13 +1,12 @@
 const express = require("express");
 const router = express.Router();
+const { isAuth, userById } = require('../middlewares');
+const projects = require('../controllers/project');
 
-const { imageUpload, getProjects, addProject } = require('../controllers/project');
-const auth = require('../controllers/authController.api');
-const { isAuth, userById } = auth;
-
-router.get('/projects/:userId', getProjects);
-router.post('/projects/image-upload', imageUpload);
-router.post('/projects/add/:userId', isAuth, addProject);
+router.get('/:id', projects.getProject);
+router.post('/', isAuth, projects.addProject);
+router.get('/', projects.getUserProjects); //?userId=
+router.post('/image-upload', projects.imageUpload);
 
 router.param('userId', userById);
 
