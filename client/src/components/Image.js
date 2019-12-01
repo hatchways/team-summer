@@ -31,7 +31,7 @@ const styles = {
 }
 
 const Image = (props) => {
-  const { classes, image, deleteImage } = props;
+  const { classes, image, deleteImage, showBig } = props;
   const [isHovering, setHovering] = useState(false);
 
   const handleMouseHover = () => {

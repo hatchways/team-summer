@@ -45,6 +45,7 @@ const UploadImages = (props) => {
     const { classes, setImages, images, deleteImage } = props;
 
     const onDrop = useCallback(acceptedFiles => {
+        console.log(acceptedFiles)
         setImages(acceptedFiles)
     }, [setImages])
 
@@ -75,10 +76,17 @@ const UploadImages = (props) => {
                                     image={image}
                                     key={image.name}
                                     deleteImage={deleteImage}
-                                    alt=""
+                                    alt={image.name}
                                 />
-                            )) :
-                            null
+                            )) : ''
+                        // images ? <Image
+                        //     image={images}
+                        //     key={images.name}
+                        //     deleteImage={deleteImage}
+                        //     alt={images.name}
+                        //     showBig={true}
+                        // />
+                        //     : ''
                     }
                 </div>
             </div>

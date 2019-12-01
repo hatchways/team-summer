@@ -23,10 +23,9 @@ export const createOrLoginUser = async (method, userData) => {
   }
 };
 
-export const editUser = async (userData) => {
+export const editUser = async (id, userData) => {
   try {
-    const { id } = userData
-    let response = await httpClient.put(`/api/${id}`)
+    let response = await httpClient.put(`/api/users/${id}`, userData)
     if (response.data.hasOwnProperty('err')) return { ...response.data };
     return {
       success: true,
