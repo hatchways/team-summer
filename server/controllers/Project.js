@@ -49,6 +49,7 @@ exports.getUserProjects = (req, res) => {
     if (req.query.location) filterOptions.location = req.query.location;
 
     Project.find(filterOptions)
+        .populate({path: 'user', select: 'name'})
         .sort([[sortBy, order]])
         .limit(limit)
         .exec((err, projects) => {
