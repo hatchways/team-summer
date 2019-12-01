@@ -4,14 +4,12 @@ import {
   Grid,
   Card,
   CardContent,
-  LinearProgress,
   Button,
   Avatar
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import * as ProjectStyles from '../components/ProjectPageStyles';
-import SvgSmallSpeechBubble from '../components/SvgSmallSpeechBubble';
 import CardCarousel from '../components/CardCarousel';
 import PercentageProgressBar from '../components/PercentageProgressBar';
 

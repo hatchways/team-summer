@@ -33,34 +33,34 @@ exports.getProject = (req, res) => {
 };
 
 exports.getUserProjects = (req, res) => {
-    let { _id } = req.query.userId;
+  const _id = req.query.userId;
 
-    const order = req.query.order || 'asc';
-    const sortBy = req.query.sortBy || 'fundingDeadline';
-    const limit = parseInt(req.query.limit) || 6;
-    const cutoff = new Date();
+  const order = req.query.order || 'asc';
+  const sortBy = req.query.sortBy || 'fundingDeadline';
+  const limit = parseInt(req.query.limit) || 6;
+  const cutoff = new Date();
 
-    const filterOptions = {
-        user: { $ne: _id },
-        fundingDeadline: { $gt: cutoff },
-    }
+  const filterOptions = {
+    user: { $ne: _id },
+    fundingDeadline: { $gt: cutoff }
+  };
 
-    if (req.query.industry) filterOptions.industry = req.query.industry;
-    if (req.query.location) filterOptions.location = req.query.location;
+  if (req.query.industry) filterOptions.industry = req.query.industry;
+  if (req.query.location) filterOptions.location = req.query.location;
 
-    Project.find(filterOptions)
-        .populate({path: 'user', select: 'name'})
-        .sort([[sortBy, order]])
-        .limit(limit)
-        .exec((err, projects) => {
-            if (err) {
-                return res.status(400).json({
-                    error: "Projects not found."
-                })
-            }
-            return res.status(200).json(projects);
-        })
-}
+  Project.find(filterOptions)
+    .populate({ path: 'user', select: 'name' })
+    .sort([[sortBy, order]])
+    .limit(limit)
+    .exec((err, projects) => {
+      if (err) {
+        return res.status(400).json({
+          error: 'Projects not found.'
+        });
+      }
+      return res.status(200).json(projects);
+    });
+};
 
 exports.addProject = (req, res) => {
   multiUpload(req, res, async (err) => {
@@ -76,7 +76,7 @@ exports.addProject = (req, res) => {
     const { title, subtitle, description, industry, location, fundingGoal, fundingDeadline } = req.body;
 
     const images = req.files ? req.files.map((file) => file.location) : [];
-    const user = req.user
+    const user = req.user;
     try {
       const project = await Project.create({
         user,
@@ -92,7 +92,7 @@ exports.addProject = (req, res) => {
       res.json(project);
     } catch (err) {
       res.status(400).json({
-        error: "User project's could not be updated.",
+        error: 'User project\'s could not be updated.',
         err
       });
     }
