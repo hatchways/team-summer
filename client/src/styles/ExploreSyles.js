@@ -1,4 +1,4 @@
-import { styled } from '@material-ui/core/styles/';
+import { styled } from '@material-ui/core/styles';
 
 export const styles = (theme) => ({
   pageTitle: {
@@ -12,14 +12,6 @@ export const Main = styled('main')({
   flexDirection: 'column',
   justifyContent: 'center'
 });
-
-export const Grid = styled('div')(({ theme, ...props }) => ({
-  width: '100%',
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-  gridGap: 30,
-  margin: '0 auto'
-}));
 
 export const FilterContainer = styled('div')(({ theme, ...props }) => ({
   display: 'flex',

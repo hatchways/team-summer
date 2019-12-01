@@ -1,5 +1,5 @@
 import React from 'react';
-import { CircularProgress, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 
@@ -9,44 +9,7 @@ import Loading from '../components/Loading';
 import { withPageContext } from '../components/pageContext';
 import { OutlinedSelect } from '../components/Inputs';
 import { getUserProjects } from '../api/projects';
-
-// Placeholder projects = {
-// {
-//         title: 'Urban Jungle: eco-friendly coffee shop',
-//         funding: 23874,
-//         fundingGoal: 40000,
-//         equality: 10,
-//         daysLeft: 44,
-//         industry: 'Technology',
-//         creator: {
-//           name: 'James Hampton',
-//           location: 'Toronto, Canada'
-//         }
-//       },
-//       {
-//         title: 'An Easy-to-use, Powerful AI Camera',
-//         funding: 34912,
-//         fundingGoal: 55000,
-//         equality: 10,
-//         daysLeft: 12,
-//         industry: 'Art',
-//         creator: {
-//           name: 'Todd Biggerstaff',
-//           location: 'California, USA'
-//         }
-//       },
-//       {
-//         title: 'test',
-//         funding: 200,
-//         fundingGoal: 500,
-//         equality: 10,
-//         daysLeft: 10,
-//         industry: 'Technology',
-//         creator: {
-//           name: 'Zack Newman',
-//           location: 'California, USA'
-//         }
-//       }}
+import ProjectGrid from '../components/ProjectGrid';
 
 class Explore extends React.Component {
   state = {
@@ -76,7 +39,7 @@ class Explore extends React.Component {
     const projects = getProjects.data;
 
     this.setState({ projects }, () => {
-      setTimeout(() => this.setState({loading: false}), 1000)
+      setTimeout(() => this.setState({loading: false}), 500)
     });
   }
 
@@ -111,7 +74,7 @@ class Explore extends React.Component {
     if (this.state.loading) return <Loading />;
 
     return (
-      <ExploreStyles.Grid>
+      <ProjectGrid>
           {filteredPosts.map(({_id: id, ...project}, index) => (
             <ProjectCard
               key={index}
@@ -121,6 +84,7 @@ class Explore extends React.Component {
                 location: project.location
               }}
               title={project.title}
+              image={project.images[0]}
               funding={project.funding.fundingTotal}
               fundingGoal={project.fundingGoal}
               industry={project.industry}
@@ -128,7 +92,7 @@ class Explore extends React.Component {
             />
           ))}
 
-        </ExploreStyles.Grid>
+        </ProjectGrid>
     )
   }
 

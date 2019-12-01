@@ -134,9 +134,7 @@ const ProjectCard = (props) => {
         </IndustryLabel>
         <CardMedia
           className={props.classes.media}
-          image={
-            'https://image.freepik.com/free-photo/river-foggy-mountains-landscape_1204-511.jpg'
-          }/>
+          image={props.image || 'https://image.freepik.com/free-photo/river-foggy-mountains-landscape_1204-511.jpg'}/>
       </div>
       <CardContent className={props.classes.content}>
         <ProjectHead {...props}/>
@@ -152,6 +150,7 @@ const ProjectCard = (props) => {
 ProjectCard.propTypes = {
   title: PropTypes.string.isRequired,
   funding: PropTypes.number.isRequired,
+  image: PropTypes.string,
   fundingGoal: PropTypes.number.isRequired,
   industry: PropTypes.string.isRequired,
   equality: PropTypes.number,
