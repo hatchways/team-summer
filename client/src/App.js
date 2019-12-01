@@ -1,6 +1,6 @@
 import React from 'react';
 import { MuiThemeProvider, withStyles } from '@material-ui/core';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 import { theme } from './themes/theme';
 
@@ -105,17 +105,19 @@ class App extends React.Component {
           - to each page.
         */}
           <PageContext.Provider value={contextProps}>
-            <Route
-              exact
-              path="/"
-              render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'}/>}
-            />
-            <Route path="/signup" component={SignUp}/>
-            <Route path="/login" component={Login}/>
-            <Route path="/profile/:id?" component={ProfilePage}/>
-            <Route path="/projects/add" component={AddProject}/>
-            <Route path="/projects/:id" component={Project}/>
-            <Route path="/explore" component={Explore}/>
+            <Switch>
+              <Route
+                exact
+                path="/"
+                render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'}/>}
+              />
+              <Route path="/signup" component={SignUp}/>
+              <Route path="/login" component={Login}/>
+              <Route path="/profile/:id?" component={ProfilePage}/>
+              <Route path="/projects/add" component={AddProject}/>
+              <Route path="/projects/:id" component={Project}/>
+              <Route path="/explore" component={Explore}/>
+            </Switch>
           </PageContext.Provider>
           <Toast
             buttonText={toastProperties.button}
