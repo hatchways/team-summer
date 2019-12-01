@@ -8,6 +8,7 @@ import NavBar from './components/NavBar';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import ProfilePage from './pages/Profile';
+import EditProfile from './pages/EditProfile';
 import AddProject from './pages/AddProject';
 import Project from './pages/Project';
 import Toast from './components/Toast';
@@ -110,9 +111,10 @@ class App extends React.Component {
             />
             <Route path="/signup" component={SignUp} />
             <Route path="/login" component={Login} />
-            <Route path="/profile/:id?" component={ProfilePage} />
-            <Route path="/projects/add/:id" component={AddProject} />
-            <Route path="/project/:id" component={Project}/>
+            <Route path="/profile/:id?" exact component={ProfilePage} />
+            <Route path="/profile/edit/:id" exact component={EditProfile} />
+            <Route path="/projects/add/:id" exact component={AddProject} />
+            <Route path="/project/:id" exact component={Project} />
           </PageContext.Provider>
           <Toast
             buttonText={toastProperties.button}

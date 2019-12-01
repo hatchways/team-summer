@@ -52,11 +52,12 @@ class ProfilePage extends Component {
   }
 
   renderUserInfo() {
-    const { imageUrl, name, location, about, expertise } = this.state.profile;
+    const { _id, imageUrl, name, location, about, expertise } = this.state.profile;
 
     return (
       <Fragment>
         <ProfileDetailPanel
+          id={_id}
           imageUrl={imageUrl}
           name={name}
           location={location}

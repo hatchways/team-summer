@@ -9,11 +9,14 @@ exports.getUser = (req, res) => {
     if (err) {
       return res.status(400).json({ message: 'an error occurred' });
     } else if (user) {
-      const { id, name, email } = user;
+      const { id, name, email, location, description, profilePic } = user;
       return res.status(200).json({
         id,
         name,
-        email
+        email,
+        location,
+        description,
+        profilePic
       });
     } else {
       return res.status(400).json({ message: 'an error occurred' });
@@ -24,7 +27,7 @@ exports.getUser = (req, res) => {
 exports.editUser = (req, res) => {
   singleUpload(req, res, function (err) {
     if (err) return res.status(422).json({ errors: [{ title: 'File Upload Error', detail: err.message }] });
-    console.log(req.profile._id)
+
     const { name, location, description } = req.body;
     const profilePic = req.file.location;
     const newInfo = { name, location, description, profilePic };
@@ -39,7 +42,7 @@ exports.editUser = (req, res) => {
           });
         }
         user.password = null;
-        res.json(user);
+        res.status(200).json(user);
       }
     )
   })
