@@ -28,8 +28,8 @@ exports.editUser = (req, res) => {
   singleUpload(req, res, function (err) {
     if (err) return res.status(422).json({ errors: [{ title: 'File Upload Error', detail: err.message }] });
 
-    const { name, location, about } = req.body;
-    const profilePic = req.file.location;
+    const { name, location, about, profilePic: newProfilePic } = req.body;
+    const profilePic = req.file ? req.file.location : newProfilePic;
     const newInfo = { name, location, about, profilePic };
     User.findOneAndUpdate(
       { _id: req.profile._id },

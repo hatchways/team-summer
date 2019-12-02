@@ -24,8 +24,8 @@ exports.userById = (req, res, next, id) => {
           error: 'User not found'
         });
       }
-      const { _id, name, email, description, location, projects, profilePic } = user;
-      req.profile = { _id, name, description, email, projects, location, profilePic };
+      const { _id, name, email, about, location, projects, profilePic } = user;
+      req.profile = { _id, name, about, email, projects, location, profilePic };
       next();
     });
 };

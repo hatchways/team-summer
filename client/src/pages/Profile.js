@@ -48,7 +48,6 @@ class ProfilePage extends Component {
 
     const id = this.props.match.params.id || this.props.userDetails.id;
     getUser(id).then((profile) => {
-      console.log(profile.data)
       this.setState({ profile: profile.data });
     });
   }

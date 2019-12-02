@@ -1,7 +1,5 @@
 import React from 'react';
 import { Typography, withStyles, Button, TextField } from '@material-ui/core';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import validator from 'validator';
 
 import { OutlinedSelect } from '../components/Inputs';
@@ -38,51 +36,61 @@ const styles = {
 class EditProfile extends React.Component {
   constructor(props) {
     super(props);
+    this.validators = FormValidator([
+      {
+        field: 'name',
+        method: validator.isEmpty,
+        validWhen: false,
+        message: 'Name is Required'
+      },
+    ])
     this.state = {
       name: '',
       about: '',
       image: [],
       location: '',
-      formData: {}
+      formData: {},
+      validation: this.validators.valid()
     }
   }
 
   componentDidMount() {
-    // console.log(this.props.userDetails)
-    // const { name, about, location, avatar } = this.props.userDetails;
     const { name, about, profilePic, location } = this.props.location.state;
     console.log(this.props.location.state)
     this.setState({ name, about, image: [profilePic], location, formData: new FormData() });
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   // const { name, about, imageUrl: avatar, location } = this.props.location.state;
-  //   if (nextProps.location.name !== this.props.location.state) {
-  //     console.log(nextProps)
-  //     // this.setState({ name, about, image: [avatar], location, formData: new FormData() });
-  //   }
-  // }
-
   handleInput = (event) => {
     const { value, name } = event.target;
-    const { formData } = this.state;
-    formData.set(name, value);
-    this.setState({ [name]: value, formData });
+    this.setState({ [name]: value });
   }
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    const { image, formData } = this.state;
-    formData.set('image', image[0]);
-    const { id } = this.props.userDetails;
-    console.log(this.state)
-    const newUserData = await editUser(id, formData);
-    if (newUserData.success) {
-      console.log(newUserData);
-      this.props.activateToast('Edit Successful', 'success');
-      this.props.history.push('/profile');
-    } else if (newUserData.err) {
-      console.log(newUserData.err)
+
+    const { name, about, image, location, formData } = this.state;
+    const validation = this.validators.validate(this.state);
+    this.setState({ validation });
+
+    if (validation.isValid) {
+      formData.set('name', name);
+      formData.set('about', about);
+      formData.set('location', location);
+      if (typeof image[0] === 'string') {
+        formData.set('profilePic', image[0])
+      } else {
+        formData.set('image', image[0]);
+      }
+      const { id } = this.props.userDetails;
+      console.log(this.state)
+      const newUserData = await editUser(id, formData);
+      if (newUserData.success) {
+        console.log(newUserData);
+        this.props.activateToast('Edit Successful', 'success');
+        this.props.history.push('/profile');
+      } else if (newUserData.err) {
+        console.log(newUserData.err)
+      }
     }
   }
 
@@ -106,7 +114,7 @@ class EditProfile extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { name, image, location, about } = this.state;
+    const { name, image, location, about, validation } = this.state;
 
     return (
       <main className={classes.pageContent}>
@@ -122,8 +130,8 @@ class EditProfile extends React.Component {
               type="name"
               variant="outlined"
               required
-            // error={validation.title.isInvalid}
-            // helperText={validation.title.message}
+              error={validation.name.isInvalid}
+              helperText={validation.name.message}
             />
             <Typography variant="h4">About</Typography>
             <TextField

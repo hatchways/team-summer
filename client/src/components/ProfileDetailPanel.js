@@ -36,7 +36,7 @@ const ProfileDetailPanel = ({ id, profilePic, name, location, about, expertise, 
             ? <Link to={{
               pathname: `/profile/edit/${id}`,
               state: {
-                id, image: profilePic, name, location, about
+                id, profilePic, name, location, about
               }
             }}>Edit</Link>
             : buttonType
