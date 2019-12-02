@@ -1,4 +1,5 @@
 const { ObjectId } = require('mongoose').Types;
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const {User, Project, Investment} = require('../models');
 
 exports.addInvestment = async (req, res) => {
@@ -29,3 +30,38 @@ exports.addInvestment = async (req, res) => {
     });
   }
 };
+
+
+exports.sendKey = (req, res) => {
+  try {
+    res.send({ publicKey: process.env.STRIPE_PUBLISHABLE_KEY });
+  } catch (e) {
+    res.send({ error: e.message });
+  }
+};
+
+const fromDollarToCent = (amount) => parseInt(amount * 100);
+
+exports.invest = async (req, res) => {
+  const { investmentAmount, token } = req.body;
+  const t = token.token
+  console.log('token invest id', t)
+
+  const order = {
+      amount: fromDollarToCent(2000),
+      currency: 'USD',
+      source: t.id, 
+      description: 'test desc'
+    }
+
+  console.log("order",order)
+  stripe.charges.create( order, (err, charge) => {
+      if(err){
+        res.send({ errooor: err });
+      } else {
+        res.send(charge);
+      }
+    }
+  );
+}
+
