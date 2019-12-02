@@ -25,6 +25,11 @@ const useStyles = makeStyles((theme) => ({
 const ProfileDetailPanel = ({ id, profilePic, name, location, about, expertise, buttonType }) => {
 
   const classes = useStyles();
+
+  // const handleRedirect = () => {
+
+  // }
+
   return (
     <Paper className={classes.paper}>
       <Avatar className={classes.avatar} src={profilePic || null} />
