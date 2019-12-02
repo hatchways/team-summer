@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongoose').Types;
-const {User, Project, Investment} = require('../models');
+const { User, Project, Investment } = require('../models');
 
 exports.addInvestment = async (req, res) => {
   const { value, projectId } = req.body;
@@ -29,3 +29,7 @@ exports.addInvestment = async (req, res) => {
     });
   }
 };
+
+exports.getInvestment = async (req, res) => {
+
+}
