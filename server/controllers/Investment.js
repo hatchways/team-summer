@@ -31,15 +31,6 @@ exports.addInvestment = async (req, res) => {
   }
 };
 
-
-exports.sendKey = (req, res) => {
-  try {
-    res.send({ publicKey: process.env.STRIPE_PUBLISHABLE_KEY });
-  } catch (e) {
-    res.send({ error: e.message });
-  }
-};
-
 const fromDollarToCent = (amount) => parseInt(amount * 100);
 
 exports.makePayment = async (req, res) => {
