@@ -43,14 +43,13 @@ class Project extends React.Component {
   };
 
   async componentDidMount() {
-    const project = await getProject(this.props.match.params.id).then((response) => response.data.project);
+    let project = await getProject(this.props.match.params.id).then((response) => response.data.project);
 
-    this.setState({
-      project: {
-        daysLeft: Math.max(0, moment({hours: 0}).diff(project.fundingDeadline, 'days')),
-        ...project
-      },
-      user: project.user });
+    project.daysLeft = Math.max(0, moment({hours: 0}).diff(project.fundingDeadline, 'days'));
+
+    if (project.images.length === 0) project.images = ['/images/image-not-found.png'];
+
+    this.setState({ project, user: project.user });
   }
 
   projectHeaderContent() {
