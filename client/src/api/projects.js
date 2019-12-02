@@ -24,5 +24,5 @@ export const getUserProjects = (userId) => {
 }
 
 export const getProject = (projectId) => {
-    return httpClient.get(`/projects/projectId`);
+    return httpClient.get(`/projects/${projectId}`);
 };
