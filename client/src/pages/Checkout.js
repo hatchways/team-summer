@@ -37,12 +37,3 @@ class Checkout extends Component {
 }
 
 export default Checkout;
-
-
-// const Pay = () => {
-//   return (
-//     <StripeProvider apiKey="pk_test_6pRNASCoBOKtIshFeQd4XMUh">
-//       <Checkout />
-//     </StripeProvider>
-//   );
-// };
