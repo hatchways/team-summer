@@ -22,18 +22,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfileDetailPanel = ({ id, imageUrl, name, location, about, expertise, buttonType }) => {
+const ProfileDetailPanel = ({ id, profilePic, name, location, about, expertise, buttonType }) => {
 
   const classes = useStyles();
   return (
     <Paper className={classes.paper}>
-      <Avatar className={classes.avatar} src={imageUrl || null} />
+      <Avatar className={classes.avatar} src={profilePic || null} />
       <Typography variant="h3">{name}</Typography>
       <Typography variant="body1">{location}</Typography>
       <Button type="submit" variant="outlined" color="primary">
         {
           buttonType === 'edit'
-            ? <Link to={`/profile/edit/${id}`}>Edit</Link>
+            ? <Link to={{
+              pathname: `/profile/edit/${id}`,
+              state: {
+                id, image: profilePic, name, location, about
+              }
+            }}>Edit</Link>
             : buttonType
         }
       </Button>

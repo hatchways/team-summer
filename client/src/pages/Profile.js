@@ -35,7 +35,8 @@ class ProfilePage extends Component {
           goal: 10400
         }
       ],
-      profilePic: ''
+      profilePic: '',
+      about: ''
     }
   };
 
@@ -59,7 +60,7 @@ class ProfilePage extends Component {
       <Fragment>
         <ProfileDetailPanel
           id={this.props.userDetails.id}
-          imageUrl={profilePic}
+          profilePic={profilePic}
           name={name}
           location={location}
           about={about}

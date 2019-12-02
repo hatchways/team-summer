@@ -78,7 +78,7 @@ const UploadImages = (props) => {
                                     alt={image.name}
                                 />
                             )) :
-                            images.length === 1 ? <Image
+                            images[0] && images.length === 1 ? <Image
                                 image={images[0]}
                                 key={images[0].name}
                                 deleteImage={deleteImage}

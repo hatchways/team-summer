@@ -40,7 +40,7 @@ class EditProfile extends React.Component {
     super(props);
     this.state = {
       name: '',
-      description: '',
+      about: '',
       image: [],
       location: '',
       formData: {}
@@ -49,10 +49,19 @@ class EditProfile extends React.Component {
 
   componentDidMount() {
     // console.log(this.props.userDetails)
-    const { name, description, location, avatar } = this.props.userDetails;
-    this.setState({ name, description, image: [avatar], location, formData: new FormData() });
-    // this.setState({ formData: new FormData() })
+    // const { name, about, location, avatar } = this.props.userDetails;
+    const { name, about, profilePic, location } = this.props.location.state;
+    console.log(this.props.location.state)
+    this.setState({ name, about, image: [profilePic], location, formData: new FormData() });
   }
+
+  // componentWillReceiveProps(nextProps) {
+  //   // const { name, about, imageUrl: avatar, location } = this.props.location.state;
+  //   if (nextProps.location.name !== this.props.location.state) {
+  //     console.log(nextProps)
+  //     // this.setState({ name, about, image: [avatar], location, formData: new FormData() });
+  //   }
+  // }
 
   handleInput = (event) => {
     const { value, name } = event.target;
@@ -66,10 +75,12 @@ class EditProfile extends React.Component {
     const { image, formData } = this.state;
     formData.set('image', image[0]);
     const { id } = this.props.userDetails;
+    console.log(this.state)
     const newUserData = await editUser(id, formData);
     if (newUserData.success) {
       console.log(newUserData);
       this.props.activateToast('Edit Successful', 'success');
+      this.props.history.push('/profile');
     } else if (newUserData.err) {
       console.log(newUserData.err)
     }
@@ -95,7 +106,7 @@ class EditProfile extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { name, image, location, description } = this.state;
+    const { name, image, location, about } = this.state;
 
     return (
       <main className={classes.pageContent}>
@@ -116,12 +127,12 @@ class EditProfile extends React.Component {
             />
             <Typography variant="h4">About</Typography>
             <TextField
-              name="description"
+              name="about"
               classes={{ root: classes.formLine }}
-              value={description}
+              value={about}
               fullWidth={true}
               onChange={this.handleInput}
-              type="description"
+              type="about"
               variant="outlined"
             />
             <UploadImages setImages={this.setImages} images={image} deleteImage={this.deleteImage} />

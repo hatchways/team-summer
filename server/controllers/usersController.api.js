@@ -9,13 +9,13 @@ exports.getUser = (req, res) => {
     if (err) {
       return res.status(400).json({ message: 'an error occurred' });
     } else if (user) {
-      const { id, name, email, location, description, profilePic } = user;
+      const { id, name, email, location, about, profilePic } = user;
       return res.status(200).json({
         id,
         name,
         email,
         location,
-        description,
+        about,
         profilePic
       });
     } else {
@@ -28,9 +28,9 @@ exports.editUser = (req, res) => {
   singleUpload(req, res, function (err) {
     if (err) return res.status(422).json({ errors: [{ title: 'File Upload Error', detail: err.message }] });
 
-    const { name, location, description } = req.body;
+    const { name, location, about } = req.body;
     const profilePic = req.file.location;
-    const newInfo = { name, location, description, profilePic };
+    const newInfo = { name, location, about, profilePic };
     User.findOneAndUpdate(
       { _id: req.profile._id },
       { $set: newInfo },

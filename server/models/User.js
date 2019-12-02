@@ -19,9 +19,13 @@ const UserSchema = new Schema({
     require: true,
     minlength: 6
   },
-  description: {
+  about: {
     type: String,
     maxlength: 600
+  },
+  location: {
+    type: String,
+    maxlength: 30
   },
   profilePic: {
     type: String
