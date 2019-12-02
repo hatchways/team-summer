@@ -7,14 +7,18 @@ export const styles = (theme) => ({
 });
 
 export const Main = styled('main')(({theme}) => ({
-  padding: '50px 30px',
+  padding: '50px 10px',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
 
+  [theme.breakpoints.up('sm')]: {
+    padding: '50px 30px',
+  },
+
   [theme.breakpoints.up('md')]: {
     padding: '50px 80px'
-  }
+  },
 }));
 
 export const FilterContainer = styled('div')(({ theme, ...props }) => ({
