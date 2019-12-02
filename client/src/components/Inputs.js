@@ -56,17 +56,16 @@ OutlinedSelect.propTypes = {
 };
 
 const CustomOutlinedInput = (props) => {
+  const { id = `input-${props.label}`, type = 'text', autoComplete = 'false' } = props;
+
   return (
     <TextField
-      id={props.id || `input-${props.label}`}
-      name={props.name}
-      value={props.value}
-      label={props.label}
-      type={props.type || 'text'}
+      id={id}
+      type={type}
       margin="normal"
       variant="outlined"
       fullWidth
-      autoComplete={props.autocomplete || 'false'}
+      autoComplete={autoComplete}
       {...props}
     />
   );
@@ -80,7 +79,7 @@ CustomOutlinedInput.propTypes = {
   ]).isRequired,
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  autocomplete: PropTypes.bool,
+  autocomplete: PropTypes.oneOf(['true', 'false']),
   id: PropTypes.string,
   type: PropTypes.string
 };
