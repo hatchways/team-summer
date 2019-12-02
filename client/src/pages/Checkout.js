@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Elements, StripeProvider } from 'react-stripe-elements';
-import CheckoutForm from '../components/payments/CheckoutForm';
+import CheckoutForm from '../components/payments/checkoutForm';
 import { getPublicStripeKey } from '../api/payments';
 
 class Checkout extends Component {
@@ -8,14 +8,16 @@ class Checkout extends Component {
     super(props);
 
     this.state = {
-      apiKey: null
+      publicKey: '',
+      projectId: '5ddd811b557fb6177e87eb05'
     };
   }
 
   componentDidMount() {
-    getPublicStripeKey().then((apiKey) => {
+    getPublicStripeKey().then((publicKey) => {
       this.setState({
-        apiKey: apiKey
+        test: 'testing',
+        publicKey,
       });
     });
   }
@@ -23,11 +25,10 @@ class Checkout extends Component {
   render() {
     return (
       <div className="checkout">
-        {this.state.apiKey && (
-          <StripeProvider apiKey={this.state.apiKey}>
-            <Elements>
-              <CheckoutForm />
-            </Elements>
+        <h3>checkout</h3>
+        {this.state.publicKey && (
+          <StripeProvider apiKey={this.state.publicKey}>
+              <CheckoutForm projectId={this.state.projectId}/>
           </StripeProvider>
         )}
       </div>
@@ -36,3 +37,12 @@ class Checkout extends Component {
 }
 
 export default Checkout;
+
+
+// const Pay = () => {
+//   return (
+//     <StripeProvider apiKey="pk_test_6pRNASCoBOKtIshFeQd4XMUh">
+//       <Checkout />
+//     </StripeProvider>
+//   );
+// };

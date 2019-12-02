@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import ProfilePage from './pages/Profile';
 import AddProject from './pages/AddProject';
 import Project from './pages/Project';
+import Checkout from './pages/Checkout';
 import Toast from './components/Toast';
 import { PageContext } from './components/pageContext';
 import jwTokenCheck from './helpers/JwtTokenHelper'
@@ -111,8 +112,9 @@ class App extends React.Component {
             <Route path="/signup" component={SignUp} />
             <Route path="/login" component={Login} />
             <Route path="/profile/:id?" component={ProfilePage} />
-            <Route path="/projects/add/:id" component={AddProject} />
             <Route path="/project/:id" component={Project}/>
+            <Route path="/projects/add/:id" component={AddProject} />
+            <Route path="/checkout" component={Checkout}/>
           </PageContext.Provider>
           <Toast
             buttonText={toastProperties.button}
