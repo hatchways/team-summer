@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
+  baseURL: '/api',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json'
@@ -9,7 +10,7 @@ const instance = axios.create({
 
 // example interceptor for setting token - could also set token as default
 instance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('jwtToken');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

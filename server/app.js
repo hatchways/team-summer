@@ -12,6 +12,12 @@ import pingRouter from './routes/ping';
 
 const app = express();
 
+const LoggerMiddleware = (req, res, next) => {
+  console.log(`Logged  ${req.url}  ${req.method} -- ${new Date()}`);
+  next();
+};
+app.use(LoggerMiddleware);
+
 // DB config
 mongoose
   .connect(MONGO_URI, {
@@ -27,7 +33,7 @@ app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/api', indexRouter);
 app.use('/ping', pingRouter);
 
 
@@ -63,4 +69,7 @@ app.use((err, req, res, next) => {
   res.json({ error: err });
 });
 
+
 module.exports = app;
+
+
