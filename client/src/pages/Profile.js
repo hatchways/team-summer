@@ -69,7 +69,7 @@ class ProfilePage extends Component {
           <Grid item xs={12} md={6} key={index}>
             <ProjectCard
               key={index}
-              onClick={() => this.props.history.push(`/projects/${project.id}`)}
+              onClick={() => this.props.history.push(`/projects/${project._id}`)}
               title={project.title}
               image={project.images[0]}
               funding={project.funding.fundingTotal}
