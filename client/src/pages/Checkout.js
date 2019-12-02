@@ -14,10 +14,10 @@ class Checkout extends Component {
   }
 
   componentDidMount() {
-    getPublicStripeKey().then((publicKey) => {
+    getPublicStripeKey().then(({data}) => {
       this.setState({
         test: 'testing',
-        publicKey,
+        publicKey: data.publicKey,
       });
     });
   }
@@ -25,7 +25,6 @@ class Checkout extends Component {
   render() {
     return (
       <div className="checkout">
-        <h3>checkout</h3>
         {this.state.publicKey && (
           <StripeProvider apiKey={this.state.publicKey}>
               <CheckoutForm projectId={this.state.projectId}/>

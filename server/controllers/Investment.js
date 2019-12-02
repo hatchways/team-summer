@@ -42,7 +42,7 @@ exports.sendKey = (req, res) => {
 
 const fromDollarToCent = (amount) => parseInt(amount * 100);
 
-exports.invest = async (req, res) => {
+exports.makePayment = async (req, res) => {
   const { investmentAmount, token } = req.body;
   const t = token.token
   console.log('token invest id', t)
