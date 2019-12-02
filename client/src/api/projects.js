@@ -20,7 +20,10 @@ export const addProject = async (projectData) => {
 };
 
 export const getUserProjects = (userId) => {
-  return httpClient.get(`/projects?userId=${userId}`);
+  let url = `/projects?userId=${userId}`;
+  if (!userId) url = '/projects';
+
+  return httpClient.get(url);
 };
 
 export const getProject = (projectId) => {

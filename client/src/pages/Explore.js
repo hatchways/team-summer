@@ -133,7 +133,7 @@ class Explore extends React.Component {
           </OutlinedSelect>
         </ExploreStyles.FilterContainer>
 
-        {filteredPosts.length === 0 && (
+        {(!this.state.loading && filteredPosts.length === 0) && (
           <Typography variant="h4" component="p" color="secondary" style={{ textAlign: 'center' }}>
             No Projects found
           </Typography>
