@@ -21,9 +21,7 @@ exports.getProject = (req, res) => {
   Project.findOne({ _id: id })
     .populate({ path: 'user', select: 'name' })
     .exec((err, project) => {
-      if (err) {
-        return res.status(400).json({ err });
-      }
+      if (err) return res.status(400).json({ err });
 
       return res.status(200).json({ project });
     });
