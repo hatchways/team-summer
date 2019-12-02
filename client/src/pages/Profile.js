@@ -65,6 +65,7 @@ class ProfilePage extends Component {
           about={about}
           expertise={expertise}
           buttonType={this.getButtonType()}
+          history={this.props.history}
         />
       </Fragment>
     );

@@ -22,30 +22,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfileDetailPanel = ({ id, profilePic, name, location, about, expertise, buttonType }) => {
+const ProfileDetailPanel = ({ id, profilePic, name, location, about, expertise, buttonType, history }) => {
 
   const classes = useStyles();
 
-  // const handleRedirect = () => {
-
-  // }
+  const handleRedirect = (buttonType) => (event) => {
+    event.preventDefault();
+    if (buttonType === 'edit') {
+      const userInfo = { id, profilePic, name, location, about };
+      history.push({
+        pathname: `profile/edit/${id}`,
+        state: userInfo
+      });
+    } else if (buttonType === 'message') {
+      // TO DO MESSAGING
+    }
+  }
 
   return (
     <Paper className={classes.paper}>
       <Avatar className={classes.avatar} src={profilePic || null} />
       <Typography variant="h3">{name}</Typography>
       <Typography variant="body1">{location}</Typography>
-      <Button type="submit" variant="outlined" color="primary">
-        {
-          buttonType === 'edit'
-            ? <Link to={{
-              pathname: `/profile/edit/${id}`,
-              state: {
-                id, profilePic, name, location, about
-              }
-            }}>Edit</Link>
-            : buttonType
-        }
+      <Button type="submit" variant="outlined" color="primary" onClick={handleRedirect(buttonType)}>
+        {buttonType}
       </Button>
       <Typography variant="body1">{about}</Typography>
       <Typography variant="body1">{expertise}</Typography>
