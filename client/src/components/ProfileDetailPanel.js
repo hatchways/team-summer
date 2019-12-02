@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Button, Paper, Typography } from '@material-ui/core';
-import { Link, withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
