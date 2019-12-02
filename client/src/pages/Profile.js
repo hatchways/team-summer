@@ -35,7 +35,7 @@ class ProfilePage extends Component {
           goal: 10400
         }
       ],
-      imageUrl: ''
+      profilePic: ''
     }
   };
 
@@ -47,18 +47,19 @@ class ProfilePage extends Component {
 
     const id = this.props.match.params.id || this.props.userDetails.id;
     getUser(id).then((profile) => {
+      console.log(profile.data)
       this.setState({ profile: profile.data });
     });
   }
 
   renderUserInfo() {
-    const { imageUrl, name, location, about, expertise } = this.state.profile;
+    const { profilePic, name, location, about, expertise } = this.state.profile;
 
     return (
       <Fragment>
         <ProfileDetailPanel
           id={this.props.userDetails.id}
-          imageUrl={imageUrl}
+          imageUrl={profilePic}
           name={name}
           location={location}
           about={about}

@@ -32,8 +32,8 @@ const ProfileDetailPanel = ({ id, imageUrl, name, location, about, expertise, bu
       <Typography variant="body1">{location}</Typography>
       <Button type="submit" variant="outlined" color="primary">
         {
-          buttonType === 'edit' ?
-            <Link to={`/profile/edit/${id}`}>Edit</Link>
+          buttonType === 'edit'
+            ? <Link to={`/profile/edit/${id}`}>Edit</Link>
             : buttonType
         }
       </Button>

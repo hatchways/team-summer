@@ -45,14 +45,24 @@ const Image = (props) => {
   return (
     <div className={classes.imageContainer} onMouseEnter={handleMouseHover} onMouseLeave={handleMouseHover} onClick={() => deleteImage(image)}>
       {
-        isHovering && <div className={classes.deleteIconContainer}><DeleteOutlinedIcon className={classes.deleteIcon} /></div>
+        isHovering && (
+          <div className={classes.deleteIconContainer}><DeleteOutlinedIcon className={classes.deleteIcon} /></div>
+        )}
+      {
+        typeof image === 'object' ?
+          <img
+            className={classes.image}
+            key={image.name}
+            src={URL.createObjectURL(image)}
+            alt=""
+          /> :
+          <img
+            className={classes.image}
+            key={image.name}
+            src={image}
+            alt=""
+          />
       }
-      <img
-        className={classes.image}
-        key={image.name}
-        src={URL.createObjectURL(image)}
-        alt=""
-      />
     </div>
   )
 }

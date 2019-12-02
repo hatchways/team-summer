@@ -48,7 +48,10 @@ class EditProfile extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ formData: new FormData() });
+    // console.log(this.props.userDetails)
+    const { name, description, location, avatar } = this.props.userDetails;
+    this.setState({ name, description, image: [avatar], location, formData: new FormData() });
+    // this.setState({ formData: new FormData() })
   }
 
   handleInput = (event) => {

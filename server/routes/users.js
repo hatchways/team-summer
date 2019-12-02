@@ -8,7 +8,7 @@ router.get('/:id', (req, res) => {
   res.status(200).json(req.profile);
 });
 
-router.put('/users/:id', isAuth, editUser);
+router.put('/:id', isAuth, editUser);
 
 router.param('id', userById);
 

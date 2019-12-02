@@ -29,8 +29,8 @@ exports.login = (req, res) => {
       if (err) {
         mongoDbErrorHandler(err, res, 400);
       } else if (user && user.comparePassword(password)) {
-        const { name, email, _id, projects, description, profilePic } = user;
-        const token = encodeToken({ name, email, _id, description, profilePic });
+        const { name, email, _id, projects, description, location, profilePic } = user;
+        const token = encodeToken({ name, email, _id, description, location, profilePic });
         return res.status(200).json({
           token,
           user: {
