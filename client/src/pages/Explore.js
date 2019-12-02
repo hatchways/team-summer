@@ -38,9 +38,7 @@ class Explore extends React.Component {
     const getProjects = await getUserProjects(this.props.userDetails.id);
     const projects = getProjects.data;
 
-    this.setState({ projects }, () => {
-      setTimeout(() => this.setState({loading: false}), 500)
-    });
+    this.setState({ projects, loading: false });
   }
 
   handleFilterSelects = (event) => {

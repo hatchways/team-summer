@@ -34,8 +34,12 @@ export const FilterContainer = styled('div')(({ theme, ...props }) => ({
 
   [theme.breakpoints.up('md')]: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
     width: '50%',
     margin: '0 auto 70px auto',
+
+    '& :first-child': {
+      marginRight: 20
+    }
   }
 }));
