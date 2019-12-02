@@ -18,26 +18,25 @@ import { getProject } from '../api/projects';
 class Project extends React.Component {
   state = {
     project: {
-      title: 'Urban Jungle: eco-friendly coffee shop',
-      subtitle: 'Fresh Coffee. Community. All rolled into one cup.',
-      description: 'Coffee shop will make its best effort to create a unique place where customers can socialize with each other in a comfortable and relaxing environment while enjoying the best brewed coffee or espresso and pastries in town. We will be in the business of helping our customers to relieve their daily stresses by providing piece of mind through great ambience, convenient location, friendly customer service, and products of consistently high quality.',
-      industry: 'Food and Craft',
-      location: 'San Jose, CA',
+      title: '',
+      subtitle: '',
+      description: '',
+      industry: '',
+      location: '',
       funding: {
         donorCount: 0,
         fundingTotal: 0
       },
-      fundingGoal: 52000,
-      daysLeft: 200,
-      equalityExchange: 10,
+      fundingGoal: 0,
+      daysLeft: 0,
+      equalityExchange: 0,
       images: [
-        '/images/placeholder-sunset.jpg',
-        '/images/placeholder-ocean.jpg'
+        '/images/image-not-found.png'
       ]
     },
     user: {
-      id: '222',
-      name: 'James Hampton',
+      id: '',
+      name: '',
       avatar: ''
     }
   };
