@@ -8,37 +8,48 @@ import {
   Avatar
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import moment from 'moment'
 
 import * as ProjectStyles from '../components/ProjectPageStyles';
 import CardCarousel from '../components/CardCarousel';
 import PercentageProgressBar from '../components/PercentageProgressBar';
+import { getProject } from '../api/projects';
 
 class Project extends React.Component {
   state = {
     project: {
-      id: this.props.match.params.id,
-      title: 'Urban Jungle: eco-friendly coffee shop',
-      subtitle: 'Fresh Coffee. Community. All rolled into one cup.',
-      description: 'Coffee shop will make its best effort to create a unique place where customers can socialize with each other in a comfortable and relaxing environment while enjoying the best brewed coffee or espresso and pastries in town. We will be in the business of helping our customers to relieve their daily stresses by providing piece of mind through great ambience, convenient location, friendly customer service, and products of consistently high quality.',
-      industry: 'Food and Craft',
-      location: 'San Jose, CA',
-      fundingRaised: 21000,
-      fundingGoal: 52000,
-      backers: 22,
-      daysLeft: 200,
-      equalityExchange: 10,
+      title: '',
+      subtitle: '',
+      description: '',
+      industry: '',
+      location: '',
+      funding: {
+        donorCount: 0,
+        fundingTotal: 0
+      },
+      fundingGoal: 0,
+      daysLeft: 0,
+      equalityExchange: 0,
       images: [
-        '/images/placeholder-sunset.jpg',
-        '/images/placeholder-ocean.jpg'
+        '/images/image-not-found.png'
       ]
     },
-    creator: {
-      id: '222',
-      name: 'James Hampton',
-      location: 'Toronto, Canada',
+    user: {
+      id: '',
+      name: '',
       avatar: ''
     }
   };
+
+  async componentDidMount() {
+    let project = await getProject(this.props.match.params.id).then((response) => response.data.project);
+
+    project.daysLeft = Math.max(0, moment({hours: 0}).diff(project.fundingDeadline, 'days'));
+
+    if (project.images.length === 0) project.images = ['/images/image-not-found.png'];
+
+    this.setState({ project, user: project.user });
+  }
 
   projectHeaderContent() {
     const { classes } = this.props;
@@ -67,7 +78,7 @@ class Project extends React.Component {
         <CardContent className={classes.projectDetailsContent}>
           <ProjectStyles.DetailsCardAbout>
             <Typography variant="h3">About</Typography>
-            <Typography variant="body1">{description}</Typography>
+            <Typography variant="body1">{!description ? 'No Description found' : description}</Typography>
           </ProjectStyles.DetailsCardAbout>
           <Typography variant="h4">Location: </Typography>
           <Typography variant="h5">{location}</Typography>
@@ -78,16 +89,18 @@ class Project extends React.Component {
 
   projectFundraisingCard() {
     const { classes } = this.props;
-    const { creator } = this.state;
-    const { fundingRaised, fundingGoal, backers, daysLeft, equalityExchange } = this.state.project;
+    const { user } = this.state;
+    const { funding, fundingGoal, daysLeft, equalityExchange } = this.state.project;
 
     const calculateCompleted = () => {
-      const percentageComplete = Math.round((fundingRaised * 100) / fundingGoal);
+      if (!funding.fundingTotal) return 0;
+
+      const percentageComplete = Math.round((funding.fundingTotal * 100) / fundingGoal);
       return Math.min(percentageComplete, 100);
     };
 
     const handleSendMessage = () => {
-      this.props.history.push(`/messages/${creator.id}`);
+      this.props.history.push(`/messages/${user.id}`);
     };
 
     const handleFundProject = () => {
@@ -105,7 +118,7 @@ class Project extends React.Component {
         <ProjectStyles.CardLine/>
         <ProjectStyles.FundraisingAmounts>
           <Typography variant="h5">$</Typography>
-          <Typography variant="h3">{fundingRaised.toLocaleString()}</Typography>
+          <Typography variant="h3">{funding.fundingTotal.toLocaleString()}</Typography>
           <Typography variant="h5" color="secondary">/</Typography>
           <Typography variant="h5" color="secondary">{fundingGoal.toLocaleString()}</Typography>
         </ProjectStyles.FundraisingAmounts>
@@ -117,7 +130,7 @@ class Project extends React.Component {
 
         <ProjectStyles.FundraisingStatContainer>
           <ProjectStyles.FundraisingStat>
-            <Typography variant="h4">{backers}</Typography>
+            <Typography variant="h4">{funding.donorCount}</Typography>
             <Typography variant="body1" color="secondary">Backers</Typography>
           </ProjectStyles.FundraisingStat>
 
@@ -129,13 +142,12 @@ class Project extends React.Component {
 
         <ProjectStyles.CreatorProfile>
           <Avatar>
-            {creator.avatar
-              ? <img src={creator.avatar} alt="Project creator avatar"/>
-              : creator.name.split('')[0]
+            {user.avatar
+              ? <img src={user.avatar} alt="Project creator avatar"/>
+              : user.name.split('')[0]
             }
           </Avatar>
-          <Typography variant="h6">{creator.name}</Typography>
-          <Typography variant="subtitle2" color="secondary">{creator.location}</Typography>
+          <Typography variant="h6">{user.name}</Typography>
         </ProjectStyles.CreatorProfile>
 
         <ProjectStyles.ProjectActionButtons>

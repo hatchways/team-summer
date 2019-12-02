@@ -17,19 +17,14 @@ exports.imageUpload = (req, res) => {
 
 exports.getProject = (req, res) => {
   const { id } = req.params;
-  Project.findOne({ _id: id }, async (err, project) => {
-    if (err) {
-      res.json({
-        status: 500,
-        err
-      });
-    } else {
-      res.json({
-        status: 200,
-        project: project
-      });
-    }
-  });
+
+  Project.findOne({ _id: id })
+    .populate({ path: 'user', select: 'name' })
+    .exec((err, project) => {
+      if (err) return res.status(400).json({ err });
+
+      return res.status(200).json({ project });
+    });
 };
 
 exports.getUserProjects = (req, res) => {
