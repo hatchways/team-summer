@@ -8,31 +8,20 @@ class Checkout extends Component {
     super(props);
 
     this.state = {
-      publicKey: '',
-      projectId: '5ddd811b557fb6177e87eb05'
+      success: false,
+      pending: false
     };
-  }
-
-  componentDidMount() {
-    getPublicStripeKey().then(({data}) => {
-      this.setState({
-        test: 'testing',
-        publicKey: data.publicKey,
-      });
-    });
   }
 
   render() {
     return (
       <div className="checkout">
-        {this.state.publicKey && (
-          <StripeProvider apiKey={this.state.publicKey}>
-              <CheckoutForm projectId={this.state.projectId}/>
-          </StripeProvider>
-        )}
+        <StripeProvider apiKey={process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY}>
+          <CheckoutForm projectId={'5ddd811b557fb6177e87eb05'} />
+        </StripeProvider>
       </div>
-    );
+      );
+    }
   }
-}
-
-export default Checkout;
+  
+  export default Checkout;
