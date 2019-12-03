@@ -14,21 +14,6 @@ import {
 
 import './checkoutForm.css'
 
-const handleBlur = () => {
-  console.log('[blur]');
-};
-const handleChange = (change) => {
-  console.log('[change]', change);
-};
-const handleClick = () => {
-  console.log('[click]');
-};
-const handleFocus = () => {
-  console.log('[focus]');
-};
-const handleReady = () => {
-  console.log('[ready]');
-};
 
 const createOptions = (fontSize, padding) => {
   return {
@@ -50,66 +35,38 @@ const createOptions = (fontSize, padding) => {
   };
 };
 
-class _CardForm extends React.Component {
-  
-  handleSubmit = (ev) => {
-    ev.preventDefault();
-    if (this.props.stripe) {
-      this.props.stripe.createToken().then((payload) => {
-        pay(payload, 5000);
-      })
+const  CheckoutForm = (props) => {
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // placeholderProps
+    const projectId = '5ddd811b557fb6177e87eb05';
+    const userId = '5ddd6d81cc85fd072f13f532';
+
+    if (props.stripe) {
+      props.stripe.createToken().then((payload) => {
+        pay(userId, projectId, payload, 5000).then((investment) => {
+          return investment
+        });
+      });
     } else {
       console.log("Stripe.js hasn't loaded yet.");
     }
   };
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
+
+  return (
+    <form onSubmit={handleSubmit}>
       <label>
-      Card details
-      <CardElement
-      onBlur={handleBlur}
-      onChange={handleChange}
-      onFocus={handleFocus}
-      onReady={handleReady}
-      {...createOptions(this.props.fontSize)}
-      />
+        Card details
+        <CardElement
+          {...createOptions(props.fontSize)}
+        />
       </label>
       <button>Pay</button>
-      </form>
-      );
-    }
-}
-const CardForm = injectStripe(_CardForm);
-
-
-
-class CheckoutForm extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      elementFontSize: window.innerWidth < 450 ? '14px' : '18px'
-    };
-    window.addEventListener('resize', () => {
-      if (window.innerWidth < 450 && this.state.elementFontSize !== '14px') {
-        this.setState({ elementFontSize: '14px' });
-      } else if (window.innerWidth >= 450 && this.state.elementFontSize !== '18px') {
-        this.setState({ elementFontSize: '18px' });
-      }
-    });
-  }
-
-  render() {
-    const { elementFontSize } = this.state;
-    return (
-      <div className="Checkout">
-        <Elements>
-          <CardForm fontSize={elementFontSize} />
-        </Elements>
-      </div>
-    );
-  }
+    </form>
+  );
 }
 
-export default CheckoutForm;
+export default injectStripe(CheckoutForm);
 
