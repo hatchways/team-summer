@@ -4,7 +4,7 @@ const authRoutes = require('./auth');
 const userRoutes = require('./users');
 const projectRoutes = require('./project');
 const investmentRoutes = require('./investment');
-const messageRoutes = require('./Message');
+const conversationRoutes = require('./Conversation');
 
 router.get('/welcome', function(req, res, next) {
   res.status(200).send({ welcomeMessage: 'Step 1 (completed)' });
@@ -14,6 +14,6 @@ router.use('/auth', authRoutes);
 router.use('/users', userRoutes);
 router.use('/projects', projectRoutes);
 router.use('/investments', investmentRoutes);
-router.use('/messages', messageRoutes);
+router.use('/conversations', conversationRoutes);
 
 module.exports = router;

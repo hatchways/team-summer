@@ -1,8 +1,6 @@
-const {Conversation, Message} = require('../models');
+const { Conversation, Message } = require('../models');
 
 
 exports.createMessage = (req, res) => {
-  res.status(200).json({
-    success: true
-  })
+  res.status(200).json(req.conversation.messages);
 };

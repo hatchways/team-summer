@@ -1,5 +1,5 @@
 const { decodeToken } = require('../utils');
-const { User } = require('../models');
+const { User, Conversation } = require('../models');
 
 exports.isAuth = async (req, res, next) => {
   const { authorization } = req.headers;
@@ -28,6 +28,17 @@ exports.userById = (req, res, next, id) => {
       req.profile = { _id, name, email, projects };
       next();
     });
+};
+
+exports.conversationById = (req, res, next, id) => {
+  Conversation.findById(id)
+    .populate('coversations')
+    .exec((err, conversion) => {
+      if (err) return res.status(400).json({error: err});
+
+      req.conversation = conversion;
+      next();
+    })
 };
 
 
