@@ -8,6 +8,7 @@ exports.isAuth = async (req, res, next) => {
     const token = authorization.split(' ')[1];
     const { payload } = await decodeToken(token);
     if (payload && payload._id && payload._id === userId) {
+      console.log(userId, payload._id)
       req.user = payload;
       next();
     }
