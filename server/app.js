@@ -36,23 +36,6 @@ app.use(express.static(join(__dirname, 'public')));
 app.use('/api', indexRouter);
 app.use('/ping', pingRouter);
 
-
-
-//STRIPE
-// app.use(bodyParser.json());
-app.use(
-  express.json({
-    // We need the raw body to verify webhook signatures.
-    // Let's compute it only when hitting the Stripe webhook endpoint.
-    verify: function(req, res, buf) {
-      if (req.originalUrl.startsWith('/webhook')) {
-        req.rawBody = buf.toString();
-      }
-    }
-  })
-);
-
-
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
   next(createError(404));
