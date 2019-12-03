@@ -1,5 +1,5 @@
 import { lighten, styled } from '@material-ui/core/styles';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 export const styles = (theme) => ({
   pageTitle: {
