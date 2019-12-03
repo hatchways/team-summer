@@ -1,6 +1,6 @@
 import React from 'react';
 import { MuiThemeProvider, withStyles } from '@material-ui/core';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 import { theme } from './themes/theme';
 
@@ -10,9 +10,11 @@ import Login from './pages/Login';
 import ProfilePage from './pages/Profile';
 import AddProject from './pages/AddProject';
 import Project from './pages/Project';
+import Explore from './pages/Explore';
+
 import Toast from './components/Toast';
 import { PageContext } from './components/pageContext';
-import jwTokenCheck from './helpers/JwtTokenHelper'
+import jwTokenCheck from './helpers/JwtTokenHelper';
 
 require('dotenv').config();
 
@@ -56,7 +58,7 @@ class App extends React.Component {
     };
 
     // Authenticate users pre-render
-    jwTokenCheck(this.state)
+    jwTokenCheck(this.state);
   }
 
   activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
@@ -103,16 +105,19 @@ class App extends React.Component {
           - to each page.
         */}
           <PageContext.Provider value={contextProps}>
-            <Route
-              exact
-              path="/"
-              render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'} />}
-            />
-            <Route path="/signup" component={SignUp} />
-            <Route path="/login" component={Login} />
-            <Route path="/profile/:id?" component={ProfilePage} />
-            <Route path="/projects/add/:id" component={AddProject} />
-            <Route path="/project/:id" component={Project}/>
+            <Switch>
+              <Route
+                exact
+                path="/"
+                render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'}/>}
+              />
+              <Route path="/signup" component={SignUp}/>
+              <Route path="/login" component={Login}/>
+              <Route path="/profile/:id?" component={ProfilePage}/>
+              <Route path="/launch" component={AddProject}/>
+              <Route path="/projects/:id" component={Project}/>
+              <Route path="/explore" component={Explore}/>
+            </Switch>
           </PageContext.Provider>
           <Toast
             buttonText={toastProperties.button}

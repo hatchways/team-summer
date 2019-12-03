@@ -28,7 +28,7 @@ exports.getProject = (req, res) => {
 };
 
 exports.getUserProjects = (req, res) => {
-  let { _id } = req.query.userId;
+  const _id = req.query.userId;
 
   const order = req.query.order || 'asc';
   const sortBy = req.query.sortBy || 'fundingDeadline';
@@ -44,6 +44,7 @@ exports.getUserProjects = (req, res) => {
   if (req.query.location) filterOptions.location = req.query.location;
 
   Project.find(filterOptions)
+    .populate({ path: 'user', select: 'name' })
     .sort([[sortBy, order]])
     .limit(limit)
     .exec((err, projects) => {
