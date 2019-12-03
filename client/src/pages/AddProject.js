@@ -105,10 +105,9 @@ class AddProject extends Component {
         for (const image of images) {
             formData.append('images', image);
         }
-        console.log(this.state);
+
         if (validation.isValid) {
             const newProject = await addProject(formData);
-            console.log(newProject)
             if (newProject.success) {
                 console.log(newProject);
                 this.props.activateToast('Upload Successful', 'success');
@@ -183,7 +182,6 @@ class AddProject extends Component {
                         />
 
                         <OutlinedSelect
-                            useLabel
                             name="industry"
                             labelText="Industry"
                             selectId="industry"
@@ -205,7 +203,6 @@ class AddProject extends Component {
                             }
                         </OutlinedSelect>
                         <OutlinedSelect
-                            useLabel
                             name="location"
                             labelText="Location"
                             selectId="location"
