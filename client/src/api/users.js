@@ -34,7 +34,6 @@ export const editUser = async (id, userData) => {
   try {
     let response = await httpClient.put(`/users/${id}`, userData)
     if (response.data.hasOwnProperty('err')) return { ...response.data };
-    console.log(response.data)
     return {
       data: response.data,
       success: true,

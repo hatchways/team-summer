@@ -17,8 +17,11 @@ const useStyles = makeStyles((theme) => ({
     margin: '10px auto',
     [theme.breakpoints.up('md')]: {
       margin: '30px auto',
-    }
+    },
   },
+  button: {
+    margin: '10px 0px 10px 0px',
+  }
 }));
 
 const ProfileDetailPanel = ({ id, profilePic, name, location, about, expertise, buttonType, history }) => {
@@ -43,7 +46,7 @@ const ProfileDetailPanel = ({ id, profilePic, name, location, about, expertise, 
       <Avatar className={classes.avatar} src={profilePic || null} />
       <Typography variant="h3">{name}</Typography>
       <Typography variant="body1">{location}</Typography>
-      <Button type="submit" variant="outlined" color="primary" onClick={handleRedirect(buttonType)}>
+      <Button classes={{ root: classes.button }} type="submit" variant="outlined" color="primary" onClick={handleRedirect(buttonType)}>
         {buttonType}
       </Button>
       <Typography variant="body1">{about}</Typography>
