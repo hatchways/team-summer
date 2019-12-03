@@ -8,6 +8,7 @@ import NavBar from './components/NavBar';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import ProfilePage from './pages/Profile';
+import EditProfile from './pages/EditProfile';
 import AddProject from './pages/AddProject';
 import Project from './pages/Project';
 import Explore from './pages/Explore';
@@ -53,7 +54,10 @@ class App extends React.Component {
       userAuthenticated: false,
       userDetails: {
         name: '',
-        id: null
+        id: null,
+        description: '',
+        avatar: '',
+        location: ''
       }
     };
 
@@ -69,7 +73,7 @@ class App extends React.Component {
   };
 
   setAuthenticated = (authenticated) => this.setState({ userAuthenticated: authenticated });
-  setUserDetails = (id, name) => this.setState({ userDetails: { id, name } });
+  setUserDetails = (id, name, about, avatar, location) => this.setState({ userDetails: { id, name, about, avatar, location } });
   toggleToast = () => this.setState((state) => ({ showToast: !state.showToast }));
 
   render() {
@@ -109,14 +113,15 @@ class App extends React.Component {
               <Route
                 exact
                 path="/"
-                render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'}/>}
+                render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'} />}
               />
-              <Route path="/signup" component={SignUp}/>
-              <Route path="/login" component={Login}/>
-              <Route path="/profile/:id?" component={ProfilePage}/>
-              <Route path="/launch" component={AddProject}/>
-              <Route path="/projects/:id" component={Project}/>
-              <Route path="/explore" component={Explore}/>
+              <Route path="/signup" component={SignUp} />
+              <Route path="/login" component={Login} />
+              <Route path="/profile/:id?" exact component={ProfilePage} />
+              <Route path="/profile/edit/:id" exact component={EditProfile} />
+              <Route path="/launch" component={AddProject} />
+              <Route path="/projects/:id" component={Project} />
+              <Route path="/explore" component={Explore} />
             </Switch>
           </PageContext.Provider>
           <Toast
