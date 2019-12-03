@@ -4,7 +4,7 @@ const { isAuth, userById } = require('../middlewares');
 const projects = require('../controllers/project');
 
 router.get('/:id', projects.getProject);
-router.post('/', isAuth, projects.addProject);
+router.post('/:id', isAuth, projects.addProject);
 router.get('/', projects.getUserProjects); //?userId=
 router.post('/image-upload', projects.imageUpload);
 

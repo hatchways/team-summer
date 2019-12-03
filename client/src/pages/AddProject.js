@@ -107,10 +107,12 @@ class AddProject extends Component {
         }
 
         if (validation.isValid) {
-            const newProject = await addProject(formData);
+            const { id } = this.props.userDetails;
+            const newProject = await addProject(id, formData);
             if (newProject.success) {
                 console.log(newProject);
                 this.props.activateToast('Upload Successful', 'success');
+                this.props.history.push('/profile');
             } else if (newProject.err) {
                 console.log(newProject.err);
             }

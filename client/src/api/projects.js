@@ -1,7 +1,7 @@
 import httpClient from './httpClient';
 
-export const addProject = async (projectData) => {
-  const url = `/projects`;
+export const addProject = async (id, projectData) => {
+  const url = `/projects/${id}`;
   const token = localStorage.getItem('jwtToken');
   const authOptions = {
     headers: {
