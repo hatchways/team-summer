@@ -39,14 +39,11 @@ const  CheckoutForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // placeholderProps
-    const projectId = '5ddd811b557fb6177e87eb05';
-    const userId = '5ddd6d81cc85fd072f13f532';
+    const { userId, projectId, investmentAmount } = props
 
     if (props.stripe) {
       props.stripe.createToken().then((payload) => {
-        pay(userId, projectId, payload, 5000).then((investment) => {
+        pay(userId, projectId, payload, investmentAmount).then((investment) => {
           return investment
         });
       });

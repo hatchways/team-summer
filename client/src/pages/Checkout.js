@@ -44,11 +44,17 @@ class Checkout extends Component {
   }
 
   renderForm = () => {
+    const projectId = '5ddd811b557fb6177e87eb05';
+    const userId = '5ddd6d81cc85fd072f13f532';
+    const investmentAmount = 500000
+
     return (
       <StripeProvider apiKey={apiKey}>
         <Elements>
           <CheckoutForm 
-            projectId={'5ddd811b557fb6177e87eb05'}
+            projectId={projectId}
+            userId={userId}
+            investmentAmount={investmentAmount}
             handlePmtStatus={this.handlePmtStatus} />
         </Elements>
       </StripeProvider>
