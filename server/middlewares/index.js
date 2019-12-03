@@ -1,5 +1,5 @@
 const { decodeToken } = require('../utils');
-const { User } = require('../models');
+const { User, Project } = require('../models');
 
 exports.isAuth = async (req, res, next) => {
   const { authorization } = req.headers;
@@ -30,5 +30,4 @@ exports.userById = (req, res, next, id) => {
       next();
     });
 };
-
 
