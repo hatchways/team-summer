@@ -15,10 +15,22 @@ const MessageSchema = new Schema({
     type: ObjectId,
     ref: 'User'
   },
+  received: {
+    type: Boolean,
+    default: false
+  },
+  seen: {
+    type: Boolean,
+    default: false
+  },
   content: {
     type: String,
     maxLength: 1000,
     required: true
+  },
+  date: {
+    type: Date,
+    default: Date.now
   }
 });
 
