@@ -182,6 +182,7 @@ class AddProject extends Component {
                         />
 
                         <OutlinedSelect
+                            useLabel
                             name="industry"
                             labelText="Industry"
                             selectId="industry"
@@ -203,6 +204,7 @@ class AddProject extends Component {
                             }
                         </OutlinedSelect>
                         <OutlinedSelect
+                            useLabel
                             name="location"
                             labelText="Location"
                             selectId="location"
