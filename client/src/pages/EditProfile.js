@@ -56,7 +56,6 @@ class EditProfile extends React.Component {
 
   componentDidMount() {
     const { name, about, profilePic, location } = this.props.location.state;
-    console.log(this.props.location.state)
     this.setState({ name, about, image: [profilePic], location, formData: new FormData() });
   }
 
@@ -82,10 +81,10 @@ class EditProfile extends React.Component {
         formData.set('image', image[0]);
       }
       const { id } = this.props.userDetails;
-      console.log(this.state)
       const newUserData = await editUser(id, formData);
       if (newUserData.success) {
-        console.log(newUserData);
+        const { data } = newUserData;
+        this.props.setUserDetails(id, data.name, data.about, data.profilePic, data.location);
         this.props.activateToast('Edit Successful', 'success');
         this.props.history.push('/profile');
       } else if (newUserData.err) {

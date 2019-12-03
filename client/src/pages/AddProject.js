@@ -107,12 +107,12 @@ class AddProject extends Component {
         }
 
         if (validation.isValid) {
-            const { formData } = this.state;
-            const { id } = this.props.userDetails;
-            const newProject = await addProject(id, formData);
+            // const { id } = this.props.userDetails;
+            const newProject = await addProject(formData);
             if (newProject.success) {
                 console.log(newProject);
                 this.props.activateToast('Upload Successful', 'success');
+                this.props.history.push('/profile');
             } else if (newProject.err) {
                 console.log(newProject.err);
             }
@@ -184,6 +184,7 @@ class AddProject extends Component {
                         />
 
                         <OutlinedSelect
+                            useLabel
                             name="industry"
                             labelText="Industry"
                             selectId="industry"
@@ -205,6 +206,7 @@ class AddProject extends Component {
                             }
                         </OutlinedSelect>
                         <OutlinedSelect
+                            useLabel
                             name="location"
                             labelText="Location"
                             selectId="location"

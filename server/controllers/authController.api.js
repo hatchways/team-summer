@@ -37,6 +37,7 @@ exports.login = (req, res) => {
             _id,
             name,
             email,
+            about,
             profilePic,
             location,
             projects
