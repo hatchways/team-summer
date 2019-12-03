@@ -68,20 +68,23 @@ class ProfilePage extends Component {
 
     return (
       <Grid container classes={{ root: 'project-section' }} spacing={3} justify="center">
-        {projects.map((project, index) => (
-          <Grid item xs={12} md={6} key={index}>
-            <ProjectCard
-              key={index}
-              onClick={() => this.props.history.push(`/projects/${project._id}`)}
-              title={project.title}
-              image={project.images[0]}
-              funding={project.funding.fundingTotal}
-              fundingGoal={project.fundingGoal}
-              industry={project.industry}
-              daysLeft={parseInt(moment(project.fundingDeadline).fromNow().split(' ')[1])}
-            />
-          </Grid>
-        ))}
+        {
+          projects ?
+            projects.map((project, index) => (
+              <Grid item xs={12} md={6} key={index}>
+                <ProjectCard
+                  key={index}
+                  onClick={() => this.props.history.push(`/projects/${project._id}`)}
+                  title={project.title}
+                  image={project.images[0]}
+                  funding={project.funding.fundingTotal}
+                  fundingGoal={project.fundingGoal}
+                  industry={project.industry}
+                  daysLeft={parseInt(moment(project.fundingDeadline).fromNow().split(' ')[1])}
+                />
+              </Grid>
+            )) : ''
+        }
       </Grid >
     );
   };

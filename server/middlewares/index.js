@@ -8,7 +8,6 @@ exports.isAuth = async (req, res, next) => {
     const token = authorization.split(' ')[1];
     const { payload } = await decodeToken(token);
     if (payload && payload._id && payload._id === userId) {
-      console.log(userId, payload._id)
       req.user = payload;
       next();
     }
@@ -27,7 +26,8 @@ exports.userById = (req, res, next, id) => {
         });
       }
       const { _id, name, email, about, location, projects, profilePic } = user;
-      req.profile = { _id, name, about, email, projects, location, profilePic };
+      // req.profile = { _id, name, about, email, projects, location, profilePic };
+      req.profile = { _id, name, email, projects };
       next();
     });
 };

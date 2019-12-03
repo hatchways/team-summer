@@ -18,10 +18,10 @@ exports.getUser = (req, res) => {
         _id,
         name,
         email,
-        about,
-        location,
-        projects,
-        profilePic
+        // about,
+        // location,
+        // projects,
+        // profilePic
       });
     });
 };
