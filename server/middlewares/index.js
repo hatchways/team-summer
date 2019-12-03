@@ -3,12 +3,10 @@ const { User } = require('../models');
 
 exports.isAuth = async (req, res, next) => {
   const { authorization } = req.headers;
-  const userId = req.params.id
   if (authorization) {
     const token = authorization.split(' ')[1];
     const { payload } = await decodeToken(token);
-    if (payload && payload._id && payload._id === userId) {
-      console.log(userId, payload._id)
+    if (payload && payload._id) {
       req.user = payload;
       next();
     }

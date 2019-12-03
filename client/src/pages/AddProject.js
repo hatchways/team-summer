@@ -107,8 +107,8 @@ class AddProject extends Component {
         }
 
         if (validation.isValid) {
-            const { id } = this.props.userDetails;
-            const newProject = await addProject(id, formData);
+            // const { id } = this.props.userDetails;
+            const newProject = await addProject(formData);
             if (newProject.success) {
                 console.log(newProject);
                 this.props.activateToast('Upload Successful', 'success');
