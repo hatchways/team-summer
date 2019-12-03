@@ -4,35 +4,42 @@ const upload = require('../services/file-upload');
 const singleUpload = upload.single('image');
 
 exports.getUser = (req, res) => {
-  const { id } = req.body;
-  User.findOne({ id }, (err, user) => {
-    if (err) {
-      return res.status(400).json({ message: 'an error occurred' });
-    } else if (user) {
-      const { id, name, email, location, about, profilePic } = user;
+  const { id } = req.params;
+  User.findById(id)
+    .populate('projects')
+    .exec((err, user) => {
+      if (err || !user) {
+        return res.status(400).json({
+          error: 'User not found'
+        });
+      }
+      const { _id, name, email, about, location, projects, profilePic } = user;
       return res.status(200).json({
-        id,
+        _id,
         name,
         email,
-        location,
         about,
+        location,
+        projects,
         profilePic
       });
-    } else {
-      return res.status(400).json({ message: 'an error occurred' });
-    }
-  });
+    });
 };
 
 exports.editUser = (req, res) => {
   singleUpload(req, res, function (err) {
-    if (err) return res.status(422).json({ errors: [{ title: 'File Upload Error', detail: err.message }] });
+    if (err) return res.status(422).json({
+      errors: [{
+        title: 'File Upload Error',
+        detail: err.message
+      }]
+    });
 
     const { name, location, about, profilePic: newProfilePic } = req.body;
     const profilePic = req.file ? req.file.location : newProfilePic;
     const newInfo = { name, location, about, profilePic };
-    User.findOneAndUpdate(
-      { _id: req.profile._id },
+    User.findByIdAndUpdate(
+      { _id: req.params.id },
       { $set: newInfo },
       { new: true },
       (err, user) => {
@@ -41,8 +48,8 @@ exports.editUser = (req, res) => {
             error: 'You are not authorized to perform this action!'
           });
         }
-        user.password = null;
-        res.status(200).json(user);
+        const { name, location, about, profilePic } = user;
+        return res.status(200).json({ name, location, about, profilePic });
       }
     )
   })

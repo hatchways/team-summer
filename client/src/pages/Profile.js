@@ -87,18 +87,22 @@ class ProfilePage extends Component {
 
     return (
       <Grid container classes={{ root: 'project-section' }} spacing={3} justify="center">
-        {projects.map(({ id, name, funding, goal, imageUrl }, ix) => (
-          <Grid item xs={12} md={6} key={ix}>
-            <ProjectCard
-              key={ix}
-              id={id}
-              name={name}
-              funding={funding}
-              goal={goal}
-              imageUrl={imageUrl}
-            />
-          </Grid>
-        ))}
+        {
+          projects
+            ? projects.map(({ id, name, funding, goal, imageUrl }, ix) => (
+              <Grid item xs={12} md={6} key={ix}>
+                <ProjectCard
+                  key={ix}
+                  id={id}
+                  name={name}
+                  funding={funding}
+                  goal={goal}
+                  imageUrl={imageUrl}
+                />
+              </Grid>
+            ))
+            : ''
+        }
       </Grid>
     );
   };

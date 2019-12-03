@@ -81,11 +81,10 @@ class EditProfile extends React.Component {
         formData.set('image', image[0]);
       }
       const { id } = this.props.userDetails;
-      console.log(this.state)
       const newUserData = await editUser(id, formData);
       if (newUserData.success) {
-        console.log(newUserData);
-        this.props.setUserDetails(id, name, about, image[0], location);
+        const { data } = newUserData;
+        this.props.setUserDetails(id, data.name, data.about, data.profilePic, data.location);
         this.props.activateToast('Edit Successful', 'success');
         this.props.history.push('/profile');
       } else if (newUserData.err) {
