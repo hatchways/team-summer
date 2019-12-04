@@ -17,13 +17,13 @@ class Checkout extends Component {
     this.setState(status)
   }
 
-  handleSuccess = () => {
+  handleClose = () => {
     //TODO: redirect to...
   }
 
   renderContent = () => {
     const { status } = this.state
-    //TODO: use toast, loading component
+
     if (status === 'INACTIVE') {
       return this.renderForm()
     } else {
@@ -31,9 +31,9 @@ class Checkout extends Component {
         return <h3>success</h3>
       }
       else if (status === 'PENDING') {
-        return <h3>loading</h3>
+        return <h3>loading</h3> //WE need a loading component
       }
-      else if (status !== 'FAILURE') {
+      else { //FAILURE
         return <h3>that didn't work. try again?</h3>//TODO: try again button
       }
     }
@@ -44,10 +44,10 @@ class Checkout extends Component {
   }
 
   renderForm = () => {
+    // const { userId, projectId, projectName } = this.props
     const projectId = '5ddd811b557fb6177e87eb05';
     const userId = '5ddd6d81cc85fd072f13f532';
     const projectName = 'some great project'
-    const investmentAmount = 500000
 
     return (
       <StripeProvider apiKey={apiKey}>
@@ -55,7 +55,6 @@ class Checkout extends Component {
           <CheckoutForm
             projectId={projectId}
             userId={userId}
-            investmentAmount={investmentAmount}
             projectName={projectName}
             handlePmtStatus={this.handlePmtStatus} />
         </Elements>

@@ -1,27 +1,20 @@
-import React, { Component } from "react";
-import { pay } from '../../api/payments';
-
-import {
-  CardElement,
-  CardNumberElement,
-  CardExpiryElement,
-  CardCVCElement,
-  PaymentRequestButtonElement,
-  injectStripe
-} from 'react-stripe-elements';
-
+import React, { Component, Fragment } from "react";
+import PropTypes from 'prop-types'; 
 import {
   Card,
-  CardMedia,
   CardContent,
   Typography,
   Button,
   Divider,
-  Input
-} from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+  OutlinedInput,
+  InputAdornment } from '@material-ui/core';
+  import { withStyles } from '@material-ui/core/styles';
+  import { OutlinedSelect } from '../../components/Inputs';
+  import { CardElement, injectStripe } from 'react-stripe-elements';
+import CloseIcon from '@material-ui/icons/Close';
+import { pay } from '../../api/payments';
 
-import './checkoutForm.css'
+
 const styles = (muiBaseTheme) => ({
   card: {
     width: '500px',
@@ -49,7 +42,18 @@ const styles = (muiBaseTheme) => ({
   },
   input: {
     width: '100%',
-    height: '3.875em'
+    height: '3.875em',
+  },
+  button: {
+    margin: '4px 0px 13px 0px'
+  },
+  outlinedInput: {
+    paddingLeft: "25px"
+  },
+  icon: {
+    horizontalAlign: "right",
+    position: "relative",
+    top: "1px"
   }
 });
 
@@ -84,6 +88,12 @@ const buttonStyle = {
   textTransform: 'uppercase'
 }
 
+const formStyle = {
+  paddingBottom: "17px",
+  textAlign: "right",
+  marginRight: "8px"
+}
+
 const inputStyle = {
   margin: '10px 0 20px 0',
   padding: '22px',
@@ -95,85 +105,148 @@ const inputStyle = {
 }
 
 class _CheckoutForm extends Component {
-  // const _CheckoutForm = (this.props) => {
+  constructor(props) {
+    super(props);
 
-  state = {
-    investmentAmount: 0,
-    investmentSaved: false
+    this.state = {
+      investmentAmount: "",
+      investmentSaved: false
+    }
   }
 
-  handleSubmit = (e) => {
-    const { userId, projectId } = this.props
-    const { investmentAmount } = this.state
+  handleInvestmentInput = (e) => {
+    const investmentAmount = e.target.value 
+    this.setState({ investmentAmount })
+  }
 
-
+  handleInvestmentSubmit = (e) => {
     e.preventDefault();
+    this.setState({investmentSaved: true})
+  }
 
-    if (this.props.stripe) {
-      this.props.stripe.createToken().then((payload) => {
-        pay(userId, projectId, payload, investmentAmount).then((investment) => {
-          return investment
-        });
+  handlePaymentSubmit = (e) => {
+    e.preventDefault();
+    const { userId, projectId, stripe } = this.props
+    const { investmentAmount } = this.state
+    if (stripe) {
+      stripe.createToken().then((payload) => {
+        pay(userId, projectId, payload, investmentAmount)
+          .then((investment) => investment);
       });
     } else {
       console.log("Stripe.js hasn't loaded yet.");
     }
   };
 
-  formatDollars = (num) => {
-    const s = "" + num
-    return s.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-  }
+  renderPaymentCard = (classes) => {
+    const { investmentAmount } = this.state
 
+    return (
+      <Fragment>
+        <CardContent className={classes.content}>
+          <Typography
+            className={"MuiTypography--heading"}
+            style={ {textAlign: "center", margin: "15px 0 -10px"}}
+            variant={"h4"}
+            gutterBottom >
+            Investment amount: {investmentAmount}
+          </Typography>
+        </CardContent>
+        <Divider className={classes.divider}></Divider>  
+        <form onSubmit={this.handlePaymentSubmit} >
+          <CardContent className={classes.content}>
+            <CardElement
+            {...createOptions()}
+            />
+          </CardContent>
+          <Divider className={classes.divider}></Divider>
+          <CardContent className={classes.content}>
+            <button
+              style={buttonStyle}>
+              invest
+            </button>
+          </CardContent>
+        </form>
+      </Fragment>
+    )
+  }
+        
+  renderInvestmentCard = (classes) => {
+    const { investmentAmount } = this.state
+
+    return (
+      <Fragment>
+        <CardContent className={classes.content}>
+        <Typography
+          style={{marginBottom: '40px'}}
+          variant="h4" >How much would you like to invest?>
+        </Typography>
+        <OutlinedInput
+          className={classes.outlinedInput}
+          name="investmentAmount"
+          id="investmentAmount"
+          placeholder='0'
+          value={investmentAmount}
+          fullWidth={true}
+          onChange={this.handleInvestmentInput}
+          type="number"
+          variant="outlined"
+          startAdornment={
+            <InputAdornment
+            position="start">
+            $
+            </InputAdornment>}
+            />
+        </CardContent>
+        <Divider 
+          className={classes.divider}
+          style={ { color: 'white', marginTop: '42px' }}></Divider>
+        <CardContent className={classes.content}>
+          <Button
+            classes={{ root: classes.button }}
+            onClick={this.handleInvestmentSubmit}
+            type="submit"
+            variant="contained"
+            color="primary" >
+            save
+          </Button>
+        </CardContent>
+      </Fragment>
+    )
+  }
 
   render() {
     const { userId, projectId, projectName, classes } = this.props
-    const { investmentAmount } = this.state
-    const investInDollars = this.formatDollars(investmentAmount)
+    const { investmentAmount, investmentSaved } = this.state
 
     return (
-      <div>
+      <div className="checkout-form">
         <Card className={classes.card}>
+          <div style={formStyle}>
+            <CloseIcon className={classes.icon}></CloseIcon>
+          </div>
           <CardContent className={classes.content}>
             <Typography
               className={"MuiTypography--heading"}
-              variant={"h2"}
-              gutterBottom >
+              variant={"h2"} >
               {projectName}
             </Typography>
-            <Divider className={classes.divider}></Divider>
-            <Typography
-              className={"MuiTypography--heading"}
-              variant={"h4"}
-              gutterBottom >
-              Investment amount: {`$${investmentAmount}`}
-            </Typography>
-
-            <Input
-              className={classes.input}
-              placeholder={`$${investInDollars}.00`}
-
-            ></Input>
-
-
           </CardContent>
-
-          <form onSubmit={this.handleSubmit}>
-            <CardContent className={classes.content}>
-              <CardElement
-                {...createOptions()}
-              />
-            </CardContent>
-
-            <CardContent className={classes.content}>
-              <button style={buttonStyle}>invest</button>
-            </CardContent>
-          </form>
-        </Card>
-      </div>
+        {
+          this.state.investmentSaved ?
+          this.renderPaymentCard(classes) :
+          this.renderInvestmentCard(classes)
+        }
+      </Card>
+    </div>
     );
   }
 }
-
+    
 const CheckoutForm = injectStripe(_CheckoutForm);
 export default withStyles(styles)(CheckoutForm);
+
+_CheckoutForm.propTypes = {
+  userId: PropTypes.string.isRequired,
+  projectId: PropTypes.string.isRequired,
+};
