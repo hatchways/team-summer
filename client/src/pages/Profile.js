@@ -1,7 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import ProjectCard from '../components/projectCard';
+import { Grid } from '@material-ui/core';
+import moment from 'moment';
+
+import ProjectCard from '../components/ProjectCard';
 import ProfileDetailPanel from '../components/ProfileDetailPanel';
-import { withStyles, Button, Grid, Typography } from '@material-ui/core';
 import { getUser } from '../api/users';
 import { withPageContext } from '../components/pageContext';
 
@@ -13,28 +15,7 @@ class ProfilePage extends Component {
       _id: '',
       name: '',
       location: '',
-      projects: [
-        {
-          name: 'testname2',
-          funding: 500,
-          goal: 1000
-        },
-        {
-          name: 'testname',
-          funding: 500,
-          goal: 1000
-        },
-        {
-          name: 'testname3',
-          funding: 5030,
-          goal: 10030
-        },
-        {
-          name: 'testname4',
-          funding: 5040,
-          goal: 10400
-        }
-      ],
+      projects: [],
       imageUrl: ''
     }
   };
@@ -47,22 +28,25 @@ class ProfilePage extends Component {
 
     const id = this.props.match.params.id || this.props.userDetails.id;
     getUser(id).then((profile) => {
+      this.props.setUserDetails(id, profile.data.name, profile.data.about, profile.data.profilePic, profile.data.location);
       this.setState({ profile: profile.data });
     });
   }
 
   renderUserInfo() {
-    const { imageUrl, name, location, about, expertise } = this.state.profile;
+    const { profilePic, name, location, about, expertise } = this.state.profile;
 
     return (
       <Fragment>
         <ProfileDetailPanel
-          imageUrl={imageUrl}
+          id={this.props.userDetails.id}
+          profilePic={profilePic}
           name={name}
           location={location}
           about={about}
           expertise={expertise}
           buttonType={this.getButtonType()}
+          history={this.props.history}
         />
       </Fragment>
     );
@@ -84,19 +68,24 @@ class ProfilePage extends Component {
 
     return (
       <Grid container classes={{ root: 'project-section' }} spacing={3} justify="center">
-        {projects.map(({ id, name, funding, goal, imageUrl }, ix) => (
-          <Grid item xs={12} md={6} key={ix}>
-            <ProjectCard
-              key={ix}
-              id={id}
-              name={name}
-              funding={funding}
-              goal={goal}
-              imageUrl={imageUrl}
-            />
-          </Grid>
-        ))}
-      </Grid>
+        {
+          projects ?
+            projects.map((project, index) => (
+              <Grid item xs={12} md={6} key={index}>
+                <ProjectCard
+                  key={index}
+                  onClick={() => this.props.history.push(`/projects/${project._id}`)}
+                  title={project.title}
+                  image={project.images[0]}
+                  funding={project.funding.fundingTotal}
+                  fundingGoal={project.fundingGoal}
+                  industry={project.industry}
+                  daysLeft={parseInt(moment(project.fundingDeadline).fromNow().split(' ')[1])}
+                />
+              </Grid>
+            )) : ''
+        }
+      </Grid >
     );
   };
 

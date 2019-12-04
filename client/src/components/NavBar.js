@@ -131,7 +131,7 @@ const Navigation = (props) => {
   const handleDropdownClick = (route) => () => {
     if (route === '/logout') {
       props.setAuthenticated(false);
-      props.setUserDetails(null, '');
+      props.setUserDetails(null, '', '', '', '');
       localStorage.removeItem('jwtToken');
       props.history.push('/login');
     } else {
@@ -171,7 +171,13 @@ const Navigation = (props) => {
             aria-controls="user-dropdown"
             onClick={(event) => toggleUserDropdown(event.currentTarget)}>
             <Avatar className={props.classes.userAvatar} src={props.userDetails.avatar || null}>
-              {props.userDetails.avatar || props.userDetails.name.split('')[0]}
+              {
+                props.userDetails.avatar
+                  ? props.userDetails.avatar
+                  : props.userDetails.name
+                    ? props.userDetails.name.split('')[0]
+                    : '?'
+              }
             </Avatar>
           </IconButton>
           <Menu

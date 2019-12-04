@@ -1,6 +1,6 @@
 import React from 'react';
 import { MuiThemeProvider, withStyles } from '@material-ui/core';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 import { theme } from './themes/theme';
 
@@ -8,12 +8,15 @@ import NavBar from './components/NavBar';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import ProfilePage from './pages/Profile';
+import EditProfile from './pages/EditProfile';
 import AddProject from './pages/AddProject';
 import Project from './pages/Project';
 import Checkout from './pages/Checkout';
+import Explore from './pages/Explore';
+
 import Toast from './components/Toast';
 import { PageContext } from './components/pageContext';
-import jwTokenCheck from './helpers/JwtTokenHelper'
+import jwTokenCheck from './helpers/JwtTokenHelper';
 
 require('dotenv').config();
 
@@ -52,12 +55,15 @@ class App extends React.Component {
       userAuthenticated: false,
       userDetails: {
         name: '',
-        id: null
+        id: null,
+        description: '',
+        avatar: '',
+        location: ''
       }
     };
 
     // Authenticate users pre-render
-    jwTokenCheck(this.state)
+    jwTokenCheck(this.state);
   }
 
   activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
@@ -68,7 +74,7 @@ class App extends React.Component {
   };
 
   setAuthenticated = (authenticated) => this.setState({ userAuthenticated: authenticated });
-  setUserDetails = (id, name) => this.setState({ userDetails: { id, name } });
+  setUserDetails = (id, name, about, avatar, location) => this.setState({ userDetails: { id, name, about, avatar, location } });
   toggleToast = () => this.setState((state) => ({ showToast: !state.showToast }));
 
   render() {
@@ -104,6 +110,7 @@ class App extends React.Component {
           - to each page.
         */}
           <PageContext.Provider value={contextProps}>
+<<<<<<< HEAD
             <Route
               exact
               path="/"
@@ -115,6 +122,22 @@ class App extends React.Component {
             <Route path="/project/:id" component={Project}/>
             <Route path="/projects/add/:id" component={AddProject} />
             <Route path="/checkout" component={Checkout}/>
+=======
+            <Switch>
+              <Route
+                exact
+                path="/"
+                render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'} />}
+              />
+              <Route path="/signup" component={SignUp} />
+              <Route path="/login" component={Login} />
+              <Route path="/profile/:id?" exact component={ProfilePage} />
+              <Route path="/profile/edit/:id" exact component={EditProfile} />
+              <Route path="/launch" component={AddProject} />
+              <Route path="/projects/:id" component={Project} />
+              <Route path="/explore" component={Explore} />
+            </Switch>
+>>>>>>> e127ef673867bd0ed08f4034458eee2616e13970
           </PageContext.Provider>
           <Toast
             buttonText={toastProperties.button}
