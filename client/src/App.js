@@ -1,6 +1,7 @@
 import React from 'react';
 import { MuiThemeProvider, withStyles } from '@material-ui/core';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import socketClient from 'socket.io-client'
 
 import { theme } from './themes/theme';
 
@@ -12,6 +13,7 @@ import EditProfile from './pages/EditProfile';
 import AddProject from './pages/AddProject';
 import Project from './pages/Project';
 import Explore from './pages/Explore';
+import Messages from './pages/Messages';
 
 import Toast from './components/Toast';
 import { PageContext } from './components/pageContext';
@@ -65,6 +67,8 @@ class App extends React.Component {
     jwTokenCheck(this.state);
   }
 
+  socket = socketClient(process.env.REACT_APP_SOCKET_ENDPOINT);
+
   activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
     this.setState({
       toastProperties: { text, variant, button },
@@ -84,7 +88,8 @@ class App extends React.Component {
       userAuthenticated: userAuthenticated,
       setAuthenticated: this.setAuthenticated,
       userDetails: userDetails,
-      setUserDetails: this.setUserDetails
+      setUserDetails: this.setUserDetails,
+      socket: this.socket
     };
 
     return (
@@ -122,6 +127,7 @@ class App extends React.Component {
               <Route path="/launch" component={AddProject} />
               <Route path="/projects/:id" component={Project} />
               <Route path="/explore" component={Explore} />
+              <Route path="/messages" component={Messages} />
             </Switch>
           </PageContext.Provider>
           <Toast
