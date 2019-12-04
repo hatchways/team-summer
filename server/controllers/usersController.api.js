@@ -7,7 +7,13 @@ exports.getUser = (req, res) => {
   const { id } = req.params;
   User.findById(id)
     .populate('projects')
-    .populate('investments')
+    // .populate('investments')
+    .populate({
+      path: 'investments',
+      populate: {
+        path: 'project'
+      }
+    })
     .exec((err, user) => {
       if (err || !user) {
         return res.status(400).json({
