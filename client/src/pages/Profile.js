@@ -24,7 +24,7 @@ const styles = {
     '&:hover': {
       cursor: 'pointer',
       color: '#E4E8EA',
-      textShadow: '2px 2px #B2B1B7',
+      textShadow: '1px 1px #B2B1B7',
     }
   },
   projectInvestmentContent: {
@@ -55,13 +55,11 @@ class ProfilePage extends Component {
     getUser(id).then((profile) => {
       this.props.setUserDetails(id, profile.data.name, profile.data.about, profile.data.profilePic, profile.data.location);
       this.setState({ profile: profile.data });
-      console.log(this.state);
     });
   }
 
   changeDisplay = (display) => {
     this.setState({ setDisplay: display })
-    console.log(this.state);
   }
 
   renderUserInfo() {
@@ -160,7 +158,7 @@ class ProfilePage extends Component {
             <Typography classes={{ h2: classes.header }} variant="h2" onClick={() => this.changeDisplay('investments')}>Investments</Typography>
           </div>
           {this.state.setDisplay === 'projects' && this.renderProjects()}
-          {this.state.setDisplay === 'investments' && this.renderProjects()}
+          {this.state.setDisplay === 'investments' && this.renderInvestments()}
         </div>
       </main>
     );
