@@ -92,43 +92,12 @@ class ProfilePage extends Component {
     //TODO: msg functionality
   }
 
-  renderInvestments = () => {
-    const { investments } = this.state.profile;
-
+  renderData = (data) => {
     return (
       <Grid container classes={{ root: 'project-section' }} spacing={3} justify="center">
         {
-          investments ?
-            investments.map((investment, index) => {
-              const { project } = investment;
-              return (
-                <Grid item xs={12} md={6} key={index}>
-                  <ProjectCard
-                    key={index}
-                    onClick={() => this.props.history.push(`/projects/${project._id}`)}
-                    title={project.title}
-                    image={project.images[0]}
-                    funding={project.funding.fundingTotal}
-                    fundingGoal={project.fundingGoal}
-                    industry={project.industry}
-                    daysLeft={parseInt(moment(project.fundingDeadline).fromNow().split(' ')[1])}
-                  />
-                </Grid>
-              )
-            }) : ''
-        }
-      </Grid >
-    );
-  }
-
-  renderProjects = () => {
-    const { projects } = this.state.profile;
-
-    return (
-      <Grid container classes={{ root: 'project-section' }} spacing={3} justify="center">
-        {
-          projects ?
-            projects.map((project, index) => (
+          data ?
+            data.map((project, index) => (
               <Grid item xs={12} md={6} key={index}>
                 <ProjectCard
                   key={index}
@@ -149,6 +118,9 @@ class ProfilePage extends Component {
 
   render() {
     const { classes } = this.props;
+    const { projects, investments } = this.state.profile;
+    const investedProjects = investments ? investments.map(investment => investment.project) : [];
+
     return (
       <main className={classes.pageContent}>
         {this.renderUserInfo()}
@@ -157,8 +129,8 @@ class ProfilePage extends Component {
             <Typography classes={{ h2: classes.header }} variant="h2" onClick={() => this.changeDisplay('projects')}>Projects</Typography>
             <Typography classes={{ h2: classes.header }} variant="h2" onClick={() => this.changeDisplay('investments')}>Investments</Typography>
           </div>
-          {this.state.setDisplay === 'projects' && this.renderProjects()}
-          {this.state.setDisplay === 'investments' && this.renderInvestments()}
+          {this.state.setDisplay === 'projects' && this.renderData(projects)}
+          {this.state.setDisplay === 'investments' && this.renderData(investedProjects)}
         </div>
       </main>
     );
