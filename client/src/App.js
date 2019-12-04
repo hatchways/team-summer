@@ -110,19 +110,6 @@ class App extends React.Component {
           - to each page.
         */}
           <PageContext.Provider value={contextProps}>
-<<<<<<< HEAD
-            <Route
-              exact
-              path="/"
-              render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'} />}
-            />
-            <Route path="/signup" component={SignUp} />
-            <Route path="/login" component={Login} />
-            <Route path="/profile/:id?" component={ProfilePage} />
-            <Route path="/project/:id" component={Project}/>
-            <Route path="/projects/add/:id" component={AddProject} />
-            <Route path="/checkout" component={Checkout}/>
-=======
             <Switch>
               <Route
                 exact
@@ -135,9 +122,9 @@ class App extends React.Component {
               <Route path="/profile/edit/:id" exact component={EditProfile} />
               <Route path="/launch" component={AddProject} />
               <Route path="/projects/:id" component={Project} />
+              <Route path="/checkout" component={Checkout} />
               <Route path="/explore" component={Explore} />
             </Switch>
->>>>>>> e127ef673867bd0ed08f4034458eee2616e13970
           </PageContext.Provider>
           <Toast
             buttonText={toastProperties.button}
