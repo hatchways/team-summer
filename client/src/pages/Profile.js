@@ -11,12 +11,14 @@ import './profile.css';
 
 class ProfilePage extends Component {
   state = {
+    display: 'projects',
     profile: {
       _id: '',
       name: '',
       location: '',
       projects: [],
-      imageUrl: ''
+      imageUrl: '',
+      investments: []
     }
   };
 
@@ -30,7 +32,12 @@ class ProfilePage extends Component {
     getUser(id).then((profile) => {
       this.props.setUserDetails(id, profile.data.name, profile.data.about, profile.data.profilePic, profile.data.location);
       this.setState({ profile: profile.data });
+      console.log(this.state);
     });
+  }
+
+  changeDisplay = () => {
+
   }
 
   renderUserInfo() {
@@ -63,6 +70,35 @@ class ProfilePage extends Component {
     //TODO: msg functionality
   }
 
+  renderInvestments = () => {
+    const { investments } = this.state.profile;
+
+    return (
+      <Grid container classes={{ root: 'project-section' }} spacing={3} justify="center">
+        {
+          investments ?
+            investments.map((investment, index) => {
+              const { project } = investment;
+              return (
+                <Grid item xs={12} md={6} key={index}>
+                  <ProjectCard
+                    key={index}
+                    onClick={() => this.props.history.push(`/projects/${project._id}`)}
+                    title={project.title}
+                    image={project.images[0]}
+                    funding={project.funding.fundingTotal}
+                    fundingGoal={project.fundingGoal}
+                    industry={project.industry}
+                    daysLeft={parseInt(moment(project.fundingDeadline).fromNow().split(' ')[1])}
+                  />
+                </Grid>
+              )
+            }) : ''
+        }
+      </Grid >
+    );
+  }
+
   renderProjects = () => {
     const { projects } = this.state.profile;
 
@@ -93,7 +129,8 @@ class ProfilePage extends Component {
     return (
       <div className="profilePage">
         {this.renderUserInfo()}
-        {this.renderProjects()}
+        {this.state.display === 'investments' && this.renderProjects()}
+        {this.state.display === 'projects' && this.renderProjects()}
       </div>
     );
   }
