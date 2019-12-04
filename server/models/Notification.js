@@ -5,20 +5,19 @@ const { ObjectId } = Schema;
 const NotificationSchema = new Schema({
     user: {
         type: ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true,
     },
-    eventCount: {
-        type: Number,
-        default: 0
+    events: {
+        messages: [{
+            type: ObjectId,
+            ref: 'Message'
+        }],
+        investments: [{
+            type: ObjectId,
+            ref: 'Message'
+        }],
     },
-    notifications: [{
-        type: ObjectId,
-        ref: 'Notification'
-    }],
-    messages: [{
-        type: ObjectId,
-        ref: 'Message'
-    }],
     created: {
         type: Date,
         default: Date.now
