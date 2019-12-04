@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Grid } from '@material-ui/core';
+import { withStyles, Typography, Grid } from '@material-ui/core';
 import moment from 'moment';
 
 import ProjectCard from '../components/ProjectCard';
@@ -9,9 +9,32 @@ import { withPageContext } from '../components/pageContext';
 
 import './profile.css';
 
+const styles = {
+  pageContent: {
+    display: 'flex',
+  },
+  headerContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  header: {
+    display: 'inline',
+    margin: '10px',
+    padding: '20px',
+    '&:hover': {
+      cursor: 'pointer',
+      color: '#E4E8EA',
+      textShadow: '2px 2px #B2B1B7',
+    }
+  },
+  projectInvestmentContent: {
+    padding: '20px',
+  }
+}
+
 class ProfilePage extends Component {
   state = {
-    display: 'projects',
+    setDisplay: 'projects',
     profile: {
       _id: '',
       name: '',
@@ -36,8 +59,9 @@ class ProfilePage extends Component {
     });
   }
 
-  changeDisplay = () => {
-
+  changeDisplay = (display) => {
+    this.setState({ setDisplay: display })
+    console.log(this.state);
   }
 
   renderUserInfo() {
@@ -126,14 +150,21 @@ class ProfilePage extends Component {
   };
 
   render() {
+    const { classes } = this.props;
     return (
-      <div className="profilePage">
+      <main className={classes.pageContent}>
         {this.renderUserInfo()}
-        {this.state.display === 'investments' && this.renderProjects()}
-        {this.state.display === 'projects' && this.renderProjects()}
-      </div>
+        <div className={classes.projectInvestmentContent}>
+          <div className={classes.headerContent}>
+            <Typography classes={{ h2: classes.header }} variant="h2" onClick={() => this.changeDisplay('projects')}>Projects</Typography>
+            <Typography classes={{ h2: classes.header }} variant="h2" onClick={() => this.changeDisplay('investments')}>Investments</Typography>
+          </div>
+          {this.state.setDisplay === 'projects' && this.renderProjects()}
+          {this.state.setDisplay === 'investments' && this.renderProjects()}
+        </div>
+      </main>
     );
   }
 }
 
-export default withPageContext(ProfilePage);
+export default withPageContext(withStyles(styles)(ProfilePage));
