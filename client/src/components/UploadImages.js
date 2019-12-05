@@ -15,7 +15,7 @@ const styles = {
     },
     dragBox: {
         display: 'flex',
-        boxShadow: '0px 0px 3px 2px #D3D3D3',
+        boxShadow: '0px 0px 3px 2px #E7E7E7',
         height: '150px',
         width: '175px',
         margin: '2px',
@@ -73,9 +73,9 @@ const UploadImages = (props) => {
                             images.map(image => (
                                 <Image
                                     image={image}
-                                    key={image.name}
+                                    key={image.name || image}
                                     deleteImage={deleteImage}
-                                    alt={image.name}
+                                    alt={image.name || image}
                                 />
                             )) :
                             images[0] && images.length === 1 ? <Image

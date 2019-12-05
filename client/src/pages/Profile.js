@@ -106,7 +106,7 @@ class ProfilePage extends Component {
                   funding={project.funding.fundingTotal}
                   fundingGoal={project.fundingGoal}
                   industry={project.industry}
-                  daysLeft={parseInt(moment(project.fundingDeadline).fromNow().split(' ')[1])}
+                  daysLeft={moment({ hours: 0 }).diff(project.fundingDeadline, 'days') * -1}
                 />
               </Grid>
             )) : ''
