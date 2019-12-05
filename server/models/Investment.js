@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const { ObjectId } = Schema; 
-const { Notification } = require('../models');
-
 
 const InvestmentSchema = new Schema({
     value: {

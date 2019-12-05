@@ -32,6 +32,7 @@ exports.login = (req, res) => {
       } else if (user && user.comparePassword(password)) {
         const { name, email, _id, projects, about, location, profilePic } = user;
         const token = encodeToken({ name, email, _id, about, location, profilePic });
+
         const notificationCount = getNotificationCount(_id);
         return res.status(200).json({
           token,
