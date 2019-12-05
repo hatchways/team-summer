@@ -84,6 +84,8 @@ class App extends React.Component {
   };
 
   componentDidMount() {
+    this.socket.on('error', (error) => console.error(`Socket Warning: ${error}`));
+
     /*
     * If on page load/refresh, user is authenticated, open the socket connection,
     * otherwise close the socket connection if connected
@@ -98,11 +100,11 @@ class App extends React.Component {
     * When the state is update, if the user authentication changes, connect/disconnect
     * the socket.
     * */
-    const {userAuthenticated: wasAuthenticated} = prevState;
-    const {userAuthenticated: isAuthenticated} = this.state;
+    const { userAuthenticated: wasAuthenticated } = prevState;
+    const { userAuthenticated: isAuthenticated } = this.state;
 
     if (!wasAuthenticated && isAuthenticated) return this.openSocketAuthenticate();
-    if (wasAuthenticated && !isAuthenticated) return this.closeSocket()
+    if (wasAuthenticated && !isAuthenticated) return this.closeSocket();
   }
 
   activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
