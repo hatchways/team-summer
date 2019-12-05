@@ -19,27 +19,26 @@ exports.mongoDbErrorHandler = (err, res, defaultErrorCode = 400) => {
       err: `${key} already registered.`,
       property: key
     };
-
+    
     code = 409;
   }
-
+  
   return res.status(code).json(error);
 };
 
-exports.getNotificationCount = (user, type, seen = false) => {
-  
-  if (type === 'Investment') {
-    return Investment.count({
-      user,
-      $or: [{
-        seen,
-      }, {
-        seen: null //for items added before seen field added
-      }]
-    });
-  }
-  return Message.count({
+exports.getNotificationCount = async (user, seen = false) => {
+  const investmentCount = await Investment.count({
+    user,
+    $or: [{
+      seen,
+    }, {
+      seen: null //for items added before seen field added
+    }]
+  });
+
+  const messageCount = await Message.count({
     user,
     seen
   });
+  return  messageCount + investmentCount;
 };

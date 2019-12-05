@@ -2,14 +2,10 @@
 const { User, Investment, Message } = require('../models');
 const upload = require('../services/file-upload');
 const singleUpload = upload.single('image');
-const { getNotificationCount } = require('../utils');
 
 
 exports.getUser = async (req, res) => {
   const { id } = req.params;
-  const messageCount = await getNotificationCount(id, 'Message');
-  const investmentCount = await getNotificationCount(id, 'Investment');
-  const notificationCount = messageCount + investmentCount;
 
   User.findById(id)
     .populate('projects')
@@ -28,7 +24,6 @@ exports.getUser = async (req, res) => {
         location,
         projects,
         profilePic,
-        notificationCount
       });
     });
 };
