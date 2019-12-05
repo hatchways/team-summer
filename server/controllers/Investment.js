@@ -26,7 +26,9 @@ const invest = async (userId, projectId, investmentAmount) => {
     );
     return investment;
   } catch (err) {
-    return err
+    res.status(400).json({
+      error: "User Investment's could not be updated."
+    });
   }
 };
 
