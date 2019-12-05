@@ -64,7 +64,7 @@ class App extends React.Component {
     };
 
     // Authenticate users pre-render
-    jwTokenCheck(this.state, this.setAuthenticated);
+    jwTokenCheck(this.state);
   }
 
   socket = socketClient(process.env.REACT_APP_SOCKET_ENDPOINT, { autoConnect: false });
