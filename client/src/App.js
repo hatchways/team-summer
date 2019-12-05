@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import ProfilePage from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 import AddProject from './pages/AddProject';
+import EditProject from './pages/EditProject';
 import Project from './pages/Project';
 import Explore from './pages/Explore';
 
@@ -120,6 +121,7 @@ class App extends React.Component {
               <Route path="/profile/:id?" exact component={ProfilePage} />
               <Route path="/profile/edit/:id" exact component={EditProfile} />
               <Route path="/launch" component={AddProject} />
+              <Route path="/projects/edit/:id" exact component={EditProject} />
               <Route path="/projects/:id" component={Project} />
               <Route path="/explore" component={Explore} />
             </Switch>
