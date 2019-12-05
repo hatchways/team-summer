@@ -7,7 +7,6 @@ exports.getUser = (req, res) => {
   const { id } = req.params;
   User.findById(id)
     .populate('projects')
-    // .populate('investments')
     .populate({
       path: 'investments',
       populate: {
@@ -46,14 +45,14 @@ exports.editUser = (req, res) => {
     const { name, location, about, profilePic: newProfilePic } = req.body;
     const profilePic = req.file ? req.file.location : newProfilePic;
     const newInfo = { name, location, about, profilePic };
-    User.findByIdAndUpdate(
+    User.updateOne(
       { _id: req.params.id },
       { $set: newInfo },
       { new: true },
       (err, user) => {
         if (err) {
           return res.status(400).json({
-            error: 'You are not authorized to perform this action!'
+            error: 'User could not be updated.'
           });
         }
         const { name, location, about, profilePic } = user;
