@@ -6,7 +6,7 @@ const singleUpload = upload.single('image');
 const multiUpload = upload.array('images');
 
 exports.imageUpload = (req, res) => {
-  singleUpload(req, res, function(err) {
+  singleUpload(req, res, function (err) {
     if (err)
       return res
         .status(422)
@@ -16,14 +16,14 @@ exports.imageUpload = (req, res) => {
 };
 
 exports.getProject = (req, res) => {
-  const { id } = req.params;
+  const { projectId } = req.params;
 
-  Project.findOne({ _id: id })
+  Project.findOne({ _id: projectId })
     .populate({ path: 'user', select: 'name' })
     .exec((err, project) => {
       if (err) return res.status(400).json({ err });
 
-      return res.status(200).json({ project });
+      return res.status(200).json(project);
     });
 };
 
@@ -59,7 +59,7 @@ exports.getUserProjects = (req, res) => {
 
 exports.addProject = (req, res) => {
   multiUpload(req, res, async (err) => {
-    if (err)
+    if (err) {
       return res.status(422).json({
         errors: [
           {
@@ -68,6 +68,8 @@ exports.addProject = (req, res) => {
           }
         ]
       });
+    }
+
     const { title, subtitle, description, industry, location, fundingGoal, fundingDeadline } = req.body;
 
     const images = req.files ? req.files.map((file) => file.location) : [];
@@ -84,12 +86,58 @@ exports.addProject = (req, res) => {
         fundingDeadline
       });
       await User.updateOne({ _id: user._id }, { $push: { projects: project._id } });
-      res.json(project);
+      return res.status(200).json(project);
     } catch (err) {
-      res.status(400).json({
-        error: 'User project\'s could not be updated.',
+      return res.status(400).json({
+        error: 'User project\'s could not be created.',
         err
       });
     }
   });
 };
+
+exports.editProject = async (req, res) => {
+  multiUpload(req, res, async (err) => {
+    if (err) {
+      return res.status(422).json({
+        errors: [
+          {
+            title: 'File Upload Error',
+            detail: err.message
+          }
+        ]
+      });
+    }
+    if (req.body.projectUserId !== req.user._id) {
+      return res.status(403).json({
+        error: 'Access denied.'
+      });
+    }
+    try {
+      const { projectId } = req.params;
+      const { title, subtitle, description, industry, location, fundingGoal, stringImage, fundingDeadline } = req.body;
+      let images = req.files ? req.files.map((file) => file.location) : stringImage;
+      if (req.files && stringImage) images = [...images, ...stringImage];
+      console.log(images);
+      const newProject = { title, subtitle, description, industry, location, fundingGoal: parseInt(fundingGoal), fundingDeadline, images }
+      await Project.findByIdAndUpdate(
+        { _id: projectId },
+        { $set: newProject },
+        { new: true },
+        (err, newProject) => {
+          if (err) {
+            return res.status(400).json({
+              error: 'Project could not be updated.'
+            })
+          }
+          return res.status(200).json(newProject);
+        }
+      )
+    } catch (err) {
+      res.status(400).json({
+        error: 'User project\'s could not be updated',
+        err
+      })
+    }
+  })
+}

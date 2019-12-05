@@ -4,7 +4,8 @@ const industries = [
     { id: 21423, name: 'Marketing' },
     { id: 42342, name: 'Engineering' },
     { id: 21342, name: 'Art' },
-    { id: 93082, name: 'Film' }
+    { id: 93082, name: 'Film' },
+    { id: 10321, name: 'Entertainment' }
 ]
 
 const locations = [

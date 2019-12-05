@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongoose').Types;
-const {User, Project, Investment} = require('../models');
+const { User, Project, Investment } = require('../models');
 
 exports.addInvestment = async (req, res) => {
   const { value, projectId } = req.body;
@@ -29,3 +29,20 @@ exports.addInvestment = async (req, res) => {
     });
   }
 };
+
+exports.getInvestment = async (req, res) => {
+  const { id } = req.params;
+
+  Investment.findById(id)
+    // .populate('user')
+    .populate('projects')
+    .exec((err, investment) => {
+      if (err) {
+        return res.status(400).json({
+          error: 'Investment could not be found.',
+          err
+        });
+      }
+      return res.status(200).json(investment);
+    })
+}
