@@ -38,13 +38,13 @@ const styles = {
     marginTop: '30px'
   },
   dateField: {
-
+    marginBottom: '20px'
   },
   formLine: {
     marginBottom: '20',
   },
   button: {
-    margin: '20px 0px 10px 0px'
+    margin: 'auto'
   }
 }
 
