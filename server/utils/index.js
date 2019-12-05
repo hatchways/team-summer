@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const JWTSecret = process.env.JWT_SECRET || 'some secret';
+const { Investment, Message } = require('../models');
+
 
 exports.encodeToken = (payload) => jwt.sign({ payload }, JWTSecret, { expiresIn: '30m' });
 
@@ -22,4 +24,22 @@ exports.mongoDbErrorHandler = (err, res, defaultErrorCode = 400) => {
   }
 
   return res.status(code).json(error);
+};
+
+exports.getNotificationCount = (user, type, seen = false) => {
+  
+  if (type === 'Investment') {
+    return Investment.count({
+      user,
+      $or: [{
+        seen,
+      }, {
+        seen: null //for items added before seen field added
+      }]
+    });
+  }
+  return Message.count({
+    user,
+    seen
+  });
 };

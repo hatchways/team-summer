@@ -68,11 +68,6 @@ UserSchema.pre('save', function (next) {
   }
 });
 
-// CASCADE DELETE INVESTMENTS 
-// userSchema.pre('remove', function(next) {
-//   this.model('Investment').deleteMany({ user: this._id }, next);
-// });
-
 UserSchema.methods.comparePassword = function (pw) {
   return bcrypt.compareSync(pw, this.password);
 };

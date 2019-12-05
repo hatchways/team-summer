@@ -3,7 +3,6 @@ const Project = require('./Project');
 const Investment = require('./Investment');
 const Conversation = require('./Conversation');
 const Message = require('./Message');
-const Notification = require('./Notification');
 
 module.exports = {
   User,
@@ -11,5 +10,4 @@ module.exports = {
   Investment,
   Conversation,
   Message,
-  Notification
 };

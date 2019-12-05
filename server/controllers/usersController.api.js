@@ -1,10 +1,16 @@
 'use strict';
-const { User } = require('../models');
+const { User, Investment, Message } = require('../models');
 const upload = require('../services/file-upload');
 const singleUpload = upload.single('image');
+const { getNotificationCount } = require('../utils');
 
-exports.getUser = (req, res) => {
+
+exports.getUser = async (req, res) => {
   const { id } = req.params;
+  const messageCount = await getNotificationCount(id, 'Message');
+  const investmentCount = await getNotificationCount(id, 'Investment');
+  const notificationCount = messageCount + investmentCount;
+
   User.findById(id)
     .populate('projects')
     .exec((err, user) => {
@@ -21,7 +27,8 @@ exports.getUser = (req, res) => {
         about,
         location,
         projects,
-        profilePic
+        profilePic,
+        notificationCount
       });
     });
 };

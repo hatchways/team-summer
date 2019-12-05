@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const { ObjectId } = Schema; 
+const { Notification } = require('../models');
+
 
 const InvestmentSchema = new Schema({
     value: {
@@ -8,6 +10,10 @@ const InvestmentSchema = new Schema({
         required: true,
         trim: true,
         min: 5
+    },
+    seen: {
+        type: Boolean,
+        default: false
     },
     date: {
         type: Date,
