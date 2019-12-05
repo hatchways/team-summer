@@ -1,12 +1,11 @@
 const messages = require('./Messages');
-const authentication = require('./Authentication');
 const middleware = require('./middleware');
 
 
 module.exports = (io) => {
   io.on('connection', (socket) => {
     /*
-    * Global socket handler, basically the root handler for sockets.
+    * Global socket handler
     * */
 
     // Client connection
@@ -16,8 +15,19 @@ module.exports = (io) => {
     socket.use(middleware.verifyToken);
 
     // Socket event listeners
+    /*
+    * You can send a response inside a listener by one of the following:
+    *
+    * Socket: Emits the message in the room EXCEPT for the sender
+    *   (to a different room then default use .to(room).emit())
+    * * socket.emit('event', () => {...})
+    *
+    * io: Emits the message to all the clients connected (or .to(room)) (including person who triggered it)
+    * * io.emit('event', () => {...})
+    * */
+
     /* Connects userId to a room, allows for the ability to send to a user id */
-    socket.on('authenticate', authentication.connect(socket));
+    socket.on('authenticate', (id) => socket.join(id));
 
     socket.on('message', messages.receiveMessage(io));
 

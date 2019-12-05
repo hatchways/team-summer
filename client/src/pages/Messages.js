@@ -11,13 +11,16 @@ class Messages extends React.Component {
   };
 
   onSubmit = (event) => {
-    const {socket} = this.props;
+    const { socket } = this.props;
 
-    socket.emit('message', this.state.message, {token: localStorage.getItem('jwtToken')})
+    socket.emit('message', {
+      id: this.props.userDetails.id,
+      message: this.state.message
+    }, { token: localStorage.getItem('jwtToken') });
   };
 
   render() {
-    this.props.socket.on('newMessage', (value) => this.setState({receivedMessage: value}));
+    this.props.socket.on('newMessage', (value) => this.setState({ receivedMessage: value }));
 
     return (
       <div>
@@ -26,11 +29,11 @@ class Messages extends React.Component {
           name="message"
           value={this.state.message}
           label="Send Message"
-          onChange={( event ) => this.setState({ message: event.target.value })}/>
+          onChange={(event) => this.setState({ message: event.target.value })}/>
         <Button onClick={this.onSubmit} variant="contained" color="primary">Send</Button>
       </div>
     );
   }
 }
 
-export default withPageContext(Messages)
+export default withPageContext(Messages);
