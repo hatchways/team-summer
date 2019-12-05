@@ -1,7 +1,7 @@
 import React from 'react';
 import { MuiThemeProvider, withStyles } from '@material-ui/core';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
-import socketClient from 'socket.io-client'
+import socketClient from 'socket.io-client';
 
 import { theme } from './themes/theme';
 
@@ -44,7 +44,6 @@ const styles = {
 class App extends React.Component {
   constructor(props) {
     super(props);
-    // globalStyles();
 
     this.state = {
       toastProperties: {
@@ -64,10 +63,47 @@ class App extends React.Component {
     };
 
     // Authenticate users pre-render
-    jwTokenCheck(this.state);
+    jwTokenCheck(this.state, this.setAuthenticated);
   }
 
-  socket = socketClient(process.env.REACT_APP_SOCKET_ENDPOINT);
+  socket = socketClient(process.env.REACT_APP_SOCKET_ENDPOINT, { autoConnect: false });
+
+  openSocketAuthenticate = () => {
+    /*
+    *  Handle opening the socket and sending the user id to the backend socket connection,
+    *  so we can identify socket connections with users
+    * */
+    const { id } = this.state.userDetails;
+    this.socket.open();
+    // TODO: Make a function where it automatically adds the token to the 3rd argument
+    return this.socket.emit('authenticate', { id }, { token: localStorage.getItem('jwtToken') });
+  };
+
+  closeSocket = () => {
+    if (this.socket.connected) this.socket.close();
+  };
+
+  componentDidMount() {
+    /*
+    * If on page load/refresh, user is authenticated, open the socket connection,
+    * otherwise close the socket connection if connected
+    * */
+    if (this.state.userAuthenticated) return this.openSocketAuthenticate();
+
+    this.closeSocket();
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    /*
+    * When the state is update, if the user authentication changes, connect/disconnect
+    * the socket.
+    * */
+    const {userAuthenticated: wasAuthenticated} = prevState;
+    const {userAuthenticated: isAuthenticated} = this.state;
+
+    if (!wasAuthenticated && isAuthenticated) return this.openSocketAuthenticate();
+    if (wasAuthenticated && !isAuthenticated) return this.closeSocket()
+  }
 
   activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
     this.setState({
@@ -77,7 +113,16 @@ class App extends React.Component {
   };
 
   setAuthenticated = (authenticated) => this.setState({ userAuthenticated: authenticated });
-  setUserDetails = (id, name, about, avatar, location) => this.setState({ userDetails: { id, name, about, avatar, location } });
+  setUserDetails = (id, name, about, avatar, location) => this.setState({
+    userDetails: {
+      id,
+      name,
+      about,
+      avatar,
+      location
+    }
+  });
+
   toggleToast = () => this.setState((state) => ({ showToast: !state.showToast }));
 
   render() {
@@ -118,16 +163,16 @@ class App extends React.Component {
               <Route
                 exact
                 path="/"
-                render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'} />}
+                render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'}/>}
               />
-              <Route path="/signup" component={SignUp} />
-              <Route path="/login" component={Login} />
-              <Route path="/profile/:id?" exact component={ProfilePage} />
-              <Route path="/profile/edit/:id" exact component={EditProfile} />
-              <Route path="/launch" component={AddProject} />
-              <Route path="/projects/:id" component={Project} />
-              <Route path="/explore" component={Explore} />
-              <Route path="/messages" component={Messages} />
+              <Route path="/signup" component={SignUp}/>
+              <Route path="/login" component={Login}/>
+              <Route path="/profile/:id?" exact component={ProfilePage}/>
+              <Route path="/profile/edit/:id" exact component={EditProfile}/>
+              <Route path="/launch" component={AddProject}/>
+              <Route path="/projects/:id" component={Project}/>
+              <Route path="/explore" component={Explore}/>
+              <Route path="/messages" component={Messages}/>
             </Switch>
           </PageContext.Provider>
           <Toast

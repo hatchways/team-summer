@@ -1,17 +1,33 @@
 const messages = require('./Messages');
+const authentication = require('./Authentication');
+const { verifyToken } = require('./middleware');
 
-module.exports = (socket) => {
-  /*
+
+module.exports = (io) => {
+  // io.use((socket, next) => {
+  //   const { token } = socket.handshake.query;
+  //
+  //   console.log(token);
+  //   next();
+  // });
+
+  io.on('connection', (socket) => {
+    /*
    * At the moment I am using one global socket, for initial implementation
    */
-  // Client connection
-  console.log('Socket client connected');
+    // Client connection
+    console.log('Socket client connected');
 
-  // Socket event listeners
-  socket.on('message', messages.receiveMessage(socket));
+    socket.use(verifyToken);
 
-  // socket emitters
+    // Socket event listeners
+    socket.on('authenticate join', authentication.connect(socket));
 
-  // Client disconnect
-  socket.on('disconnect', () => console.log('Socket client disconnected'));
+    socket.on('message', messages.receiveMessage(socket));
+
+    // Socket emitters
+
+    // Client disconnect
+    socket.on('disconnect', () => console.log('Socket client disconnected'));
+  });
 };
