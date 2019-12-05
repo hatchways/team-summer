@@ -48,7 +48,7 @@ class Project extends React.Component {
     try {
       const response = await getProject(this.props.match.params.id);
       const project = response.data;
-      project.daysLeft = Math.max(0, moment({ hours: 0 }).diff(project.fundingDeadline, 'days'));
+      project.daysLeft = Math.max(0, moment({ hours: 0 }).diff(project.fundingDeadline, 'days') * -1);
 
       if (project.images.length === 0) project.images = ['/images/image-not-found.png'];
 
