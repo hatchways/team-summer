@@ -58,44 +58,49 @@ class App extends React.Component {
         description: '',
         avatar: '',
         location: ''
-      }
+      },
+      notificationCount: 0
     };
 
     // Authenticate users pre-render
     jwTokenCheck(this.state);
   }
 
+  setAuthenticated = (authenticated) => this.setState({ userAuthenticated: authenticated });
+  setUserDetails = (id, name, about, avatar, location) => this.setState({ userDetails: { id, name, about, avatar, location } });
+  setNotificationCount = (notificationCount) => this.setState({ notificationCount });
+  toggleToast = () => this.setState((state) => ({ showToast: !state.showToast }));
   activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
     this.setState({
       toastProperties: { text, variant, button },
       showToast: true
     });
   };
-
-  setAuthenticated = (authenticated) => this.setState({ userAuthenticated: authenticated });
-  setUserDetails = (id, name, about, avatar, location) => this.setState({ userDetails: { id, name, about, avatar, location } });
-  toggleToast = () => this.setState((state) => ({ showToast: !state.showToast }));
-
+  
   render() {
-    const { toastProperties, userDetails, userAuthenticated, showToast } = this.state;
+    const { toastProperties, userDetails, userAuthenticated, showToast, notificationCount } = this.state;
 
     const contextProps = {
       activateToast: this.activateToast,
       userAuthenticated: userAuthenticated,
       setAuthenticated: this.setAuthenticated,
       userDetails: userDetails,
-      setUserDetails: this.setUserDetails
+      setUserDetails: this.setUserDetails,
+      notificationCount: notificationCount,
+      setNotificationCount: this.setNotificationCount
     };
-
+    
     return (
       <MuiThemeProvider theme={theme}>
-        <BrowserRouter>
-          <NavBar
-            userDetails={userDetails}
-            setUserDetails={this.setUserDetails}
-            userAuthenticated={userAuthenticated}
-            setAuthenticated={this.setAuthenticated}
-          />
+      <BrowserRouter>
+      <NavBar
+        userDetails={userDetails}
+        setUserDetails={this.setUserDetails}
+        userAuthenticated={userAuthenticated}
+        setAuthenticated={this.setAuthenticated}
+        notificationCount={notificationCount}
+        setNotificationCount={this.setNotificationCount}
+        />
 
           {/* Routes */}
           {/*- Base route uses a Redirect Component to redirect to

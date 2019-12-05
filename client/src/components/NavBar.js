@@ -133,6 +133,7 @@ const Navigation = (props) => {
     if (route === '/logout') {
       props.setAuthenticated(false);
       props.setUserDetails(null, '', '', '', '');
+      props.setNotificationCount(0);
       localStorage.removeItem('jwtToken');
       props.history.push('/login');
     } else {
@@ -217,7 +218,10 @@ const NavBar = (props) => {
       <SvgProductLaunchLogo style={{ marginRight: 22 }} />
       <Typography variant="h1">Product Launch</Typography>
       </Link>
-      <AlertBadge alerts={12}/>
+      {
+        props.notificationCount > 0 &&
+        <AlertBadge alerts={props.notificationCount}/>
+      }
       <Navigation
         {...props}
         drawerState={drawer}
