@@ -7,6 +7,7 @@ exports.getUser = (req, res) => {
   const { id } = req.params;
   User.findById(id)
     .populate('projects')
+    // .populate('investments')
     .populate({
       path: 'investments',
       populate: {
@@ -45,7 +46,7 @@ exports.editUser = (req, res) => {
     const { name, location, about, profilePic: newProfilePic } = req.body;
     const profilePic = req.file ? req.file.location : newProfilePic;
     const newInfo = { name, location, about, profilePic };
-    User.updateOne(
+    User.findByIdAndUpdate(
       { _id: req.params.id },
       { $set: newInfo },
       { new: true },
