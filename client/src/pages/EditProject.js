@@ -232,6 +232,8 @@ class EditProject extends Component {
             <Typography variant="h4">Description</Typography>
             <TextField
               name="description"
+              multiline
+              rows="5"
               classes={{ root: classes.formLine }}
               value={description}
               fullWidth={true}
