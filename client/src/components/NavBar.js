@@ -17,6 +17,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { Link, withRouter } from 'react-router-dom';
 
 import SvgProductLaunchLogo from './ProductLaunchLogo';
+import AlertBadge from './AlertBadge';
 
 const useStyles = makeStyles((theme) => ({
   navBar: {
@@ -91,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Navigation = (props) => {
-  const [userDropdown, toggleUserDropdown] = useState(null);
+    const [userDropdown, toggleUserDropdown] = useState(null);
 
   /* Show property values: authenticated, unauthenticated, both */
   const links = [
@@ -212,23 +213,24 @@ const NavBar = (props) => {
   return (
     <AppBar className={classes.navBar} position="static" color="inherit" elevation={0}>
       <Toolbar>
-        <Link to="/" className={classes.navBarHomeLink}>
-          <SvgProductLaunchLogo style={{ marginRight: 22 }} />
-          <Typography variant="h1">Product Launch</Typography>
-        </Link>
-
-        <Navigation
-          {...props}
-          drawerState={drawer}
-          toggleDrawer={toggleDrawer}
-          classes={classes}
-          desktop={desktop}
-        />
-        {!desktop ? (
-          <IconButton onClick={showDrawer}>
-            <MenuIcon fontSize="large" />
-          </IconButton>
+      <Link to="/" className={classes.navBarHomeLink}>
+      <SvgProductLaunchLogo style={{ marginRight: 22 }} />
+      <Typography variant="h1">Product Launch</Typography>
+      </Link>
+      <AlertBadge alerts={12}/>
+      <Navigation
+        {...props}
+        drawerState={drawer}
+        toggleDrawer={toggleDrawer}
+        classes={classes}
+        desktop={desktop}
+      />
+      {!desktop ? (
+        <IconButton onClick={showDrawer}>
+        <MenuIcon fontSize="large" />
+        </IconButton>
         ) : null}
+        
       </Toolbar>
     </AppBar>
   );
