@@ -121,8 +121,8 @@ class App extends React.Component {
               <Route path="/profile/:id?" exact component={ProfilePage} />
               <Route path="/profile/edit/:id" exact component={EditProfile} />
               <Route path="/launch" component={AddProject} />
+              <Route path="/projects/:id" exact component={Project} />
               <Route path="/projects/edit/:id" exact component={EditProject} />
-              <Route path="/projects/:id" component={Project} />
               <Route path="/explore" component={Explore} />
             </Switch>
           </PageContext.Provider>
