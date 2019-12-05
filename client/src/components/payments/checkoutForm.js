@@ -205,6 +205,7 @@ export default withStyles(styles)(CheckoutForm);
 
 _CheckoutForm.propTypes = {
   projectId: PropTypes.string.isRequired,
+  projectTitle: PropTypes.string.isRequired,
   stripe: PropTypes.object.isRequired, 
   history: PropTypes.object.isRequired,
   activateToast: PropTypes.func.isRequired
