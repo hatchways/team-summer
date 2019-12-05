@@ -19,6 +19,25 @@ export const addProject = async (projectData) => {
   }
 };
 
+export const editProject = async (projectId, newProjectData) => {
+  const url = `/projects/${projectId}`;
+  const token = localStorage.getItem('jwtToken');
+  const authOptions = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  };
+  try {
+    const response = await httpClient.put(url, newProjectData, authOptions);
+    if (response.data.err) return { ...response.data };
+
+    return { success: true };
+  } catch (error) {
+    console.log(error);
+    return { success: false };
+  }
+};
+
 export const getUserProjects = (userId) => {
   let url = `/projects?userId=${userId}`;
   if (!userId) url = '/projects';
