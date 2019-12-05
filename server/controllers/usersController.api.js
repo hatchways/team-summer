@@ -7,7 +7,6 @@ exports.getUser = (req, res) => {
   const { id } = req.params;
   User.findById(id)
     .populate('projects')
-    // .populate('investments')
     .populate({
       path: 'investments',
       populate: {

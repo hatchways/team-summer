@@ -9,7 +9,7 @@ import { withPageContext } from '../components/pageContext';
 
 import './profile.css';
 
-const styles = {
+const styles = (theme) => ({
   pageContent: {
     display: 'flex',
   },
@@ -23,14 +23,13 @@ const styles = {
     padding: '20px',
     '&:hover': {
       cursor: 'pointer',
-      color: '#E4E8EA',
-      textShadow: '1px 1px #B2B1B7',
+      color: theme.palette.primary.main
     }
   },
   projectInvestmentContent: {
     padding: '20px',
   }
-}
+});
 
 class ProfilePage extends Component {
   state = {
@@ -126,8 +125,8 @@ class ProfilePage extends Component {
         {this.renderUserInfo()}
         <div className={classes.projectInvestmentContent}>
           <div className={classes.headerContent}>
-            <Typography classes={{ h2: classes.header }} variant="h2" onClick={() => this.changeDisplay('projects')}>Projects</Typography>
-            <Typography classes={{ h2: classes.header }} variant="h2" onClick={() => this.changeDisplay('investments')}>Investments</Typography>
+            <Typography className={classes.header} variant="h2" onClick={() => this.changeDisplay('projects')}>Projects</Typography>
+            <Typography className={classes.header} variant="h2" onClick={() => this.changeDisplay('investments')}>Investments</Typography>
           </div>
           {this.state.setDisplay === 'projects' && this.renderData(projects)}
           {this.state.setDisplay === 'investments' && this.renderData(investedProjects)}
