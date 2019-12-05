@@ -1,4 +1,4 @@
-const messages = require('./Messages');
+const messages = require('./events/Messages');
 const middleware = require('./middleware');
 
 
