@@ -15,7 +15,7 @@ const styles = {
     },
     dragBox: {
         display: 'flex',
-        boxShadow: '0px 0px 3px 2px #D3D3D3',
+        boxShadow: '0px 0px 3px 2px #E7E7E7',
         height: '150px',
         width: '175px',
         margin: '2px',
