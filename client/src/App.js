@@ -76,7 +76,7 @@ class App extends React.Component {
     const { id } = this.state.userDetails;
     this.socket.open();
     // TODO: Make a function where it automatically adds the token to the 3rd argument
-    return this.socket.emit('authenticate', { id }, { token: localStorage.getItem('jwtToken') });
+    return this.socket.emit('authenticate', id, { token: localStorage.getItem('jwtToken') });
   };
 
   closeSocket = () => {

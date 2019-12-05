@@ -1,5 +1,3 @@
 const { decodeToken } = require('../utils');
 
-exports.connect = (socket) => (token) => {
-  console.log('waiting')
-};
+exports.connect = (socket) => (id) => socket.join(id);

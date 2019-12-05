@@ -16,9 +16,10 @@ module.exports = (io) => {
     socket.use(middleware.verifyToken);
 
     // Socket event listeners
-    // socket.on('authenticate join', authentication.connect(socket));
+    /* Connects userId to a room, allows for the ability to send to a user id */
+    socket.on('authenticate', authentication.connect(socket));
 
-    socket.on('message', messages.receiveMessage(socket));
+    socket.on('message', messages.receiveMessage(io));
 
     // Socket emitters
 

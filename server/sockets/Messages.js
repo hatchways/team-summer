@@ -1,4 +1,5 @@
-exports.receiveMessage = (socket) => (message) => {
+exports.receiveMessage = (io) => (message) => {
+  // io.in(room).emit() emits a value to a specific room, in this case the userId
   console.log(`New Message: ${message}`);
-  socket.emit('newMessage', message);
+  // io.in('Specific user id').emit('newMessage', message);
 };

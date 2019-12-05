@@ -13,7 +13,7 @@ class Messages extends React.Component {
   onSubmit = (event) => {
     const {socket} = this.props;
 
-    socket.emit('message', this.state.message)
+    socket.emit('message', this.state.message, {token: localStorage.getItem('jwtToken')})
   };
 
   render() {
