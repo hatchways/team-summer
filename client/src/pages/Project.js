@@ -111,6 +111,7 @@ class Project extends React.Component {
       const { _id: id, title, subtitle, description, industry, images, location, fundingGoal, fundingDeadline } = project;
       const projectUserId = this.state.user._id;
       const projectInfo = { id, title, subtitle, description, industry, images, location, fundingGoal, fundingDeadline, projectUserId };
+      console.log(projectInfo)
       this.props.history.push({
         pathname: `edit/${id}`,
         state: projectInfo
