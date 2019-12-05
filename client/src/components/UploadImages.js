@@ -73,9 +73,9 @@ const UploadImages = (props) => {
                             images.map(image => (
                                 <Image
                                     image={image}
-                                    key={image.name}
+                                    key={image.name || image}
                                     deleteImage={deleteImage}
-                                    alt={image.name}
+                                    alt={image.name || image}
                                 />
                             )) :
                             images[0] && images.length === 1 ? <Image
