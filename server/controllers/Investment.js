@@ -5,7 +5,7 @@ const {User, Project, Investment} = require('../models');
 
 //I've adjusted this to be called prior to the payment but needs a refactor
 //might be cleaner with promise chains
-const invest = async (userId, projectId, token, investmentAmount) => {
+const invest = async (userId, projectId, investmentAmount) => {
   const dollarAmount = toDollarsWithCents(investmentAmount)
 
   try {
@@ -45,8 +45,8 @@ exports.makePayment = async (req, res) => {
     }
 
   try {
-    const investment = await invest(userId, projectId, token, investmentAmount);
-    console.log("investment", investment)
+    const investment = await invest(userId, projectId, investmentAmount);
+    
     if (investment) {
       stripe.charges.create( order, (err, charge) => {
         if(err){

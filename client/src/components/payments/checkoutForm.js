@@ -68,7 +68,9 @@ class _CheckoutForm extends Component {
 
   handleInvestmentInput = (e) => {
     const investmentAmount = e.target.value 
-    this.setState({ investmentAmount })
+    if (investmentAmount <= 999999){
+      this.setState({ investmentAmount })
+    }
   }
 
   handleInvestmentSubmit = (e) => {
@@ -76,7 +78,7 @@ class _CheckoutForm extends Component {
     if(this.state.investmentAmount >= 5) {
       this.setState({investmentSaved: true})
     } else {
-      this.props.activateToast('Sorry, $5 minimum')
+      this.props.activateToast('Sorry, $5 minimum', 'neutral')
     }
   }
 
@@ -88,9 +90,9 @@ class _CheckoutForm extends Component {
     stripe.createToken().then((payload) => {
       pay(userId, projectId, payload, investmentAmount)
         .then((investment) => investment)
-        .then(() => activateToast('success. you invested.'))
+        .then(() => activateToast('success. you invested.', 'success'))
         .then(() => history.push("/explore"))
-        .catch(() => activateToast('that was a fail'))
+        .catch(() => activateToast('that was a fail', 'error'))
       });
   };
 
