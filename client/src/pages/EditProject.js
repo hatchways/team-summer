@@ -43,7 +43,10 @@ const styles = {
   formLine: {
     marginBottom: '20',
   },
-  button: {
+  previewButton: {
+    margin: '20px 0px 10px 0px'
+  },
+  submitButton: {
     margin: 'auto'
   }
 }
@@ -123,10 +126,11 @@ class EditProject extends Component {
       const { project, projectUserId, formData } = this.state;
 
       if (validation.isValid) {
-        // for (const name in project) { // have an odd and interesting error where an `ignore_whitespace` property is added with the value of false
+        // for (const name of project) { // have an odd and interesting error where an `ignore_whitespace` property is added with the value of false
         //   console.log(name);
         //   formData.set(name, project[name]);
         // }
+
         formData.set('title', project.title);
         formData.set('subtitle', project.subtitle);
         formData.set('description', project.description);
@@ -144,7 +148,9 @@ class EditProject extends Component {
         }
 
         formData.set('projectUserId', projectUserId);
-
+        for (const values of formData.values()) {
+          console.log(values);
+        }
         const { projectId } = project;
         const updatedProject = await editProject(projectId, formData);
         if (updatedProject.success) {
@@ -195,7 +201,7 @@ class EditProject extends Component {
       <main className={classes.pageContent}>
         <div className={classes.projectPreviewContainer}>
           <Typography variant="h3" align='left'>{title}</Typography>
-          <Button classes={{ root: classes.button }} type="submit" variant="contained" color="primary" >
+          <Button classes={{ root: classes.previewButton }} type="submit" variant="contained" color="primary" >
             Preview
                     </Button>
         </div>
@@ -314,7 +320,7 @@ class EditProject extends Component {
                 shrink: true,
               }}
             />
-            <Button classes={{ root: classes.button }} type="submit" variant="contained" color="primary" disabled={this.disableSubmit()}>
+            <Button classes={{ root: classes.submitButton }} type="submit" variant="contained" color="primary" disabled={this.disableSubmit()}>
               Submit
             </Button>
           </form>
