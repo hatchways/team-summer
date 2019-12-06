@@ -10,7 +10,6 @@ import {
   InputAdornment } from '@material-ui/core';
   import { withStyles } from '@material-ui/core/styles';
   import { CardElement, injectStripe } from 'react-stripe-elements';
-import CloseIcon from '@material-ui/icons/Close';
 import { stripeStyle } from './stripeStyles';
 import { pay } from '../../api/payments';
 import { toDollars } from '../../helpers/formatting';
@@ -204,4 +203,3 @@ _CheckoutForm.propTypes = {
   history: PropTypes.object.isRequired,
   activateToast: PropTypes.func.isRequired
 };
-//This component does not have access to its own history, toast
