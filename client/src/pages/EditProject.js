@@ -43,7 +43,10 @@ const styles = {
   formLine: {
     marginBottom: '20',
   },
-  button: {
+  previewButton: {
+    margin: '20px 0px 10px 0px'
+  },
+  submitButton: {
     margin: 'auto'
   }
 }
@@ -62,23 +65,25 @@ class EditProject extends Component {
         field: 'industry',
         method: validator.isEmpty,
         validWhen: false,
-        message: 'Industry is required'
+        message: 'Industry is required.'
       },
       {
         field: 'location',
         method: validator.isEmpty,
         validWhen: false,
-        message: 'location is required'
+        message: 'Location is required.'
       },
       {
         field: 'fundingGoal',
-        method: validator.isNumeric,
+        method: (value) => value > 0,
         validWhen: true,
+        message: 'Funding goal must be greater than zero.'
       },
       {
         field: 'fundingDeadline',
         method: (value) => validator.isAfter(value),
         validWhen: true,
+        message: 'Funding deadline must be after today\'s date.'
       }
     ]);
     this.state = {
@@ -123,7 +128,7 @@ class EditProject extends Component {
       const { project, projectUserId, formData } = this.state;
 
       if (validation.isValid) {
-        // for (const name in project) { // have an odd and interesting error where an `ignore_whitespace` property is added with the value of false
+        // for (const name of project) { // have an odd and interesting error where an `ignore_whitespace` property is added with the value of false
         //   console.log(name);
         //   formData.set(name, project[name]);
         // }
@@ -135,11 +140,13 @@ class EditProject extends Component {
         formData.set('fundingGoal', project.fundingGoal);
         formData.set('fundingDeadline', project.fundingDeadline);
 
-        for (const image of project.updatedImages) {
-          if (typeof image === 'string') {
-            formData.append('stringImage', image);
-          } else {
-            formData.append('images', image);
+        if (project.updatedImages[0] !== '/images/image-not-found.png') {
+          for (const image of project.updatedImages) {
+            if (typeof image === 'string') {
+              formData.append('stringImage', image);
+            } else {
+              formData.append('images', image);
+            }
           }
         }
 
@@ -195,7 +202,7 @@ class EditProject extends Component {
       <main className={classes.pageContent}>
         <div className={classes.projectPreviewContainer}>
           <Typography variant="h3" align='left'>{title}</Typography>
-          <Button classes={{ root: classes.button }} type="submit" variant="contained" color="primary" >
+          <Button classes={{ root: classes.previewButton }} type="submit" variant="contained" color="primary" >
             Preview
                     </Button>
         </div>
@@ -213,6 +220,7 @@ class EditProject extends Component {
               type="title"
               variant="outlined"
               required
+              autoComplete={'false'}
               error={validation.title.isInvalid}
               helperText={validation.title.message}
             />
@@ -227,6 +235,7 @@ class EditProject extends Component {
               onChange={this.handleInput}
               type="subtitle"
               variant="outlined"
+              autoComplete={'false'}
             />
 
             <Typography variant="h4">Description</Typography>
@@ -250,6 +259,8 @@ class EditProject extends Component {
               setState={this.handleInput}
               selectName="industry"
               value={industry}
+              error={validation.industry.isInvalid}
+              helperText={validation.industry.message}
             >
               {
                 industries.map(industry => {
@@ -272,6 +283,8 @@ class EditProject extends Component {
               setState={this.handleInput}
               selectName="location"
               value={location}
+              error={validation.location.isInvalid}
+              helperText={validation.location.message}
             >
               {
                 locations.map(location => {
@@ -313,8 +326,10 @@ class EditProject extends Component {
               InputLabelProps={{
                 shrink: true,
               }}
+              error={validation.fundingDeadline.isInvalid}
+              helperText={validation.fundingDeadline.message}
             />
-            <Button classes={{ root: classes.button }} type="submit" variant="contained" color="primary" disabled={this.disableSubmit()}>
+            <Button classes={{ root: classes.submitButton }} type="submit" variant="contained" color="primary" disabled={this.disableSubmit()}>
               Submit
             </Button>
           </form>
