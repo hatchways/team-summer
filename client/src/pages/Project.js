@@ -10,7 +10,6 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment'
 
-import { withPageContext } from '../components/pageContext';
 import * as ProjectStyles from '../components/ProjectPageStyles';
 import CardCarousel from '../components/CardCarousel';
 import PercentageProgressBar from '../components/PercentageProgressBar';
@@ -121,18 +120,9 @@ class Project extends React.Component {
     const handleSendMessage = () => {
       this.props.history.push(`/messages/${user.id}`);
     };
-    
-    const handleFundProject = () => {
-      const {history, userDetails, match } = this.props
 
-      history.push({
-        pathname: '/checkout',
-        state: { 
-          userId: userDetails.id,
-          projectId: match.params.id, 
-          projectTitle: this.state.project.title
-        }
-      })
+    const handleFundProject = () => {
+      //TODO: Implement fund logic
     };
 
     const disableFunding = () => {
