@@ -35,10 +35,12 @@ exports.conversationById = (req, res, next, id) => {
   Conversation.findById(id)
     .populate('coversations')
     .exec((err, conversion) => {
-      if (err) return res.status(400).json({error: err});
+      if (err && err.name === 'CastError') return res.status(400).json({ error: 'Id is invalid type' });
+      if (err) return res.status(400).json({ error: err });
 
+      if (!conversion) return res.status(400).json({error: 'Conversation does not exist'})
       req.conversation = conversion;
       next();
-    })
+    });
 };
 

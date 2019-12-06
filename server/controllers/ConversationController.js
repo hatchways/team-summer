@@ -8,16 +8,14 @@ exports.create = async (req, res) => {
     const conversation = await Conversation.create({ users });
     return res.status(200).json(conversation);
   } catch (error) {
-    mongoDbErrorHandler(error, res)
+    mongoDbErrorHandler(error, res);
   }
 };
 
-exports.getConversation = (req, res) => {
-  res.status(200).json(req.conversation);
-};
+exports.getConversation = (req, res) => res.status(200).json(req.conversation);
 
 exports.deleteConversation = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.conversation;
 
   try {
     await Conversation.deleteOne({ _id: id });

@@ -5,8 +5,7 @@ const conversationController = require('../controllers/ConversationController');
 const messageRoutes = require('./Message');
 
 router.get('/:id', isAuth, conversationController.getConversation);
-router.delete('/:id/delete', isAuth, conversationController.deleteConversation);
-router.use('/:id/messages', isAuth, messageRoutes);
+router.delete('/:id', isAuth, conversationController.deleteConversation);
 router.post('/create', conversationController.create);
 
 
