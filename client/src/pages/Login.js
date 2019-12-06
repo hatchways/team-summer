@@ -103,10 +103,10 @@ class Login extends React.Component {
         };
         return this.setState({ validation });
       }
-
       if (userLogin.hasOwnProperty('success')) {
         this.props.activateToast('Login Successful', 'success');
         this.props.setUserDetails(userLogin.id, userLogin.name, userLogin.about, userLogin.avatar, userLogin.location);
+        this.props.setNotificationCount(7);
         this.props.setAuthenticated(true);
         this.props.history.push('/profile');
       }

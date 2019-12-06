@@ -128,7 +128,7 @@ class Project extends React.Component {
     const disableFunding = () => {
       // TODO: Logic to handle disabling funding of project, maybe if project fund period has ended
       // Disabled by default for now until funding logic is added
-      return true;
+      return false;
     };
 
     const getButtonType = () => {

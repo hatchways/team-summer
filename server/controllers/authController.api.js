@@ -1,5 +1,5 @@
 'use strict';
-const { User } = require('../models');
+const { User, Investment, Message } = require('../models');
 const { encodeToken, mongoDbErrorHandler } = require('../utils');
 
 exports.register = (req, res) => {
@@ -32,6 +32,7 @@ exports.login = (req, res) => {
       } else if (user && user.comparePassword(password)) {
         const { name, email, _id, projects, about, location, profilePic, investments } = user;
         const token = encodeToken({ name, email, _id, about, location, profilePic });
+
         return res.status(200).json({
           token,
           user: {
