@@ -40,9 +40,6 @@ exports.makePayment = async (req, res) => {
   const dollarAmount = toDollarsWithCents(investmentAmount)
   const stripeToken = token.token
 
-  console.log("id",userId)
-  console.log("stripeToken", stripeToken)
-  
   const order = {
       amount: dollarAmount,
       currency: 'USD',
