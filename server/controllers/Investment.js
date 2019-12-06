@@ -35,23 +35,29 @@ const invest = async (userId, projectId, investmentAmount) => {
 const toDollarsWithCents = (amount) => parseInt(amount * 100);
 
 exports.makePayment = async (req, res) => {
-  const { userId, projectId, token, investmentAmount } = req.body;
+  const { projectId, token, investmentAmount } = req.body;
+  const userId = req.user._id
   const dollarAmount = toDollarsWithCents(investmentAmount)
-  const t = token.token
+  const stripeToken = token.token
 
+  console.log("id",userId)
+  console.log("stripeToken", stripeToken)
+  
   const order = {
       amount: dollarAmount,
       currency: 'USD',
-      source: t.id, 
+      source: stripeToken.id, 
       description: 'investment'
     }
 
+  console.log("order", order)
   try {
     const investment = await invest(userId, projectId, investmentAmount);
     
     if (investment) {
       stripe.charges.create( order, (err, charge) => {
         if(err){
+          console.log("investment", investment)
           return res.status(400).json({ message: 'an error occurred' });
         } else {
           return res.status(200).json({ investment });
