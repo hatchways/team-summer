@@ -14,8 +14,6 @@ class Checkout extends Component {
       location: {state: { projectId, projectTitle, userId }}
     } = this.props
 
-    console.log("prop",this.props.userDetails.id)
-
     return (
       <StripeProvider apiKey={apiKey}>
         <Elements>

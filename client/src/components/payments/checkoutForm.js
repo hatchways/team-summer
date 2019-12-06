@@ -33,8 +33,19 @@ const styles = (muiBaseTheme) => ({
     textAlign: 'center',
     padding: muiBaseTheme.spacing.unit
   },
+  investmentTypo: {
+    marginBottom: '40px'
+  },
+  paymentTypo: {
+    textAlign: "center", margin: "15px 0 -10px"
+  },
   divider: {
     margin: '35px auto 25px'
+  },
+  paymentDivider: {
+    margin: '35px auto 25px',
+    color: 'white', 
+    marginTop: '42px'
   },
   input: {
     width: '100%',
@@ -82,7 +93,7 @@ class _CheckoutForm extends Component {
     const { investmentAmount } = this.state
 
     stripe.createToken().then((payload) => {
-      pay(userId, projectId, payload, investmentAmount)
+      pay(projectId, payload, investmentAmount)
         .then((investment) => investment)
         .then(() => activateToast('success. you invested.', 'success'))
         .then(() => history.push("/explore"))
@@ -97,8 +108,7 @@ class _CheckoutForm extends Component {
       <Fragment>
         <CardContent className={classes.content}>
           <Typography
-            className={"MuiTypography--heading"}
-            style={ {textAlign: "center", margin: "15px 0 -10px"}}
+            className={`MuiTypography--heading ${classes.paymentTypo}`}
             variant={"h4"}
             gutterBottom >
             Investment amount: {toDollars(investmentAmount)}
@@ -130,8 +140,9 @@ class _CheckoutForm extends Component {
       <Fragment>
         <CardContent className={classes.content}>
         <Typography
-          style={{marginBottom: '40px'}}
-          variant="h4" >How much would you like to invest?
+          className={`MuiTypography--heading ${classes.investmentTypo}`}
+          variant="h4" >
+          How much would you like to invest?
         </Typography>
         <OutlinedInput
           className={classes.outlinedInput}
@@ -151,8 +162,8 @@ class _CheckoutForm extends Component {
             />
         </CardContent>
         <Divider 
-          className={classes.divider}
-          style={ { color: 'white', marginTop: '42px' }}></Divider>
+          className={classes.paymentDivider}>
+          </Divider>
         <CardContent className={classes.content}>
           <Button
             classes={{ root: classes.button }}

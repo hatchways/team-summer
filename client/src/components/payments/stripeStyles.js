@@ -14,21 +14,6 @@ const buttonStyle = {
     },
 }
 
-const formStyle = {
-    paddingBottom: "17px",
-    textAlign: "right",
-    marginRight: "8px",
-}
-
-const inputStyle = {
-    margin: '10px 0 20px 0',
-    padding: '22px',
-    boxShadow: 'rgba(50, 50, 93, 0.54902) 0px 1px 3px, rgba(0, 0, 0, 0.0196078) 0px 1px 0px',
-    border: '0',
-    borderRadius: '4px',
-    background: 'white'
-}
-
 //Stripe cardElement-specific
 const card = () => {
     return {
@@ -54,6 +39,6 @@ const card = () => {
 export const stripeStyle = {
     card,
     button: buttonStyle,
-    form: formStyle,
-    input: inputStyle
+    // form: formStyle,
+    // input: inputStyle
 }
