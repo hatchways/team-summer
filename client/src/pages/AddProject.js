@@ -55,6 +55,18 @@ class AddProject extends Component {
                 message: 'Title is required.'
             },
             {
+                field: 'subtitle',
+                method: (value) => value.length <= 50,
+                validWhen: true,
+                message: 'Subtitle must be 50 characters or less.'
+            },
+            {
+                field: 'description',
+                method: (value) => value.length <= 2000,
+                validWhen: true,
+                message: 'Description must be 2000 characters or less.'
+            },
+            {
                 field: 'industry',
                 method: validator.isEmpty,
                 validWhen: false,
@@ -68,8 +80,15 @@ class AddProject extends Component {
             },
             {
                 field: 'fundingGoal',
-                method: validator.isNumeric,
+                method: (value) => value > 0,
                 validWhen: true,
+                message: 'Funding goal must be greater than zero.'
+            },
+            {
+                field: 'fundingDeadline',
+                method: (value) => validator.isAfter(value),
+                validWhen: true,
+                message: 'Funding deadline must be after today\'s date.'
             }
         ]);
         this.state = {
@@ -181,6 +200,8 @@ class AddProject extends Component {
                             onChange={this.handleInput}
                             type="subtitle"
                             variant="outlined"
+                            error={validation.subtitle.isInvalid}
+                            helperText={validation.subtitle.message}
                         />
 
                         <Typography variant="h4">Description</Typography>
@@ -194,6 +215,8 @@ class AddProject extends Component {
                             onChange={this.handleInput}
                             type="description"
                             variant="outlined"
+                            error={validation.description.isInvalid}
+                            helperText={validation.description.message}
                         />
 
                         <OutlinedSelect
@@ -204,6 +227,8 @@ class AddProject extends Component {
                             setState={this.handleInput}
                             selectName="industry"
                             value={industry}
+                            error={validation.industry.isInvalid}
+                            helperText={validation.industry.message}
                         >
                             {
                                 industries.map(industry => {
@@ -226,6 +251,8 @@ class AddProject extends Component {
                             setState={this.handleInput}
                             selectName="location"
                             value={location}
+                            error={validation.location.isInvalid}
+                            helperText={validation.location.message}
                         >
                             {
                                 locations.map(location => {
@@ -266,6 +293,8 @@ class AddProject extends Component {
                             InputLabelProps={{
                                 shrink: true,
                             }}
+                            error={validation.fundingDeadline.isInvalid}
+                            helpertext={validation.fundingDeadline.message}
                         />
                         <Button classes={{ root: classes.button }} type="submit" variant="contained" color="primary" disabled={this.disableSubmit()}>
                             Submit
