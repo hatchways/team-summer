@@ -9,6 +9,8 @@ require("dotenv").config();
 
 var app = require("../app");
 var http = require("http");
+const socketIO = require("socket.io");
+const handleSockets = require("../sockets")
 
 /**
  * Get port from environment and store in Express.
@@ -21,7 +23,16 @@ app.set("port", port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+const server = http.createServer(app);
+
+
+/**
+* Sockets
+*/
+
+const io = socketIO(server)
+
+handleSockets(io)
 
 /**
  * Listen on provided port, on all network interfaces.
