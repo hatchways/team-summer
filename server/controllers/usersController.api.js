@@ -1,12 +1,10 @@
 'use strict';
-const { User, Investment, Message } = require('../models');
+const { User } = require('../models');
 const upload = require('../services/file-upload');
 const singleUpload = upload.single('image');
 
-
-exports.getUser = async (req, res) => {
+exports.getUser = (req, res) => {
   const { id } = req.params;
-
   User.findById(id)
     .populate('projects')
     .populate({

@@ -1,7 +1,5 @@
 const jwt = require('jsonwebtoken');
 const JWTSecret = process.env.JWT_SECRET || 'some secret';
-const { Investment, Message } = require('../models');
-
 
 exports.encodeToken = (payload) => jwt.sign({ payload }, JWTSecret, { expiresIn: '30m' });
 
@@ -19,9 +17,9 @@ exports.mongoDbErrorHandler = (err, res, defaultErrorCode = 400) => {
       err: `${key} already registered.`,
       property: key
     };
-    
+
     code = 409;
   }
-  
+
   return res.status(code).json(error);
 };
