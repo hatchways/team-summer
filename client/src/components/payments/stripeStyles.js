@@ -39,6 +39,4 @@ const card = () => {
 export const stripeStyle = {
     card,
     button: buttonStyle,
-    // form: formStyle,
-    // input: inputStyle
 }
