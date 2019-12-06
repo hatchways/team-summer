@@ -1,19 +1,27 @@
 'use strict';
-const { User } = require('../models');
+const { User, Investment, Message } = require('../models');
 const upload = require('../services/file-upload');
 const singleUpload = upload.single('image');
 
-exports.getUser = (req, res) => {
+
+exports.getUser = async (req, res) => {
   const { id } = req.params;
+
   User.findById(id)
     .populate('projects')
+    .populate({
+      path: 'investments',
+      populate: {
+        path: 'project'
+      }
+    })
     .exec((err, user) => {
       if (err || !user) {
         return res.status(400).json({
           error: 'User not found'
         });
       }
-      const { _id, name, email, about, location, projects, profilePic } = user;
+      const { _id, name, email, about, location, projects, profilePic, investments } = user;
       return res.status(200).json({
         _id,
         name,
@@ -21,7 +29,8 @@ exports.getUser = (req, res) => {
         about,
         location,
         projects,
-        profilePic
+        profilePic,
+        investments
       });
     });
 };
@@ -45,7 +54,7 @@ exports.editUser = (req, res) => {
       (err, user) => {
         if (err) {
           return res.status(400).json({
-            error: 'You are not authorized to perform this action!'
+            error: 'User could not be updated.'
           });
         }
         const { name, location, about, profilePic } = user;

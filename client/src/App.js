@@ -1,6 +1,7 @@
 import React from 'react';
 import { MuiThemeProvider, withStyles } from '@material-ui/core';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import socketClient from 'socket.io-client';
 
 import { theme } from './themes/theme';
 
@@ -10,9 +11,11 @@ import Login from './pages/Login';
 import ProfilePage from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 import AddProject from './pages/AddProject';
+import EditProject from './pages/EditProject';
 import Project from './pages/Project';
 import Checkout from './pages/Checkout';
 import Explore from './pages/Explore';
+import Messages from './pages/Messages';
 
 import Toast from './components/Toast';
 import { PageContext } from './components/pageContext';
@@ -43,7 +46,6 @@ const styles = {
 class App extends React.Component {
   constructor(props) {
     super(props);
-    // globalStyles();
 
     this.state = {
       toastProperties: {
@@ -59,11 +61,57 @@ class App extends React.Component {
         description: '',
         avatar: '',
         location: ''
-      }
+      },
+      notificationCount: 0
     };
 
     // Authenticate users pre-render
     jwTokenCheck(this.state);
+  }
+
+  setAuthenticated = (authenticated) => this.setState({ userAuthenticated: authenticated });
+  setUserDetails = (id, name, about, avatar, location) => this.setState({ userDetails: { id, name, about, avatar, location } });
+  setNotificationCount = (notificationCount) => this.setState({ notificationCount });
+  toggleToast = () => this.setState((state) => ({ showToast: !state.showToast }));
+  socket = socketClient(process.env.REACT_APP_SOCKET_ENDPOINT, { autoConnect: false });
+
+  openSocketAuthenticate = () => {
+    /*
+    *  Handle opening the socket and sending the user id to the backend socket connection,
+    *  so we can identify socket connections with users
+    * */
+    const { id } = this.state.userDetails;
+    this.socket.open();
+    // TODO: Make a function where it automatically adds the token to the 3rd argument
+    return this.socket.emit('authenticate', id, { token: localStorage.getItem('jwtToken') });
+  };
+
+  closeSocket = () => {
+    if (this.socket.connected) this.socket.close();
+  };
+
+  componentDidMount() {
+    this.socket.on('error', (error) => console.error(`Socket Warning: ${error}`));
+
+    /*
+    * If on page load/refresh, user is authenticated, open the socket connection,
+    * otherwise close the socket connection if connected
+    * */
+    if (this.state.userAuthenticated) return this.openSocketAuthenticate();
+
+    this.closeSocket();
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    /*
+    * When the state is update, if the user authentication changes, connect/disconnect
+    * the socket.
+    * */
+    const { userAuthenticated: wasAuthenticated } = prevState;
+    const { userAuthenticated: isAuthenticated } = this.state;
+
+    if (!wasAuthenticated && isAuthenticated) return this.openSocketAuthenticate();
+    if (wasAuthenticated && !isAuthenticated) return this.closeSocket();
   }
 
   activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
@@ -74,29 +122,43 @@ class App extends React.Component {
   };
 
   setAuthenticated = (authenticated) => this.setState({ userAuthenticated: authenticated });
-  setUserDetails = (id, name, about, avatar, location) => this.setState({ userDetails: { id, name, about, avatar, location } });
+  setUserDetails = (id, name, about, avatar, location) => this.setState({
+    userDetails: {
+      id,
+      name,
+      about,
+      avatar,
+      location
+    }
+  });
+
   toggleToast = () => this.setState((state) => ({ showToast: !state.showToast }));
 
   render() {
-    const { toastProperties, userDetails, userAuthenticated, showToast } = this.state;
+    const { toastProperties, userDetails, userAuthenticated, showToast, notificationCount } = this.state;
 
     const contextProps = {
       activateToast: this.activateToast,
       userAuthenticated: userAuthenticated,
       setAuthenticated: this.setAuthenticated,
       userDetails: userDetails,
-      setUserDetails: this.setUserDetails
+      setUserDetails: this.setUserDetails,
+      notificationCount: notificationCount,
+      setNotificationCount: this.setNotificationCount,
+      socket: this.socket
     };
-
+    
     return (
       <MuiThemeProvider theme={theme}>
-        <BrowserRouter>
-          <NavBar
-            userDetails={userDetails}
-            setUserDetails={this.setUserDetails}
-            userAuthenticated={userAuthenticated}
-            setAuthenticated={this.setAuthenticated}
-          />
+      <BrowserRouter>
+      <NavBar
+        userDetails={userDetails}
+        setUserDetails={this.setUserDetails}
+        userAuthenticated={userAuthenticated}
+        setAuthenticated={this.setAuthenticated}
+        notificationCount={notificationCount}
+        setNotificationCount={this.setNotificationCount}
+        />
 
           {/* Routes */}
           {/*- Base route uses a Redirect Component to redirect to
@@ -114,16 +176,18 @@ class App extends React.Component {
               <Route
                 exact
                 path="/"
-                render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'} />}
+                render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'}/>}
               />
-              <Route path="/signup" component={SignUp} />
-              <Route path="/login" component={Login} />
-              <Route path="/profile/:id?" exact component={ProfilePage} />
-              <Route path="/profile/edit/:id" exact component={EditProfile} />
-              <Route path="/launch" component={AddProject} />
-              <Route path="/projects/:id" component={Project} />
+              <Route path="/signup" component={SignUp}/>
+              <Route path="/login" component={Login}/>
+              <Route path="/profile/:id?" exact component={ProfilePage}/>
+              <Route path="/profile/edit/:id" exact component={EditProfile}/>
+              <Route path="/launch" component={AddProject}/>
+              <Route path="/projects/:id" exact component={Project}/>
+              <Route path="/projects/edit/:id" exact component={EditProject}/>
+              <Route path="/explore" component={Explore}/>
               <Route path="/checkout" component={Checkout} />
-              <Route path="/explore" component={Explore} />
+              <Route path="/messages" component={Messages}/>
             </Switch>
           </PageContext.Provider>
           <Toast

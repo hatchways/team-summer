@@ -16,9 +16,12 @@ import CardCarousel from '../components/CardCarousel';
 import PercentageProgressBar from '../components/PercentageProgressBar';
 import { getProject } from '../api/projects';
 
+import { withPageContext } from '../components/pageContext';
+
 class Project extends React.Component {
   state = {
     project: {
+      _id: null,
       title: '',
       subtitle: '',
       description: '',
@@ -36,20 +39,24 @@ class Project extends React.Component {
       ]
     },
     user: {
-      id: '',
+      _id: '',
       name: '',
       avatar: ''
     }
   };
 
   async componentDidMount() {
-    let project = await getProject(this.props.match.params.id).then((response) => response.data.project);
+    try {
+      const response = await getProject(this.props.match.params.id);
+      const project = response.data;
+      project.daysLeft = Math.max(0, moment({ hours: 0 }).diff(project.fundingDeadline, 'days') * -1);
 
-    project.daysLeft = Math.max(0, moment({hours: 0}).diff(project.fundingDeadline, 'days'));
+      if (project.images.length === 0 || project.images[0] === '/images/image-not-found.png') project.images = ['/images/image-not-found.png'];
 
-    if (project.images.length === 0) project.images = ['/images/image-not-found.png'];
-
-    this.setState({ project, user: project.user });
+      this.setState({ project, user: project.user });
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   projectHeaderContent() {
@@ -75,7 +82,7 @@ class Project extends React.Component {
 
     return (
       <Card elevation={4}>
-        <CardCarousel images={images}/>
+        <CardCarousel images={images} />
         <CardContent className={classes.projectDetailsContent}>
           <ProjectStyles.DetailsCardAbout>
             <Typography variant="h3">About</Typography>
@@ -100,6 +107,17 @@ class Project extends React.Component {
       return Math.min(percentageComplete, 100);
     };
 
+    const handleEditProjectRedirect = () => {
+      const { project } = this.state;
+      const { _id: id, title, subtitle, description, industry, images, location, fundingGoal, fundingDeadline } = project;
+      const projectUserId = this.state.user._id;
+      const projectInfo = { id, title, subtitle, description, industry, images, location, fundingGoal, fundingDeadline, projectUserId };
+      this.props.history.push({
+        pathname: `edit/${id}`,
+        state: projectInfo
+      });
+    }
+
     const handleSendMessage = () => {
       this.props.history.push(`/messages/${user.id}`);
     };
@@ -123,9 +141,16 @@ class Project extends React.Component {
       return false;
     };
 
+    const getButtonType = () => {
+      const userId = this.state.user._id;
+      return this.props.userAuthenticated && userId === this.props.userDetails.id
+        ? <Button variant="outlined" color="primary" onClick={handleEditProjectRedirect}>Edit</Button>
+        : <Button variant="outlined" color="secondary" onClick={handleSendMessage}>Send Message</Button>;
+    }
+
     return (
       <Card elevation={0}>
-        <ProjectStyles.CardLine/>
+        <ProjectStyles.CardLine />
         <ProjectStyles.FundraisingAmounts>
           <Typography variant="h5">$</Typography>
           <Typography variant="h3">{funding.fundingTotal.toLocaleString()}</Typography>
@@ -133,7 +158,7 @@ class Project extends React.Component {
           <Typography variant="h5" color="secondary">{fundingGoal.toLocaleString()}</Typography>
         </ProjectStyles.FundraisingAmounts>
 
-        <PercentageProgressBar value={calculateCompleted()}/>
+        <PercentageProgressBar value={calculateCompleted()} />
 
         <Typography variant="body1" className={classes.fundraisingEquity}>Equity
           Exchange: {equalityExchange}% </Typography>
@@ -153,7 +178,7 @@ class Project extends React.Component {
         <ProjectStyles.CreatorProfile>
           <Avatar>
             {user.avatar
-              ? <img src={user.avatar} alt="Project creator avatar"/>
+              ? <img src={user.avatar} alt="Project creator avatar" />
               : user.name.split('')[0]
             }
           </Avatar>
@@ -161,7 +186,7 @@ class Project extends React.Component {
         </ProjectStyles.CreatorProfile>
 
         <ProjectStyles.ProjectActionButtons>
-          <Button variant="outlined" color="secondary" onClick={handleSendMessage}>Send Message</Button>
+          {getButtonType()}
           {!disableFunding() && (
             <Button variant="contained" color="primary" onClick={handleFundProject}>Fund This Project</Button>
           )}

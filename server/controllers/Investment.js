@@ -32,6 +32,7 @@ const invest = async (userId, projectId, investmentAmount) => {
   }
 };
 
+<<<<<<< HEAD
 const toDollarsWithCents = (amount) => parseInt(amount * 100);
 
 exports.makePayment = async (req, res) => {
@@ -66,3 +67,21 @@ exports.makePayment = async (req, res) => {
   }
 }
 
+=======
+exports.getInvestment = async (req, res) => {
+  const { id } = req.params;
+
+  Investment.findById(id)
+    // .populate('user')
+    .populate('projects')
+    .exec((err, investment) => {
+      if (err) {
+        return res.status(400).json({
+          error: 'Investment could not be found.',
+          err
+        });
+      }
+      return res.status(200).json(investment);
+    })
+}
+>>>>>>> dev
