@@ -39,9 +39,12 @@ const useStyles = makeStyles((theme) => ({
   },
   navBarHomeLink: {
     // Alignment
-    display: 'flex',
-    alignItems: 'center',
-    flexGrow: 1
+    flexGrow: 1,
+    '& a': {
+      display: 'flex',
+      alignItems: 'center',
+      maxWidth: 300
+    }
   },
   navLinks: {
     // Alignment
@@ -214,10 +217,12 @@ const NavBar = (props) => {
   return (
     <AppBar className={classes.navBar} position="static" color="inherit" elevation={0}>
       <Toolbar>
-      <Link to="/" className={classes.navBarHomeLink}>
-      <SvgProductLaunchLogo style={{ marginRight: 22 }} />
-      <Typography variant="h1">Product Launch</Typography>
-      </Link>
+        <div className={classes.navBarHomeLink}>
+          <Link to="/">
+            <SvgProductLaunchLogo style={{ marginRight: 22 }} />
+            <Typography variant="h1">Product Launch</Typography>
+          </Link>
+        </div>
       {
         props.notificationCount > 0 &&
         <AlertBadge alerts={props.notificationCount}/>
