@@ -25,20 +25,3 @@ exports.mongoDbErrorHandler = (err, res, defaultErrorCode = 400) => {
   
   return res.status(code).json(error);
 };
-
-exports.getNotificationCount = async (user, seen = false) => {
-  const investmentCount = await Investment.count({
-    user,
-    $or: [{
-      seen,
-    }, {
-      seen: null //for items added before seen field added
-    }]
-  });
-
-  const messageCount = await Message.count({
-    user,
-    seen
-  });
-  return  messageCount + investmentCount;
-};

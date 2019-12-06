@@ -1,7 +1,6 @@
 'use strict';
 const { User, Investment, Message } = require('../models');
 const { encodeToken, mongoDbErrorHandler } = require('../utils');
-const { getNotificationCount } = require('../utils');
 
 exports.register = (req, res) => {
   User.create(req.body, (err, user) => {
@@ -33,7 +32,6 @@ exports.login = (req, res) => {
         const { name, email, _id, projects, about, location, profilePic } = user;
         const token = encodeToken({ name, email, _id, about, location, profilePic });
 
-        const notificationCount = getNotificationCount(_id);
         return res.status(200).json({
           token,
           user: {
@@ -44,7 +42,6 @@ exports.login = (req, res) => {
             profilePic,
             location,
             projects,
-            notificationCount
           }
         });
       } else {
