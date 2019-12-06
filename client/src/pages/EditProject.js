@@ -65,23 +65,25 @@ class EditProject extends Component {
         field: 'industry',
         method: validator.isEmpty,
         validWhen: false,
-        message: 'Industry is required'
+        message: 'Industry is required.'
       },
       {
         field: 'location',
         method: validator.isEmpty,
         validWhen: false,
-        message: 'location is required'
+        message: 'Location is required.'
       },
       {
         field: 'fundingGoal',
-        method: validator.isNumeric,
+        method: (value) => value > 0,
         validWhen: true,
+        message: 'Funding goal must be greater than zero.'
       },
       {
         field: 'fundingDeadline',
         method: (value) => validator.isAfter(value),
         validWhen: true,
+        message: 'Funding deadline must be after today\'s date.'
       }
     ]);
     this.state = {
@@ -149,9 +151,7 @@ class EditProject extends Component {
         }
 
         formData.set('projectUserId', projectUserId);
-        // for (const values of formData.values()) {
-        //   console.log(values);
-        // }
+
         const { projectId } = project;
         const updatedProject = await editProject(projectId, formData);
         if (updatedProject.success) {
@@ -220,6 +220,7 @@ class EditProject extends Component {
               type="title"
               variant="outlined"
               required
+              autoComplete={'false'}
               error={validation.title.isInvalid}
               helperText={validation.title.message}
             />
@@ -234,6 +235,7 @@ class EditProject extends Component {
               onChange={this.handleInput}
               type="subtitle"
               variant="outlined"
+              autoComplete={'false'}
             />
 
             <Typography variant="h4">Description</Typography>
@@ -257,6 +259,8 @@ class EditProject extends Component {
               setState={this.handleInput}
               selectName="industry"
               value={industry}
+              error={validation.industry.isInvalid}
+              helperText={validation.industry.message}
             >
               {
                 industries.map(industry => {
@@ -279,6 +283,8 @@ class EditProject extends Component {
               setState={this.handleInput}
               selectName="location"
               value={location}
+              error={validation.location.isInvalid}
+              helperText={validation.location.message}
             >
               {
                 locations.map(location => {
@@ -320,6 +326,8 @@ class EditProject extends Component {
               InputLabelProps={{
                 shrink: true,
               }}
+              error={validation.fundingDeadline.isInvalid}
+              helperText={validation.fundingDeadline.message}
             />
             <Button classes={{ root: classes.submitButton }} type="submit" variant="contained" color="primary" disabled={this.disableSubmit()}>
               Submit
