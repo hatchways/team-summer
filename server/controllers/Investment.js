@@ -1,35 +1,73 @@
 const { ObjectId } = require('mongoose').Types;
-const { User, Project, Investment } = require('../models');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const {User, Project, Investment} = require('../models');
 
-exports.addInvestment = async (req, res) => {
-  const { value, projectId } = req.body;
-  const user = req.user
+
+//I've adjusted this to be called prior to the payment but needs a refactor
+//might be cleaner with promise chains
+const invest = async (userId, projectId, investmentAmount) => {
+  const dollarAmount = toDollarsWithCents(investmentAmount)
 
   try {
     const investment = await Investment.create({
-      user: ObjectId(user._id),
+      user: ObjectId(userId),
       project: ObjectId(projectId),
-      value: parseInt(value)
+      value: dollarAmount
     });
-    await User.updateOne({ _id: user._id }, { $push: { investments: investment._id } });
+    await User.updateOne({ _id: userId }, { $push: { investments: investment._id } });
     await Project.updateOne(
       { _id: projectId },
       {
         $inc: {
           'funding.donorCount': 1,
-          'funding.fundingTotal': parseInt(value)
+          'funding.fundingTotal': dollarAmount
         }
       }
     );
-    res.status(201).send(investment);
+    return investment;
   } catch (err) {
     res.status(400).json({
-      error: "User Investment's could not be updated.",
-      err
+      error: "User Investment's could not be updated."
     });
   }
 };
 
+<<<<<<< HEAD
+const toDollarsWithCents = (amount) => parseInt(amount * 100);
+
+exports.makePayment = async (req, res) => {
+  const { projectId, token, investmentAmount } = req.body;
+  const userId = req.user._id
+  const dollarAmount = toDollarsWithCents(investmentAmount)
+  const stripeToken = token.token
+
+  const order = {
+      amount: dollarAmount,
+      currency: 'USD',
+      source: stripeToken.id, 
+      description: 'investment'
+    }
+
+  console.log("order", order)
+  try {
+    const investment = await invest(userId, projectId, investmentAmount);
+    
+    if (investment) {
+      stripe.charges.create( order, (err, charge) => {
+        if(err){
+          console.log("investment", investment)
+          return res.status(400).json({ message: 'an error occurred' });
+        } else {
+          return res.status(200).json({ investment });
+        }
+      })
+    }
+  } catch (err) {
+    return res.status(400).json({ message: 'an error occurred' });
+  }
+}
+
+=======
 exports.getInvestment = async (req, res) => {
   const { id } = req.params;
 
@@ -46,3 +84,4 @@ exports.getInvestment = async (req, res) => {
       return res.status(200).json(investment);
     })
 }
+>>>>>>> dev
