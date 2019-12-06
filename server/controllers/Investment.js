@@ -32,7 +32,6 @@ const invest = async (userId, projectId, investmentAmount) => {
   }
 };
 
-<<<<<<< HEAD
 const toDollarsWithCents = (amount) => parseInt(amount * 100);
 
 exports.makePayment = async (req, res) => {
@@ -48,14 +47,12 @@ exports.makePayment = async (req, res) => {
       description: 'investment'
     }
 
-  console.log("order", order)
   try {
     const investment = await invest(userId, projectId, investmentAmount);
     
     if (investment) {
       stripe.charges.create( order, (err, charge) => {
         if(err){
-          console.log("investment", investment)
           return res.status(400).json({ message: 'an error occurred' });
         } else {
           return res.status(200).json({ investment });
@@ -67,7 +64,6 @@ exports.makePayment = async (req, res) => {
   }
 }
 
-=======
 exports.getInvestment = async (req, res) => {
   const { id } = req.params;
 
@@ -84,4 +80,3 @@ exports.getInvestment = async (req, res) => {
       return res.status(200).json(investment);
     })
 }
->>>>>>> dev
