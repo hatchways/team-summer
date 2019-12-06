@@ -15,14 +15,14 @@ export const createOrLoginUser = async (method, userData) => {
     if (response.data.hasOwnProperty('err')) return { ...response.data };
 
     localStorage.setItem('jwtToken', response.data.token);
+
     return {
       success: true,
       id: response.data.user._id,
       name: response.data.user.name,
       about: response.data.user.about,
       avatar: response.data.user.profilePic,
-      location: response.data.user.location,
-      notificationCount: response.data.user.notificationCount
+      location: response.data.user.location
     };
   } catch (error) {
     console.log(error);

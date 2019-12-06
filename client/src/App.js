@@ -60,18 +60,13 @@ class App extends React.Component {
         description: '',
         avatar: '',
         location: ''
-      },
-      notificationCount: 0
+      }
     };
 
     // Authenticate users pre-render
     jwTokenCheck(this.state);
   }
 
-  setAuthenticated = (authenticated) => this.setState({ userAuthenticated: authenticated });
-  setUserDetails = (id, name, about, avatar, location) => this.setState({ userDetails: { id, name, about, avatar, location } });
-  setNotificationCount = (notificationCount) => this.setState({ notificationCount });
-  toggleToast = () => this.setState((state) => ({ showToast: !state.showToast }));
   socket = socketClient(process.env.REACT_APP_SOCKET_ENDPOINT, { autoConnect: false });
 
   openSocketAuthenticate = () => {
@@ -134,7 +129,7 @@ class App extends React.Component {
   toggleToast = () => this.setState((state) => ({ showToast: !state.showToast }));
 
   render() {
-    const { toastProperties, userDetails, userAuthenticated, showToast, notificationCount } = this.state;
+    const { toastProperties, userDetails, userAuthenticated, showToast } = this.state;
 
     const contextProps = {
       activateToast: this.activateToast,
@@ -142,22 +137,18 @@ class App extends React.Component {
       setAuthenticated: this.setAuthenticated,
       userDetails: userDetails,
       setUserDetails: this.setUserDetails,
-      notificationCount: notificationCount,
-      setNotificationCount: this.setNotificationCount,
       socket: this.socket
     };
-    
+
     return (
       <MuiThemeProvider theme={theme}>
-      <BrowserRouter>
-      <NavBar
-        userDetails={userDetails}
-        setUserDetails={this.setUserDetails}
-        userAuthenticated={userAuthenticated}
-        setAuthenticated={this.setAuthenticated}
-        notificationCount={notificationCount}
-        setNotificationCount={this.setNotificationCount}
-        />
+        <BrowserRouter>
+          <NavBar
+            userDetails={userDetails}
+            setUserDetails={this.setUserDetails}
+            userAuthenticated={userAuthenticated}
+            setAuthenticated={this.setAuthenticated}
+          />
 
           {/* Routes */}
           {/*- Base route uses a Redirect Component to redirect to

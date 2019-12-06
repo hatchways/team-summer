@@ -17,7 +17,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { Link, withRouter } from 'react-router-dom';
 
 import SvgProductLaunchLogo from './ProductLaunchLogo';
-import AlertBadge from './AlertBadge';
 
 const useStyles = makeStyles((theme) => ({
   navBar: {
@@ -39,12 +38,9 @@ const useStyles = makeStyles((theme) => ({
   },
   navBarHomeLink: {
     // Alignment
-    flexGrow: 1,
-    '& a': {
-      display: 'flex',
-      alignItems: 'center',
-      maxWidth: 300
-    }
+    display: 'flex',
+    alignItems: 'center',
+    flexGrow: 1
   },
   navLinks: {
     // Alignment
@@ -95,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Navigation = (props) => {
-    const [userDropdown, toggleUserDropdown] = useState(null);
+  const [userDropdown, toggleUserDropdown] = useState(null);
 
   /* Show property values: authenticated, unauthenticated, both */
   const links = [
@@ -136,7 +132,6 @@ const Navigation = (props) => {
     if (route === '/logout') {
       props.setAuthenticated(false);
       props.setUserDetails(null, '', '', '', '');
-      props.setNotificationCount(0);
       localStorage.removeItem('jwtToken');
       props.history.push('/login');
     } else {
@@ -217,29 +212,23 @@ const NavBar = (props) => {
   return (
     <AppBar className={classes.navBar} position="static" color="inherit" elevation={0}>
       <Toolbar>
-        <div className={classes.navBarHomeLink}>
-          <Link to="/">
-            <SvgProductLaunchLogo style={{ marginRight: 22 }} />
-            <Typography variant="h1">Product Launch</Typography>
-          </Link>
-        </div>
-      {
-        props.notificationCount > 0 &&
-        <AlertBadge alerts={props.notificationCount}/>
-      }
-      <Navigation
-        {...props}
-        drawerState={drawer}
-        toggleDrawer={toggleDrawer}
-        classes={classes}
-        desktop={desktop}
-      />
-      {!desktop ? (
-        <IconButton onClick={showDrawer}>
-        <MenuIcon fontSize="large" />
-        </IconButton>
+        <Link to="/" className={classes.navBarHomeLink}>
+          <SvgProductLaunchLogo style={{ marginRight: 22 }} />
+          <Typography variant="h1">Product Launch</Typography>
+        </Link>
+
+        <Navigation
+          {...props}
+          drawerState={drawer}
+          toggleDrawer={toggleDrawer}
+          classes={classes}
+          desktop={desktop}
+        />
+        {!desktop ? (
+          <IconButton onClick={showDrawer}>
+            <MenuIcon fontSize="large" />
+          </IconButton>
         ) : null}
-        
       </Toolbar>
     </AppBar>
   );
