@@ -94,7 +94,6 @@ const inputStyle = {
 }
 
 class _CheckoutForm extends Component {
-// const _CheckoutForm = (this.props) => {
 
   state = {
     investmentAmount: 0,

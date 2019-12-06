@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const { ObjectId } = Schema; 
+const { ObjectId } = Schema;
 
 const InvestmentSchema = new Schema({
     value: {

@@ -2,20 +2,30 @@
 const { User, Investment, Message } = require('../models');
 const upload = require('../services/file-upload');
 const singleUpload = upload.single('image');
+const { getNotificationCount } = require('../utils');
 
 
 exports.getUser = async (req, res) => {
   const { id } = req.params;
+  const messageCount = await getNotificationCount(id, 'Message');
+  const investmentCount = await getNotificationCount(id, 'Investment');
+  const notificationCount = messageCount + investmentCount;
 
   User.findById(id)
     .populate('projects')
+    .populate({
+      path: 'investments',
+      populate: {
+        path: 'project'
+      }
+    })
     .exec((err, user) => {
       if (err || !user) {
         return res.status(400).json({
           error: 'User not found'
         });
       }
-      const { _id, name, email, about, location, projects, profilePic } = user;
+      const { _id, name, email, about, location, projects, profilePic, investments } = user;
       return res.status(200).json({
         _id,
         name,
@@ -24,6 +34,8 @@ exports.getUser = async (req, res) => {
         location,
         projects,
         profilePic,
+        investments,
+        notificationCount
       });
     });
 };
@@ -47,7 +59,7 @@ exports.editUser = (req, res) => {
       (err, user) => {
         if (err) {
           return res.status(400).json({
-            error: 'You are not authorized to perform this action!'
+            error: 'User could not be updated.'
           });
         }
         const { name, location, about, profilePic } = user;
