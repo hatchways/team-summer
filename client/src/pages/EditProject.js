@@ -130,7 +130,6 @@ class EditProject extends Component {
         //   console.log(name);
         //   formData.set(name, project[name]);
         // }
-
         formData.set('title', project.title);
         formData.set('subtitle', project.subtitle);
         formData.set('description', project.description);
@@ -139,18 +138,20 @@ class EditProject extends Component {
         formData.set('fundingGoal', project.fundingGoal);
         formData.set('fundingDeadline', project.fundingDeadline);
 
-        for (const image of project.updatedImages) {
-          if (typeof image === 'string') {
-            formData.append('stringImage', image);
-          } else {
-            formData.append('images', image);
+        if (project.updatedImages[0] !== '/images/image-not-found.png') {
+          for (const image of project.updatedImages) {
+            if (typeof image === 'string') {
+              formData.append('stringImage', image);
+            } else {
+              formData.append('images', image);
+            }
           }
         }
 
         formData.set('projectUserId', projectUserId);
-        for (const values of formData.values()) {
-          console.log(values);
-        }
+        // for (const values of formData.values()) {
+        //   console.log(values);
+        // }
         const { projectId } = project;
         const updatedProject = await editProject(projectId, formData);
         if (updatedProject.success) {
