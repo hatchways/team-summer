@@ -68,12 +68,10 @@ class App extends React.Component {
     jwTokenCheck(this.state);
   }
 
-<<<<<<< HEAD
   setAuthenticated = (authenticated) => this.setState({ userAuthenticated: authenticated });
   setUserDetails = (id, name, about, avatar, location) => this.setState({ userDetails: { id, name, about, avatar, location } });
   setNotificationCount = (notificationCount) => this.setState({ notificationCount });
   toggleToast = () => this.setState((state) => ({ showToast: !state.showToast }));
-=======
   socket = socketClient(process.env.REACT_APP_SOCKET_ENDPOINT, { autoConnect: false });
 
   openSocketAuthenticate = () => {
@@ -115,16 +113,12 @@ class App extends React.Component {
     if (wasAuthenticated && !isAuthenticated) return this.closeSocket();
   }
 
->>>>>>> dev
   activateToast = (text, variant = 'neutral', button = 'CLOSE') => {
     this.setState({
       toastProperties: { text, variant, button },
       showToast: true
     });
   };
-<<<<<<< HEAD
-  
-=======
 
   setAuthenticated = (authenticated) => this.setState({ userAuthenticated: authenticated });
   setUserDetails = (id, name, about, avatar, location) => this.setState({
@@ -139,7 +133,6 @@ class App extends React.Component {
 
   toggleToast = () => this.setState((state) => ({ showToast: !state.showToast }));
 
->>>>>>> dev
   render() {
     const { toastProperties, userDetails, userAuthenticated, showToast, notificationCount } = this.state;
 
@@ -149,12 +142,9 @@ class App extends React.Component {
       setAuthenticated: this.setAuthenticated,
       userDetails: userDetails,
       setUserDetails: this.setUserDetails,
-<<<<<<< HEAD
       notificationCount: notificationCount,
-      setNotificationCount: this.setNotificationCount
-=======
+      setNotificationCount: this.setNotificationCount,
       socket: this.socket
->>>>>>> dev
     };
     
     return (

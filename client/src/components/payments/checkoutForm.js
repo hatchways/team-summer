@@ -94,10 +94,6 @@ const inputStyle = {
 }
 
 class _CheckoutForm extends Component {
-<<<<<<< HEAD
-=======
-// const _CheckoutForm = (this.props) => {
->>>>>>> dev
 
   state = {
     investmentAmount: 0,
