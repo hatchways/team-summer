@@ -15,8 +15,8 @@ Install server dependencies by running the command ```npm install``` in the root
 #### Client
 Client packages are setup by running `npm install` or `npm ci` in the client directory.
 
-Set up a .env file in the client folder with `REACT_APP_JWT_SECRET="TOKEN"` set to the backend JWT secret,
-there is a `client/sample.env` for reference
+Set up a .env file in the client folder with `REACT_APP_JWT_SECRET` set to the backend JWT secret
+and `REACT_APP_SOCKET_ENDPOINT` to the backend url, there is a `client/sample.env` for reference
 
 Note: bcrypt relies on python 2.7 need to  have it in path when installing bcrypt
 <!-- TO DO... Finish this -->

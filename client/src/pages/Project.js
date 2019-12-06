@@ -50,7 +50,7 @@ class Project extends React.Component {
       const project = response.data;
       project.daysLeft = Math.max(0, moment({ hours: 0 }).diff(project.fundingDeadline, 'days') * -1);
 
-      if (project.images.length === 0) project.images = ['/images/image-not-found.png'];
+      if (project.images.length === 0 || project.images[0] === '/images/image-not-found.png') project.images = ['/images/image-not-found.png'];
 
       this.setState({ project, user: project.user });
     } catch (err) {
@@ -111,7 +111,6 @@ class Project extends React.Component {
       const { _id: id, title, subtitle, description, industry, images, location, fundingGoal, fundingDeadline } = project;
       const projectUserId = this.state.user._id;
       const projectInfo = { id, title, subtitle, description, industry, images, location, fundingGoal, fundingDeadline, projectUserId };
-      console.log(projectInfo)
       this.props.history.push({
         pathname: `edit/${id}`,
         state: projectInfo
