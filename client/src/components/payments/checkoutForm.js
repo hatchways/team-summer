@@ -47,11 +47,6 @@ const styles = (muiBaseTheme) => ({
   outlinedInput: {
     paddingLeft: "25px"
   },
-  icon: { //in case this will become a popup
-    horizontalAlign: "right",
-    position: "relative",
-    top: "1px"
-  },
   form: {
     paddingBottom: "17px",
     textAlign: "right",
@@ -180,9 +175,6 @@ class _CheckoutForm extends Component {
     return (
       <div className="checkout-form">
         <Card className={classes.card}>
-          <div style={stripeStyle.form}>
-            <CloseIcon className={classes.icon}></CloseIcon>
-          </div>
           <CardContent className={classes.content}>
             <Typography
               className={"MuiTypography--heading"}
