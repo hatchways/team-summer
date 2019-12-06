@@ -25,7 +25,6 @@ const inputStyle = {
     padding: '22px',
     boxShadow: 'rgba(50, 50, 93, 0.54902) 0px 1px 3px, rgba(0, 0, 0, 0.0196078) 0px 1px 0px',
     border: '0',
-    outline: '0',
     borderRadius: '4px',
     background: 'white'
 }
