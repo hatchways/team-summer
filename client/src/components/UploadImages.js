@@ -15,7 +15,7 @@ const styles = {
     },
     dragBox: {
         display: 'flex',
-        boxShadow: '0px 0px 3px 2px #D3D3D3',
+        boxShadow: '0px 0px 3px 2px #E7E7E7',
         height: '150px',
         width: '175px',
         margin: '2px',
@@ -42,7 +42,7 @@ const styles = {
 }
 
 const UploadImages = (props) => {
-    const { classes, setImages, images, deleteImage } = props;
+    const { classes, showMany, setImages, images, deleteImage } = props;
 
     const onDrop = useCallback(acceptedFiles => {
         setImages(acceptedFiles)
@@ -69,16 +69,23 @@ const UploadImages = (props) => {
                 </div>
                 <div className={classes.images}>
                     {
-                        images.length ?
+                        showMany ?
                             images.map(image => (
                                 <Image
                                     image={image}
-                                    key={image.name}
+                                    key={image.name || image}
                                     deleteImage={deleteImage}
-                                    alt=""
+                                    alt={image.name || image}
                                 />
                             )) :
-                            null
+                            images[0] && images.length === 1 ? <Image
+                                image={images[0]}
+                                key={images[0].name}
+                                deleteImage={deleteImage}
+                                alt={images[0].name}
+                                showBig={true}
+                            />
+                                : ''
                     }
                 </div>
             </div>

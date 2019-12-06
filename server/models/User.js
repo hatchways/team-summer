@@ -19,6 +19,17 @@ const UserSchema = new Schema({
     require: true,
     minlength: 6
   },
+  about: {
+    type: String,
+    maxlength: 600
+  },
+  location: {
+    type: String,
+    maxlength: 30
+  },
+  profilePic: {
+    type: String
+  },
   date: {
     type: Date,
     default: Date.now

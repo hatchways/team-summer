@@ -55,6 +55,18 @@ class AddProject extends Component {
                 message: 'Title is required.'
             },
             {
+                field: 'subtitle',
+                method: (value) => value.length <= 50,
+                validWhen: true,
+                message: 'Subtitle must be 50 characters or less.'
+            },
+            {
+                field: 'description',
+                method: (value) => value.length <= 2000,
+                validWhen: true,
+                message: 'Description must be 2000 characters or less.'
+            },
+            {
                 field: 'industry',
                 method: validator.isEmpty,
                 validWhen: false,
@@ -68,18 +80,27 @@ class AddProject extends Component {
             },
             {
                 field: 'fundingGoal',
-                method: validator.isNumeric,
+                method: (value) => value > 0,
                 validWhen: true,
+                message: 'Funding goal must be greater than zero.'
+            },
+            {
+                field: 'fundingDeadline',
+                method: (value) => validator.isAfter(value),
+                validWhen: true,
+                message: 'Funding deadline must be after today\'s date.'
             }
         ]);
         this.state = {
             uploading: false,
             title: '',
             subtitle: '',
+            description: '',
             industry: '',
             location: '',
             images: [],
             fundingGoal: 0,
+            fundingDeadline: '',
             formData: {},
             validation: this.validators.valid()
         }
@@ -101,16 +122,16 @@ class AddProject extends Component {
         const validation = this.validators.validate(this.state);
         this.setState({ validation });
 
-        const { images, formData } = this.state;
-        for (const image of images) {
-            formData.append('images', image);
-        }
-
         if (validation.isValid) {
+            const { images, formData } = this.state;
+            for (const image of images) {
+                formData.append('images', image);
+            }
             const newProject = await addProject(formData);
             if (newProject.success) {
                 console.log(newProject);
                 this.props.activateToast('Upload Successful', 'success');
+                this.props.history.push('/profile');
             } else if (newProject.err) {
                 console.log(newProject.err);
             }
@@ -141,7 +162,7 @@ class AddProject extends Component {
 
     render() {
         const { classes } = this.props;
-        const { title, subtitle, industry, location, images, fundingGoal, validation } = this.state;
+        const { title, subtitle, description, industry, location, images, fundingGoal, fundingDeadline, validation } = this.state;
 
         return (
             <main className={classes.pageContent}>
@@ -179,6 +200,23 @@ class AddProject extends Component {
                             onChange={this.handleInput}
                             type="subtitle"
                             variant="outlined"
+                            error={validation.subtitle.isInvalid}
+                            helperText={validation.subtitle.message}
+                        />
+
+                        <Typography variant="h4">Description</Typography>
+                        <TextField
+                            name="description"
+                            multiline
+                            rows="5"
+                            classes={{ root: classes.formLine }}
+                            value={description}
+                            fullWidth={true}
+                            onChange={this.handleInput}
+                            type="description"
+                            variant="outlined"
+                            error={validation.description.isInvalid}
+                            helperText={validation.description.message}
                         />
 
                         <OutlinedSelect
@@ -189,6 +227,8 @@ class AddProject extends Component {
                             setState={this.handleInput}
                             selectName="industry"
                             value={industry}
+                            error={validation.industry.isInvalid}
+                            helperText={validation.industry.message}
                         >
                             {
                                 industries.map(industry => {
@@ -211,6 +251,8 @@ class AddProject extends Component {
                             setState={this.handleInput}
                             selectName="location"
                             value={location}
+                            error={validation.location.isInvalid}
+                            helperText={validation.location.message}
                         >
                             {
                                 locations.map(location => {
@@ -225,7 +267,7 @@ class AddProject extends Component {
                                 })
                             }
                         </OutlinedSelect>
-                        <UploadImages setImages={this.setImages} images={images} deleteImage={this.deleteImage} />
+                        <UploadImages setImages={this.setImages} showMany={true} images={images} deleteImage={this.deleteImage} />
                         <Typography variant="h4">Funding Goal Amount</Typography>
                         <OutlinedInput
                             name="fundingGoal"
@@ -238,6 +280,21 @@ class AddProject extends Component {
                             error={validation.fundingGoal.isInvalid}
                             helpertext={validation.fundingGoal.message}
                             startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                        />
+                        <Typography variant="h4">Funding Deadline</Typography>
+                        <TextField
+                            className={classes.dateField}
+                            name="fundingDeadline"
+                            id="fundingDeadline"
+                            type="date"
+                            value={fundingDeadline}
+                            onChange={this.handleInput}
+                            required
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            error={validation.fundingDeadline.isInvalid}
+                            helpertext={validation.fundingDeadline.message}
                         />
                         <Button classes={{ root: classes.button }} type="submit" variant="contained" color="primary" disabled={this.disableSubmit()}>
                             Submit

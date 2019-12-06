@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Grid } from '@material-ui/core';
+import { withStyles, Typography, Grid } from '@material-ui/core';
 import moment from 'moment';
 
 import ProjectCard from '../components/ProjectCard';
@@ -9,14 +9,38 @@ import { withPageContext } from '../components/pageContext';
 
 import './profile.css';
 
+const styles = (theme) => ({
+  pageContent: {
+    display: 'flex',
+  },
+  headerContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  header: {
+    display: 'inline',
+    margin: '10px',
+    padding: '20px',
+    '&:hover': {
+      cursor: 'pointer',
+      color: theme.palette.primary.main
+    }
+  },
+  projectInvestmentContent: {
+    padding: '20px',
+  }
+});
+
 class ProfilePage extends Component {
   state = {
+    setDisplay: 'projects',
     profile: {
       _id: '',
       name: '',
       location: '',
       projects: [],
-      imageUrl: ''
+      imageUrl: '',
+      investments: []
     }
   };
 
@@ -28,22 +52,29 @@ class ProfilePage extends Component {
 
     const id = this.props.match.params.id || this.props.userDetails.id;
     getUser(id).then((profile) => {
+      this.props.setUserDetails(id, profile.data.name, profile.data.about, profile.data.profilePic, profile.data.location);
       this.setState({ profile: profile.data });
     });
   }
 
+  changeDisplay = (display) => {
+    this.setState({ setDisplay: display })
+  }
+
   renderUserInfo() {
-    const { imageUrl, name, location, about, expertise } = this.state.profile;
+    const { profilePic, name, location, about, expertise } = this.state.profile;
 
     return (
       <Fragment>
         <ProfileDetailPanel
-          imageUrl={imageUrl}
+          id={this.props.userDetails.id}
+          profilePic={profilePic}
           name={name}
           location={location}
           about={about}
           expertise={expertise}
           buttonType={this.getButtonType()}
+          history={this.props.history}
         />
       </Fragment>
     );
@@ -60,37 +91,49 @@ class ProfilePage extends Component {
     //TODO: msg functionality
   }
 
-  renderProjects = () => {
-    const { projects } = this.state.profile;
-
+  renderData = (data) => {
     return (
       <Grid container classes={{ root: 'project-section' }} spacing={3} justify="center">
-        {projects.map((project, index) => (
-          <Grid item xs={12} md={6} key={index}>
-            <ProjectCard
-              key={index}
-              onClick={() => this.props.history.push(`/projects/${project._id}`)}
-              title={project.title}
-              image={project.images[0]}
-              funding={project.funding.fundingTotal}
-              fundingGoal={project.fundingGoal}
-              industry={project.industry}
-              daysLeft={parseInt(moment(project.fundingDeadline).fromNow().split(' ')[1])}
-            />
-          </Grid>
-        ))}
-      </Grid>
+        {
+          data ?
+            data.map((project, index) => (
+              <Grid item xs={12} md={6} key={index}>
+                <ProjectCard
+                  key={index}
+                  onClick={() => this.props.history.push(`/projects/${project._id}`)}
+                  title={project.title}
+                  image={project.images[0]}
+                  funding={project.funding.fundingTotal}
+                  fundingGoal={project.fundingGoal}
+                  industry={project.industry}
+                  daysLeft={moment({ hours: 0 }).diff(project.fundingDeadline, 'days') * -1}
+                />
+              </Grid>
+            )) : ''
+        }
+      </Grid >
     );
   };
 
   render() {
+    const { classes } = this.props;
+    const { projects, investments } = this.state.profile;
+    const investedProjects = investments ? investments.map(investment => investment.project) : [];
+
     return (
-      <div className="profilePage">
+      <main className={classes.pageContent}>
         {this.renderUserInfo()}
-        {this.renderProjects()}
-      </div>
+        <div className={classes.projectInvestmentContent}>
+          <div className={classes.headerContent}>
+            <Typography className={classes.header} variant="h2" onClick={() => this.changeDisplay('projects')}>Projects</Typography>
+            <Typography className={classes.header} variant="h2" onClick={() => this.changeDisplay('investments')}>Investments</Typography>
+          </div>
+          {this.state.setDisplay === 'projects' && this.renderData(projects)}
+          {this.state.setDisplay === 'investments' && this.renderData(investedProjects)}
+        </div>
+      </main>
     );
   }
 }
 
-export default withPageContext(ProfilePage);
+export default withPageContext(withStyles(styles)(ProfilePage));

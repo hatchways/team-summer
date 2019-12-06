@@ -1,5 +1,5 @@
 const { decodeToken } = require('../utils');
-const { User, Conversation } = require('../models');
+const { User, Project, Conversation } = require('../models');
 
 exports.isAuth = async (req, res, next) => {
   const { authorization } = req.headers;
@@ -18,14 +18,15 @@ exports.isAuth = async (req, res, next) => {
 exports.userById = (req, res, next, id) => {
   User.findById(id)
     .populate('projects')
+    .populate('investments')
     .exec((err, user) => {
       if (err || !user) {
         return res.status(400).json({
           error: 'User not found'
         });
       }
-      const { _id, name, email, projects } = user;
-      req.profile = { _id, name, email, projects };
+      const { _id, name, email, about, location, projects, profilePic, investments } = user;
+      req.profile = { _id, name, about, email, projects, location, profilePic, investments };
       next();
     });
 };
@@ -40,5 +41,4 @@ exports.conversationById = (req, res, next, id) => {
       next();
     })
 };
-
 

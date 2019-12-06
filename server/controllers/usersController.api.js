@@ -1,21 +1,63 @@
 'use strict';
 const { User } = require('../models');
+const upload = require('../services/file-upload');
+const singleUpload = upload.single('image');
 
 exports.getUser = (req, res) => {
-  const { id } = req.body;
-  User.findOne({ id }, (err, user) => {
-    if (err) {
-      return res.status(400).json({ message: 'an error occurred' });
-    } else if (user) {
-      const { id, name, email } = user;
-      return res.json({
-        status: 200,
-        id,
+  const { id } = req.params;
+  User.findById(id)
+    .populate('projects')
+    .populate({
+      path: 'investments',
+      populate: {
+        path: 'project'
+      }
+    })
+    .exec((err, user) => {
+      if (err || !user) {
+        return res.status(400).json({
+          error: 'User not found'
+        });
+      }
+      const { _id, name, email, about, location, projects, profilePic, investments } = user;
+      return res.status(200).json({
+        _id,
         name,
-        email
+        email,
+        about,
+        location,
+        projects,
+        profilePic,
+        investments
       });
-    } else {
-      return res.status(400).json({ message: 'an error occurred' });
-    }
-  });
+    });
 };
+
+exports.editUser = (req, res) => {
+  singleUpload(req, res, function (err) {
+    if (err) return res.status(422).json({
+      errors: [{
+        title: 'File Upload Error',
+        detail: err.message
+      }]
+    });
+
+    const { name, location, about, profilePic: newProfilePic } = req.body;
+    const profilePic = req.file ? req.file.location : newProfilePic;
+    const newInfo = { name, location, about, profilePic };
+    User.findByIdAndUpdate(
+      { _id: req.params.id },
+      { $set: newInfo },
+      { new: true },
+      (err, user) => {
+        if (err) {
+          return res.status(400).json({
+            error: 'User could not be updated.'
+          });
+        }
+        const { name, location, about, profilePic } = user;
+        return res.status(200).json({ name, location, about, profilePic });
+      }
+    )
+  })
+}

@@ -1,13 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { isAuth, userById } = require('../middlewares');
-const users = require('../controllers/usersController.api');
+const { getUser, editUser } = require('../controllers/usersController.api')
+const { isAuth } = require('../middlewares');
 
+router.get('/:id', getUser);
 
-router.get('/:id', (req, res) => {
-  res.status(200).json(req.profile);
-});
-
-router.param('id', userById);
+router.put('/:id', isAuth, editUser);
 
 module.exports = router;

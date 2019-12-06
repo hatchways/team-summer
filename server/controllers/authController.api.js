@@ -25,19 +25,24 @@ exports.login = (req, res) => {
   const { email, password } = req.body;
   User.findOne({ email })
     .populate('projects')
+    .populate('investments')
     .exec((err, user) => {
       if (err) {
         mongoDbErrorHandler(err, res, 400);
       } else if (user && user.comparePassword(password)) {
-        const { name, email, _id, projects } = user;
-        const token = encodeToken({ name, email, _id });
+        const { name, email, _id, projects, about, location, profilePic, investments } = user;
+        const token = encodeToken({ name, email, _id, about, location, profilePic });
         return res.status(200).json({
           token,
           user: {
             _id,
             name,
             email,
-            projects
+            about,
+            profilePic,
+            location,
+            projects,
+            investments
           }
         });
       } else {
