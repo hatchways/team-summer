@@ -30,6 +30,38 @@ exports.addInvestment = async (req, res) => {
   }
 };
 
+const toDollarsWithCents = (amount) => parseInt(amount * 100);
+
+exports.makePayment = async (req, res) => {
+  const { projectId, token, investmentAmount } = req.body;
+  const userId = req.user._id
+  const dollarAmount = toDollarsWithCents(investmentAmount)
+  const stripeToken = token.token
+
+  const order = {
+      amount: dollarAmount,
+      currency: 'USD',
+      source: stripeToken.id, 
+      description: 'investment'
+    }
+
+  try {
+    const investment = await invest(userId, projectId, investmentAmount);
+    
+    if (investment) {
+      stripe.charges.create( order, (err, charge) => {
+        if(err){
+          return res.status(400).json({ message: 'an error occurred' });
+        } else {
+          return res.status(200).json({ investment });
+        }
+      })
+    }
+  } catch (err) {
+    return res.status(400).json({ message: 'an error occurred' });
+  }
+}
+
 exports.getInvestment = async (req, res) => {
   const { id } = req.params;
 
