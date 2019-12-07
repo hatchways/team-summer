@@ -2,10 +2,10 @@ import React, { Component, Fragment } from 'react';
 import { withStyles, Typography, Grid } from '@material-ui/core';
 import moment from 'moment';
 
-import ProjectCard from '../components/ProjectCard';
-import ProfileDetailPanel from '../components/ProfileDetailPanel';
-import { getUser } from '../api/users';
-import { withPageContext } from '../components/pageContext';
+import ProjectCard from 'components/ProjectCard';
+import ProfileDetailPanel from 'components/ProfileDetailPanel';
+import { getUser } from 'api/users';
+import { withPageContext } from 'components/pageContext';
 
 import './profile.css';
 
