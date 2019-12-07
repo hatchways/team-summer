@@ -18,6 +18,8 @@ import { Link, withRouter } from 'react-router-dom';
 
 import SvgProductLaunchLogo from './ProductLaunchLogo';
 import NotificationDropdown from './NotificationDropdown';
+import { messages } from '../dummyData/dropDownItems'
+
 
 const useStyles = makeStyles((theme) => ({
   navBar: {
@@ -228,10 +230,14 @@ const NavBar = (props) => {
 
 
 
-
-        <div>
-          <NotificationDropdown alerts={props.notificationCount} />
-        </div>
+        {true &&
+          <div>
+            <NotificationDropdown 
+              alerts={props.notificationCount} 
+              messages={messages}
+              />
+          </div>
+        }
 
 
 
