@@ -43,7 +43,8 @@ exports.login = (req, res) => {
             profilePic,
             location,
             projects,
-            investments
+            investments,
+            notificationCount: 6
           }
         });
       } else {

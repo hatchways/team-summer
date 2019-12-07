@@ -17,7 +17,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { Link, withRouter } from 'react-router-dom';
 
 import SvgProductLaunchLogo from './ProductLaunchLogo';
-import AlertBadge from './AlertBadge';
+import NotificationDropdown from './NotificationDropdown';
 
 const useStyles = makeStyles((theme) => ({
   navBar: {
@@ -223,10 +223,22 @@ const NavBar = (props) => {
             <Typography variant="h1">Product Launch</Typography>
           </Link>
         </div>
-      {
-        props.notificationCount > 0 &&
-        <AlertBadge alerts={props.notificationCount}/>
-      }
+
+
+
+
+
+
+        <div>
+          <NotificationDropdown alerts={props.notificationCount} />
+        </div>
+
+
+
+
+
+
+
       <Navigation
         {...props}
         drawerState={drawer}
@@ -246,3 +258,4 @@ const NavBar = (props) => {
 };
 
 export default withRouter(withTheme(NavBar));
+

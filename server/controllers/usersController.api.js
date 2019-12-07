@@ -30,7 +30,8 @@ exports.getUser = async (req, res) => {
         location,
         projects,
         profilePic,
-        investments
+        investments,
+        notificationCount: 8
       });
     });
 };
