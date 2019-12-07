@@ -13,6 +13,7 @@ import EditProfile from './pages/EditProfile';
 import AddProject from './pages/AddProject';
 import EditProject from './pages/EditProject';
 import Project from './pages/Project';
+import Checkout from './pages/Checkout';
 import Explore from './pages/Explore';
 import Messages from './pages/Messages';
 
@@ -175,6 +176,7 @@ class App extends React.Component {
               <Route path="/launch" component={AddProject}/>
               <Route path="/projects/:id" exact component={Project}/>
               <Route path="/projects/edit/:id" exact component={EditProject}/>
+              <Route path="/checkout" component={Checkout} />
               <Route path="/explore" component={Explore}/>
               <Route path="/messages" component={Messages}/>
             </Switch>
