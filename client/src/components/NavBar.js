@@ -225,12 +225,7 @@ const NavBar = (props) => {
             <Typography variant="h1">Product Launch</Typography>
           </Link>
         </div>
-
-
-
-
-
-        {true &&
+        {props.notificationCount > 0 &&
           <div>
             <NotificationDropdown 
               alerts={props.notificationCount} 
@@ -238,13 +233,6 @@ const NavBar = (props) => {
               />
           </div>
         }
-
-
-
-
-
-
-
       <Navigation
         {...props}
         drawerState={drawer}
