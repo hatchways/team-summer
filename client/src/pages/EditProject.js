@@ -5,12 +5,12 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import validator from 'validator';
 import moment from 'moment'
 
-import { OutlinedSelect } from '../components/Inputs';
-import UploadImages from '../components/UploadImages';
-import FormValidator from '../helpers/form-validation';
-import { editProject } from '../api/projects';
-import { locations, industries } from '../dummyData/dropDownItems'
-import { withPageContext } from '../components/pageContext';
+import { OutlinedSelect } from 'components/Inputs';
+import UploadImages from 'components/UploadImages';
+import FormValidator from 'helpers/form-validation';
+import { editProject } from 'api/projects';
+import { locations, industries } from 'dummyData/dropDownItems'
+import { withPageContext } from 'components/pageContext';
 
 const styles = {
   pageContent: {

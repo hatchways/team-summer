@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import validator from 'validator';
 import { capitalize } from '@material-ui/core/utils';
 
-import { CustomOutlinedInput } from '../components/Inputs';
-import CenteredPageHeader from '../components/CenteredPageHeader';
-import FormValidator from '../helpers/form-validation';
-import { createOrLoginUser } from '../api/users';
-import { withPageContext } from '../components/pageContext';
+import { CustomOutlinedInput } from 'components/Inputs';
+import CenteredPageHeader from 'components/CenteredPageHeader';
+import FormValidator from 'helpers/form-validation';
+import { createOrLoginUser } from 'api/users';
+import { withPageContext } from 'components/pageContext';
 
 const styles = {
   pageContent: {
