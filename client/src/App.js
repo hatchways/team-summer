@@ -15,6 +15,7 @@ import EditProject from './pages/EditProject';
 import Project from './pages/Project';
 import Explore from './pages/Explore';
 import Messages from './pages/Messages';
+import Checkout from './pages/Checkout';
 
 import Toast from './components/Toast';
 import { PageContext } from './components/pageContext';
@@ -177,6 +178,7 @@ class App extends React.Component {
               <Route path="/projects/edit/:id" exact component={EditProject}/>
               <Route path="/explore" component={Explore}/>
               <Route path="/messages" component={Messages}/>
+              <Route path="/checkout" component={Checkout}/>
             </Switch>
           </PageContext.Provider>
           <Toast
