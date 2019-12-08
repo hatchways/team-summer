@@ -15,7 +15,6 @@ export const createOrLoginUser = async (method, userData) => {
     if (response.data.hasOwnProperty('err')) return { ...response.data };
 
     localStorage.setItem('jwtToken', response.data.token);
-    console.log(response.data.user.notificationCount)
     return {
       success: true,
       id: response.data.user._id,
