@@ -3,22 +3,22 @@ import { MuiThemeProvider, withStyles } from '@material-ui/core';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import socketClient from 'socket.io-client';
 
-import { theme } from './themes/theme';
+import { theme } from 'themes/theme';
 
-import NavBar from './components/NavBar';
-import SignUp from './pages/SignUp';
-import Login from './pages/Login';
-import ProfilePage from './pages/Profile';
-import EditProfile from './pages/EditProfile';
-import AddProject from './pages/AddProject';
-import EditProject from './pages/EditProject';
-import Project from './pages/Project';
-import Explore from './pages/Explore';
-import Messages from './pages/Messages';
+import NavBar from 'components/NavBar';
+import SignUp from 'pages/SignUp';
+import Login from 'pages/Login';
+import ProfilePage from 'pages/Profile';
+import EditProfile from 'pages/EditProfile';
+import AddProject from 'pages/AddProject';
+import EditProject from 'pages/EditProject';
+import Project from 'pages/Project';
+import Explore from 'pages/Explore';
+import Messages from 'pages/Messages';
 
-import Toast from './components/Toast';
-import { PageContext } from './components/pageContext';
-import jwTokenCheck from './helpers/JwtTokenHelper';
+import Toast from 'components/Toast';
+import { PageContext } from 'components/pageContext';
+import jwTokenCheck from 'helpers/JwtTokenHelper';
 
 require('dotenv').config();
 
