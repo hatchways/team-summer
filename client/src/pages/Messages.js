@@ -147,11 +147,11 @@ class Messages extends React.Component {
     const response = await getConversations(this.props.userDetails.id);
     this.setState({ conversations: response.data });
     this.scrollChatToBottom();
+
+    this.props.socket.on('newMessage', (data) => {
+      this.handleSetMessage(data.conversation, data.sender, data.content)
+    })
   }
-
-  handleRecieveMessage = () => {
-
-  };
 
   switchPanelDisplay = (conversationId) => {
     this.setState({
