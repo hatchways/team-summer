@@ -59,7 +59,7 @@ export default function CustomizedMenus({ alerts, messages, notifications }) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose} >
                 {
-                    notifications
+                    notifications.length
                         ? notifications.map((notification) => {
                             const { _id, investor, investmentAmount, project, } = notification
                             const notificationMessage = `${investor.name} invested ${investmentAmount} in your project ${project.title}`

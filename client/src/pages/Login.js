@@ -9,6 +9,7 @@ import CenteredPageHeader from 'components/CenteredPageHeader';
 import FormValidator from 'helpers/form-validation';
 import { createOrLoginUser } from 'api/users';
 import { withPageContext } from 'components/pageContext';
+import { getNotifications } from '../api/notifications';
 
 const styles = {
   pageContent: {
@@ -108,7 +109,10 @@ class Login extends React.Component {
         this.props.activateToast('Login Successful', 'success');
         this.props.setUserDetails(userLogin.id, userLogin.name, userLogin.about, userLogin.avatar, userLogin.location);
         this.props.setAuthenticated(true);
-        this.props.setNotificationCount(userLogin.notificationCount);
+        const notifications = await getNotifications(userLogin.id);
+        const { data } = notifications
+        this.props.setNotifications(data);
+        // this.props.setNotificationCount(userLogin.notificationCount);
         this.props.history.push('/profile');
       }
     }
