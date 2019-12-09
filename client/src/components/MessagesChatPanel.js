@@ -109,6 +109,17 @@ export default (props) => {
       </CurrentConversationDetails>
 
       <MessagesSection>
+        {currentConversation.messages.length === 0 && (
+          <React.Fragment>
+            <Typography variant="h3" color="secondary" component="p" style={{ textAlign: 'center' }}>
+              No Messages
+            </Typography>
+            <Typography variant="h4" color="secondary" component="p" style={{textAlign: 'center'}}>
+              Say hello!
+            </Typography>
+          </React.Fragment>
+
+        )}
         {currentConversation.messages.map((message, index) => (
           <MessageItem key={index} sent={message.sender !== 0}>
             {message.sender === 0 && (
@@ -131,7 +142,7 @@ export default (props) => {
         {props.desktop
           ? <Button variant="contained" color="primary" disabled={!outboundMessage}>Submit</Button>
           : <IconButton color="primary" disabled={!outboundMessage}>
-              <SendIcon />
+            <SendIcon/>
           </IconButton>
         }
       </MessageInput>
