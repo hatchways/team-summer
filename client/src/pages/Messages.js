@@ -113,6 +113,31 @@ class Messages extends React.Component {
     conversations: []
   };
 
+  chatWindowRef = React.createRef();
+
+  scrollChatToBottom = () => {
+    const chatWindow = this.chatWindowRef.current;
+
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  };
+
+  handleSetMessage = (conversationId, sender, content) => {
+    let conversationIndex = 0;
+    let conversations = [...this.state.conversations];
+
+    const conversation = conversations.find((conversation, index) => {
+      if (conversation._id === conversationId) {
+        conversationIndex = index;
+      }
+      return conversation._id === conversationId;
+    });
+
+    conversations[conversationIndex].messages.push({ sender, content });
+
+    this.setState({ conversations });
+    this.scrollChatToBottom();
+  };
+
   async componentDidMount() {
     if (!this.props.userDetails.id) {
       this.props.activateToast('Please Log in to view messages', 'error');
@@ -121,16 +146,8 @@ class Messages extends React.Component {
 
     const response = await getConversations(this.props.userDetails.id);
     this.setState({ conversations: response.data });
+    this.scrollChatToBottom();
   }
-
-  // onSubmit = (event) => {
-  //   const { socket } = this.props;
-  //
-  //   socket.emit('message', {
-  //     id: this.props.userDetails.id,
-  //     message: this.state.message
-  //   }, { token: localStorage.getItem('jwtToken') });
-  // };
 
   switchPanelDisplay = (conversationId) => {
     this.setState({
@@ -145,6 +162,8 @@ class Messages extends React.Component {
       activeConversation: this.activeConversation,
       switchPanelDisplay: this.switchPanelDisplay,
       desktop: this.props.desktop,
+      handleSetMessage: this.handleSetMessage,
+      chatWindowRef: this.chatWindowRef,
       ...this.props
     };
 

@@ -95,6 +95,9 @@ export default (props) => {
         content: outboundMessage
       },
       { token: localStorage.getItem('jwtToken') });
+
+    props.handleSetMessage(conversation, props.userDetails.id, outboundMessage);
+    setOutboundMessage('');
   };
 
   return (
@@ -119,7 +122,7 @@ export default (props) => {
         </IconButton>
       </CurrentConversationDetails>
 
-      <MessagesSection>
+      <MessagesSection ref={props.chatWindowRef}>
         {currentConversation.messages.length === 0 && (
           <React.Fragment>
             <Typography variant="h3" color="secondary" component="p" style={{ textAlign: 'center' }}>
@@ -132,7 +135,7 @@ export default (props) => {
 
         )}
         {currentConversation.messages.map((message, index) => (
-          <MessageItem key={index} sent={message.sender !== 0}>
+          <MessageItem key={index} sent={message.sender === props.userDetails.id}>
             {message.sender === 0 && (
               <Avatar className={classes.userPictureSmall}>
                 {currentConversation.user.avatar || currentConversation.user.name.split('')[0]}
@@ -144,7 +147,7 @@ export default (props) => {
           </MessageItem>
         ))}
       </MessagesSection>
-      <MessageInput onSubmit={sendMessage}>
+      <MessageInput onSubmit={sendMessage(currentConversation.users[0]._id, currentConversation._id)}>
         <InputBase classes={{ root: classes.sendMessageInput }}
                    placeholder="Type your message"
                    value={outboundMessage}
@@ -152,7 +155,8 @@ export default (props) => {
         />
         {props.desktop
           ? <Button variant="contained" color="primary" disabled={!outboundMessage}
-                    onClick={sendMessage(currentConversation.users[0]._id, currentConversation._id)}>Submit</Button>
+                    onClick={sendMessage(currentConversation.users[0]._id, currentConversation._id)}>
+            Submit</Button>
           : <IconButton color="primary" type="submit" disabled={!outboundMessage}>
             <SendIcon/>
           </IconButton>

@@ -11,7 +11,7 @@ exports.receiveMessage = (io) => async ({ sender, receiver, conversation, conten
       content
     });
 
-    await Conversation.updateOne({_id: conversation}, {messages: message._id})
+    await Conversation.updateOne({_id: conversation}, {$push: {messages: message._id}})
   } catch (error) {
     console.log(error);
   }

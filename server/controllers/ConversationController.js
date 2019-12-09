@@ -27,7 +27,7 @@ exports.getConversationsForUser = async (req, res) => {
       })
       .populate({
         path: 'messages',
-        select: ['content']
+        select: ['content', 'sender']
       })
       .exec((err, user) => {
         if (err) return res.status(400).json({ error: err });
