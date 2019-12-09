@@ -112,7 +112,6 @@ class Login extends React.Component {
         const notifications = await getNotifications(userLogin.id);
         const { data } = notifications
         this.props.setNotifications(data);
-        // this.props.setNotificationCount(userLogin.notificationCount);
         this.props.history.push('/profile');
       }
     }
