@@ -9,6 +9,9 @@ exports.getNotifications = (req, res) => {
   }
   const { userId } = req.params;
   Notification.find({ user: userId })
+    .populate({ path: 'user', select: 'name' })
+    .populate({ path: 'investor', select: 'name' })
+    .populate({ path: 'project', select: 'title' })
     .exec((err, notifications) => {
       if (err) return res.status(400).json({ err });
 
