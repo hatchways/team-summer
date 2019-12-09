@@ -10,12 +10,12 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment'
 
-import * as ProjectStyles from '../components/ProjectPageStyles';
-import CardCarousel from '../components/CardCarousel';
-import PercentageProgressBar from '../components/PercentageProgressBar';
-import { getProject } from '../api/projects';
+import * as ProjectStyles from 'components/ProjectPageStyles';
+import CardCarousel from 'components/CardCarousel';
+import PercentageProgressBar from 'components/PercentageProgressBar';
+import { getProject } from 'api/projects';
 
-import { withPageContext } from '../components/pageContext';
+import { withPageContext } from 'components/pageContext';
 
 class Project extends React.Component {
   state = {
