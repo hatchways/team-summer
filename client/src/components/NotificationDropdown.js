@@ -39,7 +39,6 @@ const StyledMenuItem = withStyles(theme => ({
 }))(MenuItem);
 
 export default function CustomizedMenus({ alerts, messages, notifications }) {
-    console.log(notifications)
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = event => {
