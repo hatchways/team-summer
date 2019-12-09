@@ -2,9 +2,14 @@ const { Notification } = require('../models');
 const { ObjectId } = require('mongoose').Types;
 
 exports.getNotifications = (req, res) => {
-  const userId = req.user._id;
-
-  Notification.find({ _id: userId })
+  if (req.user._id !== userId) {
+    return res.status(403).json({
+      error: 'Access denied.'
+    });
+  }
+  const { userId } = req.params;
+  console.log(userId)
+  Notification.find({ user: userId })
     .exec((err, notifications) => {
       if (err) return res.status(400).json({ err });
 
@@ -12,19 +17,20 @@ exports.getNotifications = (req, res) => {
     });
 };
 
-exports.createNotification = (req, res) => {
+exports.createNotification = async (req, res) => {
   const investorId = req.user._id;
   const { projectOwnerId, investmentAmount, projectId } = req.body;
 
-  Notification.create({
+  const notification = await Notification.create({
     user: ObjectId(projectOwnerId),
     investmentAmount,
     investor: ObjectId(investorId),
     project: ObjectId(projectId)
   })
-    .exec((err, notification) => {
-      if (err) return res.status(400).json({ err });
 
-      return res.status(200).json(notification);
-    });
+  if (notification) {
+    return res.status(200).json(notification);
+  } else {
+    return res.status(400).json({ err: 'Notification could not be created.' })
+  }
 };
