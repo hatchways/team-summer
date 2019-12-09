@@ -7,6 +7,7 @@ import {
   Typography
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
+const standingProjectPic = 'https://image.freepik.com/free-photo/river-foggy-mountains-landscape_1204-511.jpg'
 
 const IndustryLabel = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
@@ -134,7 +135,7 @@ const ProjectCard = (props) => {
         </IndustryLabel>
         <CardMedia
           className={props.classes.media}
-          image={props.image || 'https://image.freepik.com/free-photo/river-foggy-mountains-landscape_1204-511.jpg'}/>
+          image={props.image || standingProjectPic}/>
       </div>
       <CardContent className={props.classes.content}>
         <ProjectHead {...props}/>

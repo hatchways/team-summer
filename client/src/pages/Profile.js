@@ -2,38 +2,47 @@ import React, { Component, Fragment } from 'react';
 import { withStyles, Typography, Grid } from '@material-ui/core';
 import moment from 'moment';
 
+
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+
+
+
 import ProjectCard from 'components/ProjectCard';
 import ProfileDetailPanel from 'components/ProfileDetailPanel';
 import { getUser } from 'api/users';
 import { withPageContext } from 'components/pageContext';
-
-import './profile.css';
+const standinProfilePic = '/images/ee72493c158dc6aafc0831429481101b97cb10b7.png';
+const standingProjectPic = '/images/a8b330accea0c77385355109bf6d88761738e377.png';
 
 const styles = (theme) => ({
   pageContent: {
     display: 'flex',
   },
-  headerContainer: {
-    display: 'flex',
-    flexDirection: 'row',
+  projectInvestmentWrapper: {
+    padding: '2em 3em'
+  },
+  projectInvestmentHeader: {
+    marginBottom: '35px'
+  },
+  projectInvestmentContent: {
+    // margin: '25px 0 25px'
+    display: 'flexGrow',
   },
   header: {
     display: 'inline',
-    margin: '10px',
-    padding: '20px',
+    paddingRight: '35px',
     '&:hover': {
       cursor: 'pointer',
       color: theme.palette.primary.main
     }
   },
-  projectInvestmentContent: {
-    padding: '20px',
-  }
 });
 
 class ProfilePage extends Component {
   state = {
     setDisplay: 'projects',
+    tabValue: 0,
     profile: {
       _id: '',
       name: '',
@@ -53,22 +62,27 @@ class ProfilePage extends Component {
     const id = this.props.match.params.id || this.props.userDetails.id;
     getUser(id).then((profile) => {
       this.props.setUserDetails(id, profile.data.name, profile.data.about, profile.data.profilePic, profile.data.location);
+      //change _id to id
       this.setState({ profile: profile.data });
     });
   }
 
-  changeDisplay = (display) => {
+  changeDisplay = () => {
+    const tabValue = this.state.tabValue === 0 ? 1 : 0;
+    const display = this.state.tabValue === 0 ? 'projects' : 'investments'
+    this.setState({ tabValue })
     this.setState({ setDisplay: display })
   }
 
   renderUserInfo() {
     const { profilePic, name, location, about, expertise } = this.state.profile;
+    const avatarPic = profilePic ? profilePic : standinProfilePic
 
     return (
       <Fragment>
         <ProfileDetailPanel
           id={this.props.userDetails.id}
-          profilePic={profilePic}
+          profilePic={avatarPic}
           name={name}
           location={location}
           about={about}
@@ -80,24 +94,36 @@ class ProfilePage extends Component {
     );
   }
 
-  getButtonType() {
+  getButtonType = () => {
     const { profile } = this.state;
-    return this.props.userAuthenticated && profile._id === this.props.userDetails.id ? 'edit' : 'message';
+    return this.props.userAuthenticated && profile._id === this.props.userDetails.id ? 
+      'edit' : 'message';
   }
 
-  handleClick() {
-    console.log('clicked');
-    //TODO: edit page
-    //TODO: msg functionality
+  
+  renderTabs = () => {
+
+      return (
+        <Fragment>
+          <Tabs
+            value={this.state.tabValue}
+            indicatorColor="primary"
+            onChange={this.changeDisplay} >
+            <Tab label="Projects" />
+            <Tab label="Investments" />
+          </Tabs>
+        </Fragment>
+      );
+    
   }
 
   renderData = (data) => {
     return (
-      <Grid container classes={{ root: 'project-section' }} spacing={3} justify="center">
+      <Grid container classes={{ root: 'project-section' }} spacing={8} justify="left">
         {
           data ?
             data.map((project, index) => (
-              <Grid item xs={12} md={6} key={index}>
+              <Grid item sm={12} md={6} key={index}>
                 <ProjectCard
                   key={index}
                   onClick={() => this.props.history.push(`/projects/${project._id}`)}
@@ -123,14 +149,21 @@ class ProfilePage extends Component {
     return (
       <main className={classes.pageContent}>
         {this.renderUserInfo()}
-        <div className={classes.projectInvestmentContent}>
-          <div className={classes.headerContent}>
-            <Typography className={classes.header} variant="h2" onClick={() => this.changeDisplay('projects')}>Projects</Typography>
-            <Typography className={classes.header} variant="h2" onClick={() => this.changeDisplay('investments')}>Investments</Typography>
+
+        <div className={classes.projectInvestmentWrapper}>
+          <div className={classes.projectInvestmentHeader}>
+
+          
+            {this.renderTabs()}
+ 
+
           </div>
-          {this.state.setDisplay === 'projects' && this.renderData(projects)}
-          {this.state.setDisplay === 'investments' && this.renderData(investedProjects)}
+          <div className={classes.projectInvestmentContent}>
+            {this.state.setDisplay === 'projects' && this.renderData(projects)}
+            {this.state.setDisplay === 'investments' && this.renderData(investedProjects)}
+          </div>
         </div>
+
       </main>
     );
   }
