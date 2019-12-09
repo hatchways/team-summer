@@ -12,8 +12,8 @@ const ConversationListPanel = styled(Paper)(({ theme }) => ({
 }));
 
 const ConversationListStyled = styled('div')(({ theme }) => ({
-  maxHeight: 450,
-  overflow: 'auto',
+  maxHeight: 'calc(100vh - 74px)',
+  overflowY: 'scroll',
   padding: 5
 }));
 

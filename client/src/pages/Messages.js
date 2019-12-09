@@ -20,6 +20,11 @@ const styles = (theme) => ({
     height: avatarSize,
     marginRight: 15
   },
+  userPictureSmall: {
+    width: avatarSize - 10,
+    height: avatarSize - 10,
+    marginRight: 15
+  },
   userCardName: {
     marginBottom: 2,
     wordWrap: 'break-word',
@@ -27,6 +32,10 @@ const styles = (theme) => ({
   },
   messagePreview: {
     width: '50%'
+  },
+  sendMessageInput: {
+    padding: 30,
+    flexGrow: 1
   }
 });
 
@@ -40,7 +49,7 @@ const Main = styled('div')(({ theme }) => ({
 }));
 
 const Messages = (props) => {
-  const [activeConversation, setActiveConversation] = useState(0);
+  const [activeConversation, setActiveConversation] = useState(1);
   const [showChatPanel, toggleChatPanel] = useState(true);
   const [conversations, setConversations] = useState([
     {
@@ -49,7 +58,33 @@ const Messages = (props) => {
         name: 'Evan',
         avatar: null,
         location: 'California'
-      }
+      },
+      messages: [
+        {
+          sender: 0,
+          content: 'This is a test message!'
+        },
+        {
+          sender: 0,
+          content: 'Test response'
+        },
+        {
+          sender: 1,
+          content: 'Test response'
+        },
+        {
+          sender: 0,
+          content: 'Test response'
+        },
+        {
+          sender: 1,
+          content: 'Test response'
+        },
+        {
+          sender: 0,
+          content: 'Test response'
+        },
+      ]
     },
     {
       id: 2,
@@ -57,7 +92,17 @@ const Messages = (props) => {
         name: 'Kevin',
         avatar: null,
         location: 'New York'
-      }
+      },
+      messages: [
+        {
+          sender: 0,
+          content: 'This is a test message!'
+        },
+        {
+          sender: 1,
+          content: 'Test response'
+        }
+      ]
     }
   ]);
 
