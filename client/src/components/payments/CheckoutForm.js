@@ -94,18 +94,22 @@ class _CheckoutForm extends Component {
         const { projectOwnerId, projectId, projectTitle, stripe, history, activateToast, socket } = this.props
         const { investmentAmount } = this.state
 
-        console.log(projectOwnerId, projectId, projectTitle, investmentAmount)
         stripe.createToken().then((payload) => {
             pay(projectId, payload, investmentAmount)
-                .then((investment) => investment)
-                .then(() => createNotification(projectOwnerId, investmentAmount, projectId))
-                .then(() => socket.emit('investment', {
-                    id: projectOwnerId,
-                    name: this.userDetails.name,
-                    projectName: projectTitle
-                }, { token: localStorage.getItem('jwtToken') }))
-                .then(() => activateToast('success. you invested.', 'success'))
-                .then(() => history.push("/explore"))
+                // .then((investment) => console.log('im the investment!', investment))
+                .then((response) => {
+                    const { data: { investment } } = response;
+                    console.log(investment);
+                    createNotification(projectOwnerId, investment.value, investment.project)
+                        // .then(() => socket.emit('investment', {
+                        //     id: projectOwnerId,
+                        //     name: this.userDetails.name,
+                        //     projectName: projectTitle
+                        // }, { token: localStorage.getItem('jwtToken') }))
+                        .then(() => activateToast('success. you invested.', 'success'))
+                        .then(() => history.push("/explore"))
+                        .catch(() => activateToast('that was a fail', 'error'))
+                })
                 .catch(() => activateToast('that was a fail', 'error'))
         });
     };
