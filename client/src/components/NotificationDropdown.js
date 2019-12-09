@@ -59,16 +59,18 @@ export default function CustomizedMenus({ alerts, messages }) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose} >
                 {
-                    messages.map((msg, ix) => {
-                        return (
-                            <StyledMenuItem>
-                                <ListItemIcon>
-                                    <MonitizationIcon fontSize="small" />
-                                </ListItemIcon>
-                                <ListItemText primary={msg.content} />
-                            </StyledMenuItem>
-                        )
-                    })
+                    messages
+                        ? messages.map((msg, ix) => {
+                            return (
+                                <StyledMenuItem key={ix}>
+                                    <ListItemIcon>
+                                        <MonitizationIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText primary={msg.content} />
+                                </StyledMenuItem>
+                            )
+                        })
+                        : ''
                 }
             </StyledMenu>
         </div>
