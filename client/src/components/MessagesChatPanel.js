@@ -47,7 +47,7 @@ const CurrentConversationUserInfo = styled('div')(({ theme }) => ({
 
 const MessagesSection = styled('div')(({ theme }) => ({
   padding: '50px 35px',
-  overflowY: 'scroll'
+  overflowY: 'auto'
 }));
 
 const MessageItem = styled(({ sent, ...props }) => <div {...props}/>)(({ theme, ...props }) => ({
