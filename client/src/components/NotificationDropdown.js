@@ -62,7 +62,7 @@ export default function CustomizedMenus({ alerts, messages, notifications }) {
                     notifications
                         ? notifications.map((notification) => {
                             const { _id, investor, investmentAmount, project, } = notification
-                            const notificationMessage = `${investor} invested ${investmentAmount} in your project ${project}`
+                            const notificationMessage = `${investor.name} invested ${investmentAmount} in your project ${project.title}`
                             return (
                                 <StyledMenuItem key={_id}>
                                     <ListItemIcon>

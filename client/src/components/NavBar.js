@@ -96,27 +96,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Navigation = (props) => {
   const [userDropdown, toggleUserDropdown] = useState(null);
-  // const [notifications, setNotifications] = useState([]);
 
-  // useEffect(() => {
-  //   const loadData = async () => {
-  //     await loadNotifications();
-  //   }
-  //   loadData();
-  // }, [])
-
-  // const loadNotifications = async () => {
-  //   try {
-  //     console.log(props.userDetails)
-  //     const response = await getNotifications(props.userDetails.id);
-  //     const { data } = response;
-  //     console.log(data);
-  //     setNotifications(data);
-  //     console.log(notifications)
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
   /* Show property values: authenticated, unauthenticated, both */
   const links = [
     { label: 'Explore', url: '/explore', show: 'authenticated' },
@@ -241,7 +221,8 @@ const NavBar = (props) => {
       const response = await getNotifications(props.userDetails.id);
       const { data } = response;
       setNotifications(data);
-      props.setNotificationCount(data.length);
+      const notificationCount = data.length || 0
+      props.setNotificationCount(notificationCount);
     } catch (err) {
       console.log(err);
     }
