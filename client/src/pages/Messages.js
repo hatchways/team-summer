@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
 
-import { withPageContext } from '../components/pageContext';
-import { CustomOutlinedInput } from '../components/Inputs';
+import { withPageContext } from 'components/pageContext';
+import { CustomOutlinedInput } from 'components/Inputs';
 
 class Messages extends React.Component {
   state = {

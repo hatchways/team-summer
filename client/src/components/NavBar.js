@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import {
   AppBar,
   makeStyles,
@@ -14,9 +15,9 @@ import {
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 
-import { Link, withRouter } from 'react-router-dom';
-
 import SvgProductLaunchLogo from './ProductLaunchLogo';
+import NotificationDropdown from './NotificationDropdown';
+import { messages } from '../dummyData/dropDownItems'; //standin data
 
 const useStyles = makeStyles((theme) => ({
   navBar: {
@@ -38,9 +39,12 @@ const useStyles = makeStyles((theme) => ({
   },
   navBarHomeLink: {
     // Alignment
-    display: 'flex',
-    alignItems: 'center',
-    flexGrow: 1
+    flexGrow: 1,
+    '& a': {
+      display: 'flex',
+      alignItems: 'center',
+      maxWidth: 300
+    }
   },
   navLinks: {
     // Alignment
@@ -130,9 +134,10 @@ const Navigation = (props) => {
 
   const handleDropdownClick = (route) => () => {
     if (route === '/logout') {
+      localStorage.removeItem('jwtToken');
       props.setAuthenticated(false);
       props.setUserDetails(null, '', '', '', '');
-      localStorage.removeItem('jwtToken');
+      props.setNotificationCount(0);
       props.history.push('/login');
     } else {
       props.history.push(route);
@@ -212,11 +217,20 @@ const NavBar = (props) => {
   return (
     <AppBar className={classes.navBar} position="static" color="inherit" elevation={0}>
       <Toolbar>
-        <Link to="/" className={classes.navBarHomeLink}>
-          <SvgProductLaunchLogo style={{ marginRight: 22 }} />
-          <Typography variant="h1">Product Launch</Typography>
-        </Link>
-
+        <div className={classes.navBarHomeLink}>
+          <Link to="/">
+            <SvgProductLaunchLogo style={{ marginRight: 22 }} />
+            <Typography variant="h1">Product Launch</Typography>
+          </Link>
+        </div>
+        {props.notificationCount > 0 &&
+          <div>
+            <NotificationDropdown
+              alerts={props.notificationCount}
+              messages={messages}
+            />
+          </div>
+        }
         <Navigation
           {...props}
           drawerState={drawer}

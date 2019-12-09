@@ -4,11 +4,11 @@ import { capitalize } from '@material-ui/core/utils';
 import { Link } from 'react-router-dom';
 import validator from 'validator';
 
-import { CustomOutlinedInput } from '../components/Inputs';
-import CenteredPageHeader from '../components/CenteredPageHeader';
-import FormValidator from '../helpers/form-validation';
-import { createOrLoginUser } from '../api/users';
-import { withPageContext } from '../components/pageContext';
+import { CustomOutlinedInput } from 'components/Inputs';
+import CenteredPageHeader from 'components/CenteredPageHeader';
+import FormValidator from 'helpers/form-validation';
+import { createOrLoginUser } from 'api/users';
+import { withPageContext } from 'components/pageContext';
 
 const styles = {
   pageContent: {
@@ -108,6 +108,7 @@ class Login extends React.Component {
         this.props.activateToast('Login Successful', 'success');
         this.props.setUserDetails(userLogin.id, userLogin.name, userLogin.about, userLogin.avatar, userLogin.location);
         this.props.setAuthenticated(true);
+        this.props.setNotificationCount(userLogin.notificationCount);
         this.props.history.push('/profile');
       }
     }
