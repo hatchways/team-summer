@@ -64,12 +64,12 @@ const ConversationList = ({ conversations, classes, activeConversation, switchPa
           onClick={() => switchPanelDisplay(conversation.id)}
         >
 
-          <Avatar className={classes.userPicture}>
-            {conversation.user.avatar || conversation.user.name.split('')[0]}
+          <Avatar className={classes.userPicture} src={conversation.users[0].profilePic || null}>
+            {!conversation.users[0].profilePic && conversation.users[0].name.split('')[0]}
           </Avatar>
           <Grid container direction="column">
             <Typography variant="h5" component="p"
-                        className={classes.userCardName}>{conversation.user.name}</Typography>
+                        className={classes.userCardName}>{conversation.users[0].name}</Typography>
             <Typography variant="body1"
                         display="inline"
                         noWrap

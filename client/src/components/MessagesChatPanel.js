@@ -95,12 +95,12 @@ export default (props) => {
         </ConversationNavigation>
       )}
       <CurrentConversationDetails>
-        <Avatar className={classes.userPicture}>
-          {currentConversation.user.avatar || currentConversation.user.name.split('')[0]}
+        <Avatar className={classes.userPicture} src={currentConversation.users[0].profilePic || null}>
+          {!currentConversation.users[0].profilePic && currentConversation.users[0].name.split('')[0]}
         </Avatar>
         <CurrentConversationUserInfo>
-          <Typography variant="h4">{currentConversation.user.name}</Typography>
-          <Typography variant="body1" color="secondary">{currentConversation.user.location}</Typography>
+          <Typography variant="h4">{currentConversation.users[0].name}</Typography>
+          <Typography variant="body1" color="secondary">{currentConversation.users[0].location}</Typography>
         </CurrentConversationUserInfo>
 
         <IconButton>

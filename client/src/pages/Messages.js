@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { styled, useMediaQuery } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { Redirect } from 'react-router-dom';
 
 import MessagesConversationPanel from '../components/MessagesConversationPanel';
 import MessagesChatPanel from '../components/MessagesChatPanel';
 import { withPageContext } from '../components/pageContext';
+import { getConversations } from '../api/messages';
 
 const avatarSize = 60;
 
@@ -105,12 +107,22 @@ const Main = styled('div')(({ theme }) => ({
 *
 * */
 
-const Messages = (props) => {
-  const [activeConversation, setActiveConversation] = useState(1);
-  const [showChatPanel, toggleChatPanel] = useState(true);
-  const [conversations, setConversations] = useState([]);
+class Messages extends React.Component {
+  state = {
+    activeConversation: 0,
+    showChatPanel: false,
+    conversations: []
+  };
 
-  const desktop = useMediaQuery((theme) => theme.breakpoints.up('md'));
+  async componentDidMount() {
+    if (!this.props.userDetails.id) {
+      this.props.activateToast('Please Log in to view messages', 'error');
+      return this.props.history.push('/login');
+    }
+
+    const response = await getConversations(this.props.userDetails.id);
+    this.setState({ conversations: response.data });
+  }
 
   // onSubmit = (event) => {
   //   const { socket } = this.props;
@@ -121,46 +133,48 @@ const Messages = (props) => {
   //   }, { token: localStorage.getItem('jwtToken') });
   // };
 
-  const switchPanelDisplay = (conversationId) => {
-    toggleChatPanel(!showChatPanel);
-    setActiveConversation(conversationId);
+  switchPanelDisplay = (conversationId) => {
+    this.setState({
+      showChatPanel: !this.state.showChatPanel,
+      activeConversation: conversationId
+    });
   };
 
-  const renderPageComponents = () => {
-    const conversationProps = {
-      conversations,
-      activeConversation,
-      switchPanelDisplay,
-      ...props
+  renderPageComponents = () => {
+    const componentProps = {
+      conversations: this.state.conversations,
+      activeConversation: this.activeConversation,
+      switchPanelDisplay: this.switchPanelDisplay,
+      desktop: this.props.desktop,
+      ...this.props
     };
 
-    const chatProps = {
-      conversations,
-      activeConversation,
-      desktop,
-      switchPanelDisplay,
-      ...props
-    };
-
-    if (desktop) {
+    if (this.props.desktop) {
       return (
         <React.Fragment>
-          <MessagesConversationPanel {...conversationProps}/>
-          <MessagesChatPanel {...chatProps} />
+          <MessagesConversationPanel {...componentProps}/>
+          <MessagesChatPanel {...componentProps} />
         </React.Fragment>
       );
     } else {
-      if (showChatPanel) return <MessagesChatPanel {...chatProps} />;
+      if (this.state.showChatPanel) return <MessagesChatPanel {...componentProps} />;
 
-      return <MessagesConversationPanel {...conversationProps}/>;
+      return <MessagesConversationPanel {...componentProps}/>;
     }
   };
 
-  return (
-    <Main>
-      {renderPageComponents()}
-    </Main>
-  );
+  render() {
+    return (
+      <Main>
+        {this.renderPageComponents()}
+      </Main>
+    );
+  }
+}
+
+const withMediaQuery = Component => props => {
+  const mediaQuery = useMediaQuery((theme) => theme.breakpoints.up('md'));
+  return <Component desktop={mediaQuery} {...props} />;
 };
 
-export default withPageContext(withStyles(styles)(Messages));
+export default withPageContext(withStyles(styles)(withMediaQuery(Messages)));
