@@ -1,124 +1,117 @@
-import React from 'react';
-import { Typography, Grid, Avatar, IconButton } from '@material-ui/core';
-import SettingsIcon from '@material-ui/icons/Settings';
-
-import * as MessageStyles from '../styles/MessagesStyles';
-import { withPageContext } from '../components/pageContext';
+import React, { useState } from 'react';
+import { styled, useMediaQuery } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-class Messages extends React.Component {
-  state = {
-    message: '',
-    receivedMessage: '',
-    activeConversation: 0,
-    conversations: [
-      {
-        id: 0,
-        user: {
-          name: 'Evan',
-          avatar: null,
-          location: 'California'
-        },
-        active: true
-      },
-      {
-        id: 1,
-        user: {
-          name: 'Kevin',
-          avatar: null,
-          location: 'New York'
-        },
-        active: false
+import MessagesConversationPanel from '../components/MessagesConversationPanel';
+import MessagesChatPanel from '../components/MessagesChatPanel';
+import { withPageContext } from '../components/pageContext';
+
+const avatarSize = 60;
+
+const styles = (theme) => ({
+  conversationListHeader: {
+    marginBottom: 30
+  },
+  userListHeader: {
+    marginRight: 10
+  },
+  userPicture: {
+    width: avatarSize,
+    height: avatarSize,
+    marginRight: 15
+  },
+  userCardName: {
+    marginBottom: 2,
+    wordWrap: 'break-word',
+    fontWeight: 600
+  },
+  messagePreview: {
+    width: '50%'
+  }
+});
+
+const Main = styled('div')(({ theme }) => ({
+  display: 'grid',
+  height: 'calc(100vh - 74px)',
+
+  [theme.breakpoints.up('md')]: {
+    gridTemplateColumns: 'minmax(100px, 0.8fr) minmax(100px, 1.2fr)'
+  }
+}));
+
+const Messages = (props) => {
+  const [activeConversation, setActiveConversation] = useState(0);
+  const [showChatPanel, toggleChatPanel] = useState(true);
+  const [conversations, setConversations] = useState([
+    {
+      id: 1,
+      user: {
+        name: 'Evan',
+        avatar: null,
+        location: 'California'
       }
-    ]
+    },
+    {
+      id: 2,
+      user: {
+        name: 'Kevin',
+        avatar: null,
+        location: 'New York'
+      }
+    }
+  ]);
+
+  const desktop = useMediaQuery((theme) => theme.breakpoints.up('md'));
+
+  // onSubmit = (event) => {
+  //   const { socket } = this.props;
+  //
+  //   socket.emit('message', {
+  //     id: this.props.userDetails.id,
+  //     message: this.state.message
+  //   }, { token: localStorage.getItem('jwtToken') });
+  // };
+
+  const switchPanelDisplay = (conversationId) => {
+    toggleChatPanel(!showChatPanel);
+    setActiveConversation(conversationId);
   };
 
-  onSubmit = (event) => {
-    const { socket } = this.props;
+  const renderPageComponents = () => {
+    const conversationProps = {
+      conversations,
+      activeConversation,
+      switchPanelDisplay,
+      ...props
+    };
 
-    socket.emit('message', {
-      id: this.props.userDetails.id,
-      message: this.state.message
-    }, { token: localStorage.getItem('jwtToken') });
+    const chatProps = {
+      conversations,
+      activeConversation,
+      desktop,
+      switchPanelDisplay,
+      ...props
+    };
+
+    if (desktop) {
+      return (
+        <React.Fragment>
+          <MessagesConversationPanel {...conversationProps}/>
+          <MessagesChatPanel {...chatProps} />
+        </React.Fragment>
+      );
+    } else {
+      if (showChatPanel) return <MessagesChatPanel {...chatProps} />;
+
+      return <MessagesConversationPanel {...conversationProps}/>;
+    }
   };
 
-  renderConversationList() {
-    const { classes } = this.props;
+  return (
+    <Main>
+      {renderPageComponents()}
+    </Main>
+  );
+};
 
-    return (
-      <MessageStyles.ConversationList>
-        {this.state.conversations.map((conversation, index) => (
-          <MessageStyles.UserConversationCard key={index} active={conversation.active} elevation={2}>
-            <Avatar className={classes.userPicture}>
-              {conversation.user.avatar || conversation.user.name.split('')[0]}
-            </Avatar>
-            <Grid container direction="column">
-              <Typography variant="h5" component="p"
-                          className={classes.userCardName}>{conversation.user.name}</Typography>
-              <Typography variant="body1"
-                          display="inline"
-                          noWrap
-                          color="secondary"
-                          className={classes.messagePreview}>
-                {'Hello! This is my last message'}
-              </Typography>
-            </Grid>
-          </MessageStyles.UserConversationCard>
-        ))}
-      </MessageStyles.ConversationList>
-    );
-  }
-
-  renderConversationPanel() {
-    const { classes } = this.props;
-
-    return (
-      <MessageStyles.ConversationListPanel elevation={5}>
-
-        <Grid container alignItems="center" className={classes.conversationListHeader}>
-          <Typography variant="h4" component="h3" className={classes.userListHeader}>Messages</Typography>
-          <MessageStyles.NewCount>
-            <Typography variant="h6" component="p">2</Typography>
-          </MessageStyles.NewCount>
-        </Grid>
-
-        {this.renderConversationList()}
-      </MessageStyles.ConversationListPanel>
-    );
-  }
-
-  renderMessageSection() {
-    const { classes } = this.props;
-    const { conversations, activeConversation } = this.state;
-
-    const currentConversation = conversations.find((conversation) => conversation.id === activeConversation);
-
-    return (
-      <MessageStyles.CurrentConversation>
-        <MessageStyles.CurrentConversationDetails>
-          <Avatar className={classes.userPicture}>
-            {currentConversation.user.avatar || currentConversation.user.name.split('')[0]}
-          </Avatar>
-          <MessageStyles.CurrentConversationUserInfo>
-            <Typography variant="h4">{currentConversation.user.name}</Typography>
-            <Typography variant="body1" color="secondary">{currentConversation.user.location}</Typography>
-          </MessageStyles.CurrentConversationUserInfo>
-          <IconButton>
-            <SettingsIcon/>
-          </IconButton>
-        </MessageStyles.CurrentConversationDetails>
-      </MessageStyles.CurrentConversation>
-    );
-  };
-
-  render() {
-    return (
-      <MessageStyles.Main>
-        {this.renderConversationPanel()}
-        {this.renderMessageSection()}
-      </MessageStyles.Main>
-    );
-  }
-}
-
-export default withPageContext(withStyles(MessageStyles.styles)(Messages));
+export default withPageContext(withStyles(styles)(Messages));
