@@ -19,8 +19,9 @@ export const getNotifications = async () => {
   }
 };
 
-export const createNotification = async (notificationData) => {
+export const createNotification = async (projectOwnerId, investmentAmount, projectId) => {
   const url = `/notifications`;
+  const notificationData = { projectOwnerId, investmentAmount, projectId }
   const token = localStorage.getItem('jwtToken');
   const authOptions = {
     headers: {

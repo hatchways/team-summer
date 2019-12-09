@@ -13,6 +13,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import { stripeStyle } from './stripeStyle';
 import { pay } from '../../api/payments';
+import { createNotification } from '../../api/notifications';
 import { toDollars } from '../../helpers/formatting';
 
 const styles = (muiBaseTheme) => ({
@@ -90,12 +91,13 @@ class _CheckoutForm extends Component {
 
     handlePaymentSubmit = (e) => {
         e.preventDefault();
-        const { projectId, stripe, history, activateToast } = this.props
+        const { projectOwnerId, projectId, stripe, history, activateToast } = this.props
         const { investmentAmount } = this.state
 
         stripe.createToken().then((payload) => {
             pay(projectId, payload, investmentAmount)
                 .then((investment) => investment)
+                .then(() => createNotification(projectOwnerId, investmentAmount, projectId))
                 .then(() => activateToast('success. you invested.', 'success'))
                 .then(() => history.push("/explore"))
                 .catch(() => activateToast('that was a fail', 'error'))
