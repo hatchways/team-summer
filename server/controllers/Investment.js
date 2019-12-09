@@ -29,12 +29,13 @@ const invest = async (userId, projectId, investmentAmount) => {
       value: dollarAmount
     });
     await User.updateOne(
-      { _id: userId }, 
+      { _id: userId },
       { $push: { investments: investment._id } }
     );
     await Project.updateOne(
       { _id: projectId },
-      { $inc: {
+      {
+        $inc: {
           'funding.donorCount': 1,
           'funding.fundingTotal': dollarAmount
         }
@@ -65,7 +66,7 @@ exports.makePayment = async (req, res) => {
     description: 'investment'
   }
   try {
-    const investment = await invest(userId, projectId, investmentAmount);
+    const investment = await invest(userId, projectId, investmentAmount / 100);
     if (investment) {
       stripe.charges.create(order, (err, charge) => {
         if (err) {
