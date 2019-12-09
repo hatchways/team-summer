@@ -1,4 +1,5 @@
 const messages = require('./events/Messages');
+const investments = require('./events/Investments');
 const middleware = require('./middleware');
 
 
@@ -32,6 +33,7 @@ module.exports = (io) => {
 
     socket.on('message', messages.receiveMessage(io));
 
+    socket.on('investment', investments.receiveInvestment(io));
     // Socket emitters
 
     // Client disconnect
