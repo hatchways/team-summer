@@ -19,7 +19,6 @@ exports.getInvestment = async (req, res) => {
     })
 }
 
-
 const invest = async (userId, projectId, investmentAmount) => {
   const dollarAmount = toDollarsWithCents(investmentAmount)
 
