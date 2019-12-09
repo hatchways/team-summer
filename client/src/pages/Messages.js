@@ -48,11 +48,9 @@ const Main = styled('div')(({ theme }) => ({
   }
 }));
 
-const Messages = (props) => {
-  const [activeConversation, setActiveConversation] = useState(1);
-  const [showChatPanel, toggleChatPanel] = useState(true);
-  const [conversations, setConversations] = useState([
-    {
+// Placeholder Conversations
+/*
+* {
       id: 1,
       user: {
         name: 'Evan',
@@ -104,7 +102,13 @@ const Messages = (props) => {
         }
       ]
     }
-  ]);
+*
+* */
+
+const Messages = (props) => {
+  const [activeConversation, setActiveConversation] = useState(1);
+  const [showChatPanel, toggleChatPanel] = useState(true);
+  const [conversations, setConversations] = useState([]);
 
   const desktop = useMediaQuery((theme) => theme.breakpoints.up('md'));
 

@@ -4,6 +4,9 @@ import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
 
 const ConversationListPanel = styled(Paper)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
   padding: 60,
 
   [theme.breakpoints.up('lg')]: {
@@ -48,6 +51,11 @@ const UserConversationCard = styled(({ active, ...props }) => <Card {...props}/>
 const ConversationList = ({ conversations, classes, activeConversation, switchPanelDisplay }) => {
   return (
     <ConversationListStyled>
+      {conversations.length === 0 && (
+        <Typography variant="h6" color="secondary" component="p" style={{ textAlign: 'center' }}>
+          No conversations
+        </Typography>
+      )}
       {conversations.map((conversation, index) => (
         <UserConversationCard
           key={index}
