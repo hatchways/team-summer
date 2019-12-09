@@ -125,7 +125,7 @@ class Messages extends React.Component {
     let conversationIndex = 0;
     let conversations = [...this.state.conversations];
 
-    const conversation = conversations.find((conversation, index) => {
+    conversations.find((conversation, index) => {
       if (conversation._id === conversationId) {
         conversationIndex = index;
       }
@@ -148,6 +148,10 @@ class Messages extends React.Component {
     this.setState({ conversations: response.data });
     this.scrollChatToBottom();
   }
+
+  handleRecieveMessage = () => {
+
+  };
 
   switchPanelDisplay = (conversationId) => {
     this.setState({

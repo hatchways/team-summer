@@ -136,9 +136,9 @@ export default (props) => {
         )}
         {currentConversation.messages.map((message, index) => (
           <MessageItem key={index} sent={message.sender === props.userDetails.id}>
-            {message.sender === 0 && (
-              <Avatar className={classes.userPictureSmall}>
-                {currentConversation.user.avatar || currentConversation.user.name.split('')[0]}
+            {message.sender !== props.userDetails.id && (
+              <Avatar className={classes.userPictureSmall} src={currentConversation.users[0].profilePic || null}>
+                {!currentConversation.users[0].profilePic && currentConversation.users[0].name.split('')[0]}
               </Avatar>
             )}
             <MessageBubble>
