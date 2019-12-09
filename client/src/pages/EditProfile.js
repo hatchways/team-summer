@@ -2,12 +2,12 @@ import React from 'react';
 import { Typography, withStyles, Button, TextField } from '@material-ui/core';
 import validator from 'validator';
 
-import { OutlinedSelect } from '../components/Inputs';
-import UploadImages from '../components/UploadImages';
-import FormValidator from '../helpers/form-validation';
-import { editUser } from '../api/users';
-import { locations } from '../dummyData/dropDownItems'
-import { withPageContext } from '../components/pageContext';
+import { OutlinedSelect } from 'components/Inputs';
+import UploadImages from 'components/UploadImages';
+import FormValidator from 'helpers/form-validation';
+import { editUser } from 'api/users';
+import { locations } from 'dummyData/dropDownItems'
+import { withPageContext } from 'components/pageContext';
 
 const styles = {
   pageContent: {
