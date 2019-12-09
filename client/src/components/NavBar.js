@@ -214,7 +214,7 @@ const NavBar = (props) => {
       await loadNotifications();
     }
     loadData();
-  }, [])
+  }, [drawer])
 
   const loadNotifications = async () => {
     try {
