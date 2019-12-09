@@ -18,7 +18,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SvgProductLaunchLogo from './ProductLaunchLogo';
 import NotificationDropdown from './NotificationDropdown';
 import { getNotifications } from '../api/notifications';
-import { messages } from '../dummyData/dropDownItems'; //standin data
 
 const useStyles = makeStyles((theme) => ({
   navBar: {
@@ -268,7 +267,6 @@ const NavBar = (props) => {
             <NotificationDropdown
               alerts={props.notificationCount}
               notifications={notifications}
-              messages={messages}
             />
           </div>
         }

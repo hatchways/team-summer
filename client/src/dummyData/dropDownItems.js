@@ -16,20 +16,7 @@ const locations = [
     { id: 223, name: 'Florida' }
 ]
 
-const messages = [
-    {
-        content: "blah blah"
-    },
-    {
-        content: "etc etc"
-    },
-    {
-        content: "yada yada"
-    }
-]
-
 export {
     industries,
     locations,
-    messages
 }
