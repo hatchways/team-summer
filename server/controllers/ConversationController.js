@@ -19,22 +19,23 @@ exports.getConversationsForUser = async (req, res) => {
   const { user: userId } = req.query;
 
   try {
-    await Conversation.find({users: mongoose.Types.ObjectId(userId)})
-    .populate({
-      path: 'users',
-      match: {_id: {$ne: userId}},
-      select: ['name', 'profilePic', 'location'],
-      // populate: {
-      //   path: 'messages'
-      // }
-    })
-    .exec((err, user) => {
-      if (err) return res.status(400).json({error: err});
+    await Conversation.find({ users: mongoose.Types.ObjectId(userId) })
+      .populate({
+        path: 'users',
+        match: { _id: { $ne: userId } },
+        select: ['name', 'profilePic', 'location']
+      })
+      .populate({
+        path: 'messages',
+        select: ['content']
+      })
+      .exec((err, user) => {
+        if (err) return res.status(400).json({ error: err });
 
-      res.status(200).json(user)
-    })
+        res.status(200).json(user);
+      });
   } catch (error) {
-    mongoDbErrorHandler(error, res)
+    mongoDbErrorHandler(error, res);
   }
 };
 

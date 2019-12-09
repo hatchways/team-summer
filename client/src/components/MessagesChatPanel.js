@@ -66,7 +66,7 @@ const MessageBubble = styled('div')(({ theme }) => ({
   borderRadius: 100
 }));
 
-const MessageInput = styled('div')(({ theme }) => ({
+const MessageInput = styled('form')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
 
@@ -85,6 +85,17 @@ export default (props) => {
       <Typography variant="h3" color="secondary" component="p">No current conversation</Typography>
     </div>
   );
+
+  const sendMessage = (receiver, conversation) => (event) => {
+    event.preventDefault();
+    props.socket.emit('sendMessage', {
+        sender: props.userDetails.id,
+        receiver,
+        conversation,
+        content: outboundMessage
+      },
+      { token: localStorage.getItem('jwtToken') });
+  };
 
   return (
     <ConversationGrid>
@@ -114,7 +125,7 @@ export default (props) => {
             <Typography variant="h3" color="secondary" component="p" style={{ textAlign: 'center' }}>
               No Messages
             </Typography>
-            <Typography variant="h4" color="secondary" component="p" style={{textAlign: 'center'}}>
+            <Typography variant="h4" color="secondary" component="p" style={{ textAlign: 'center' }}>
               Say hello!
             </Typography>
           </React.Fragment>
@@ -133,15 +144,16 @@ export default (props) => {
           </MessageItem>
         ))}
       </MessagesSection>
-      <MessageInput>
+      <MessageInput onSubmit={sendMessage}>
         <InputBase classes={{ root: classes.sendMessageInput }}
                    placeholder="Type your message"
                    value={outboundMessage}
                    onChange={(event) => setOutboundMessage(event.target.value)}
         />
         {props.desktop
-          ? <Button variant="contained" color="primary" disabled={!outboundMessage}>Submit</Button>
-          : <IconButton color="primary" disabled={!outboundMessage}>
+          ? <Button variant="contained" color="primary" disabled={!outboundMessage}
+                    onClick={sendMessage(currentConversation.users[0]._id, currentConversation._id)}>Submit</Button>
+          : <IconButton color="primary" type="submit" disabled={!outboundMessage}>
             <SendIcon/>
           </IconButton>
         }

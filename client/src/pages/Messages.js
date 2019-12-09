@@ -1,7 +1,6 @@
 import React from 'react';
 import { styled, useMediaQuery } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { Redirect } from 'react-router-dom';
 
 import MessagesConversationPanel from '../components/MessagesConversationPanel';
 import MessagesChatPanel from '../components/MessagesChatPanel';
