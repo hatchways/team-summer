@@ -122,13 +122,22 @@ class Project extends React.Component {
     };
 
     const handleFundProject = () => {
-      //TODO: Implement fund logic
+      const { history, userDetails, match } = this.props
+
+      history.push({
+        pathname: '/checkout',
+        state: {
+          userId: userDetails.id,
+          projectId: match.params.id,
+          projectTitle: this.state.project.title
+        }
+      })
     };
 
     const disableFunding = () => {
       // TODO: Logic to handle disabling funding of project, maybe if project fund period has ended
       // Disabled by default for now until funding logic is added
-      return true;
+      return false;
     };
 
     const getButtonType = () => {
