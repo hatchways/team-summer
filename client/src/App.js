@@ -61,7 +61,8 @@ class App extends React.Component {
         description: '',
         avatar: '',
         location: ''
-      }
+      },
+      notificationCount: 0
     };
 
     // Authenticate users pre-render
@@ -115,7 +116,8 @@ class App extends React.Component {
       showToast: true
     });
   };
-
+  toggleToast = () => this.setState((state) => ({ showToast: !state.showToast }));
+  setNotificationCount = (notificationCount) => this.setState({ notificationCount });
   setAuthenticated = (authenticated) => this.setState({ userAuthenticated: authenticated });
   setUserDetails = (id, name, about, avatar, location) => this.setState({
     userDetails: {
@@ -127,10 +129,13 @@ class App extends React.Component {
     }
   });
 
-  toggleToast = () => this.setState((state) => ({ showToast: !state.showToast }));
-
   render() {
-    const { toastProperties, userDetails, userAuthenticated, showToast } = this.state;
+    const {
+      toastProperties,
+      userDetails,
+      userAuthenticated,
+      showToast,
+      notificationCount } = this.state;
 
     const contextProps = {
       activateToast: this.activateToast,
@@ -138,6 +143,8 @@ class App extends React.Component {
       setAuthenticated: this.setAuthenticated,
       userDetails: userDetails,
       setUserDetails: this.setUserDetails,
+      notificationCount: notificationCount,
+      setNotificationCount: this.setNotificationCount,
       socket: this.socket
     };
 
@@ -149,6 +156,8 @@ class App extends React.Component {
             setUserDetails={this.setUserDetails}
             userAuthenticated={userAuthenticated}
             setAuthenticated={this.setAuthenticated}
+            notificationCount={notificationCount}
+            setNotificationCount={this.setNotificationCount}
           />
 
           {/* Routes */}
