@@ -240,7 +240,7 @@ const NavBar = (props) => {
             <Typography variant="h1">Product Launch</Typography>
           </Link>
         </div>
-        {props.notifications.length > 0 &&
+        {props.notifications && props.notifications.length > 0 &&
           <div>
             <NotificationDropdown
               alerts={props.notifications.length}
