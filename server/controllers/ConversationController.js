@@ -23,7 +23,7 @@ exports.getConversationsForUser = async (req, res) => {
     .populate({
       path: 'users',
       match: {_id: {$ne: userId}},
-      select: ['name', 'profilePic'],
+      select: ['name', 'profilePic', 'location'],
       // populate: {
       //   path: 'messages'
       // }
