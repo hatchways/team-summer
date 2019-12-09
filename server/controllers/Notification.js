@@ -8,7 +8,6 @@ exports.getNotifications = (req, res) => {
     });
   }
   const { userId } = req.params;
-  console.log(userId)
   Notification.find({ user: userId })
     .exec((err, notifications) => {
       if (err) return res.status(400).json({ err });
