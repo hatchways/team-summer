@@ -6,21 +6,28 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     textAlign: 'center',
+    width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: '30%',
+      minWidth: '350px',
+      maxWidth: '400px',
       minHeight: '100vh'
     },
   },
   avatar: {
-    width: 60,
-    height: 60,
+    width: 80,
+    height: 80,
     margin: '10px auto',
     [theme.breakpoints.up('md')]: {
-      margin: '30px auto',
+      margin: '25px auto 30px',
+      width: 100,
+      height: 100,
     },
   },
   button: {
-    margin: '10px 0px 10px 0px',
+    margin: '20px 0px 15px 0px',
+    [theme.breakpoints.up('md')]: {
+      margin: '30px 0px 15px 0px',
+    },
   }
 }));
 
@@ -46,7 +53,12 @@ const ProfileDetailPanel = ({ id, profilePic, name, location, about, expertise, 
       <Avatar className={classes.avatar} src={profilePic || null} />
       <Typography variant="h3">{name}</Typography>
       <Typography variant="body1">{location}</Typography>
-      <Button classes={{ root: classes.button }} type="submit" variant="outlined" color="primary" onClick={handleRedirect(buttonType)}>
+      <Button 
+        classes={{ root: classes.button }} 
+        type="submit" 
+        variant="outlined" 
+        color="primary" 
+        onClick={handleRedirect(buttonType)}>
         {buttonType}
       </Button>
       <Typography variant="body1">{about}</Typography>
