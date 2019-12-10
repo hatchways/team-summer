@@ -7,6 +7,7 @@ exports.create = async (req, res) => {
 
   try {
     const conversation = await Conversation.create({ users });
+    await User.updateMany({_id: {$in: users}}, {conversations: conversation._id});
     return res.status(200).json(conversation);
   } catch (error) {
     mongoDbErrorHandler(error, res);
@@ -45,6 +46,7 @@ exports.deleteConversation = async (req, res) => {
   try {
     await Conversation.deleteOne({ _id: id });
     await Message.deleteMany({ conversation: id });
+    await User.updateMany({conversations: id}, {$pull: {conversations: id}});
     res.status(200).json({ success: true });
   } catch (error) {
     mongoDbErrorHandler(error, res);

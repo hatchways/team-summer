@@ -3,8 +3,9 @@ const { User, Project, Conversation } = require('../models');
 
 
 exports.isDev = (req, res, next) => {
-  console.log(process.env.NODE_ENV);
-  res.status(200).json({test: 2})
+  if (process.env.ENVIRONMENT === 'development') return next();
+
+  res.status(401).json({error: `Cannot process request on ENVIRONMENT: ${process.env.ENVIRONMENT}`})
 };
 
 exports.isAuth = async (req, res, next) => {
