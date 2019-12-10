@@ -5,7 +5,9 @@ import {
   IconButton,
   Typography,
   InputBase,
-  Button
+  Button,
+  Menu,
+  MenuItem
 } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -81,21 +83,36 @@ const ConversationNavigation = ({ switchPanelDisplay }) => (
   </ConversationNavigationStyles>
 );
 
-const ConversationDetails = ({ classes, currentConversation }) => (
-  <CurrentConversationDetails>
-    <Avatar className={classes.userPicture} src={currentConversation.users[0].profilePic || null}>
-      {!currentConversation.users[0].profilePic && currentConversation.users[0].name.split('')[0]}
-    </Avatar>
-    <CurrentConversationUserInfo>
-      <Typography variant="h4">{currentConversation.users[0].name}</Typography>
-      <Typography variant="body1" color="secondary">{currentConversation.users[0].location}</Typography>
-    </CurrentConversationUserInfo>
+const ConversationDetails = ({ classes, currentConversation, conversationActions }) => {
+  const [showConversationActions, toggleConversationActions] = useState(null);
 
-    <IconButton>
-      <SettingsIcon/>
-    </IconButton>
-  </CurrentConversationDetails>
-);
+  return (
+    <CurrentConversationDetails>
+      <Avatar className={classes.userPicture} src={currentConversation.users[0].profilePic || null}>
+        {!currentConversation.users[0].profilePic && currentConversation.users[0].name.split('')[0]}
+      </Avatar>
+      <CurrentConversationUserInfo>
+        <Typography variant="h4">{currentConversation.users[0].name}</Typography>
+        <Typography variant="body1" color="secondary">{currentConversation.users[0].location}</Typography>
+      </CurrentConversationUserInfo>
+
+      <IconButton onClick={(event) => toggleConversationActions(event.currentTarget)}>
+        <SettingsIcon/>
+      </IconButton>
+      <Menu
+        id={`conversation-${currentConversation._id}-details-menu`}
+        anchorEl={showConversationActions}
+        keepMounted
+        open={Boolean(showConversationActions)}
+        onClose={() => toggleConversationActions(null)}
+      >
+        {conversationActions.map((action, index) => (
+          <MenuItem key={`${action.label}-${index}`} onClick={action.callback}>{action.label}</MenuItem>
+        ))}
+      </Menu>
+    </CurrentConversationDetails>
+  );
+};
 
 const Chat = ({ classes, currentConversation, chatWindowRef, userDetails }) => (
   <MessagesSection ref={chatWindowRef}>
@@ -172,6 +189,10 @@ export default (props) => {
     setOutboundMessage('');
   };
 
+  const conversationActions = [
+    {label: 'Delete', callback: () => props.removeConversation(currentConversation._id)}
+  ];
+
   const commonProps = {
     classes,
     currentConversation,
@@ -184,7 +205,8 @@ export default (props) => {
         <ConversationNavigation switchPanelDisplay={props.switchPanelDisplay}/>
       )}
 
-      <ConversationDetails currentConversation={currentConversation} {...commonProps} />
+      <ConversationDetails currentConversation={currentConversation}
+                           conversationActions={conversationActions} {...commonProps} />
 
       <Chat
         chatWindowRef={props.chatWindowRef}

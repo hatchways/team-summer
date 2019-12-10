@@ -82,6 +82,14 @@ class Messages extends React.Component {
     this.scrollChatToBottom();
   };
 
+  removeConversation = (id) => {
+    this.setState({
+      conversations: this.state.conversations.filter((conversation) => {
+        return conversation._id !== id;
+      })
+    });
+  };
+
   async componentDidMount() {
     if (!this.props.userDetails.id) {
       this.props.activateToast('Please Log in to view messages', 'error');
@@ -112,6 +120,7 @@ class Messages extends React.Component {
       desktop: this.props.desktop,
       handleSetMessage: this.handleSetMessage,
       chatWindowRef: this.chatWindowRef,
+      removeConversation: this.removeConversation,
       ...this.props
     };
 
