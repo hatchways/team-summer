@@ -180,7 +180,7 @@ class App extends React.Component {
               />
               <Route path="/signup" component={SignUp}/>
               <Route path="/login" component={Login}/>
-              <Route path="/profile/:id?" exact component={ProfilePage}/>
+              <Route path="/profile/:id" exact component={ProfilePage}/>
               <Route path="/profile/edit/:id" exact component={EditProfile}/>
               <Route path="/launch" component={AddProject}/>
               <Route path="/projects/:id" exact component={Project}/>

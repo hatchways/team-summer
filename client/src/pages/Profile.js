@@ -57,16 +57,25 @@ class ProfilePage extends Component {
       this.props.activateToast('Please log in to view profiles', 'error');
       return this.props.history.push('/login');
     }
-    
-    const id = this.props.match.params.id || this.props.userDetails.id;
+
+    const id = this.props.match.params.id
+    const isCurrentUser = id === this.props.userDetails.id;
     getUser(id).then((profile) => {
       // TODO: setUserDetails should take (id, profile)
       this.props.setUserDetails(id, profile.data.name, profile.data.about, profile.data.profilePic, profile.data.location);
-      this.setState({ profile: profile.data }, this.setUserType());
-    });
+      this.setState(
+        { 
+          profile: profile.data, 
+          isCurrentUser
+        }
+      )
+    })
   }
 
   setUserType = () => {
+    console.log("profile",this.state.profile)
+    
+  //   console.log("data",this.props.userDetails.id)
     const isCurrentUser = this.state.profile._id === this.props.userDetails.id ?
       true : false
     this.setState({isCurrentUser})
@@ -92,7 +101,6 @@ class ProfilePage extends Component {
     );
   }
 
-
   setFilter = (filter) => this.setState({displayFilter: filter});
 
   renderTabs = (classes) => {
@@ -115,7 +123,6 @@ class ProfilePage extends Component {
     } else {
       data = profile.projects 
     } 
-    console.log("dta",data.length)
     if(data.length === 0) {
       return <PlaceholderCard />
     }
