@@ -65,6 +65,8 @@ const styles = (muiBaseTheme) => ({
     }
 });
 
+const MINIMUM_AMOUNT = 5;
+
 class _CheckoutForm extends Component {
 
     state = {
@@ -81,10 +83,10 @@ class _CheckoutForm extends Component {
 
     handleInvestmentSubmit = (e) => {
         e.preventDefault();
-        if (this.state.investmentAmount >= 5) {
+        if (this.state.investmentAmount >= MINIMUM_AMOUNT) {
             this.setState({ investmentSaved: true })
         } else {
-            this.props.activateToast('Sorry, $5 minimum', 'neutral')
+            this.props.activateToast(`Sorry, $${MINIMUM_AMOUNT} minimum`, 'neutral')
         }
     }
 
@@ -182,7 +184,7 @@ class _CheckoutForm extends Component {
     render() {
         const { projectTitle, classes } = this.props
         const { investmentAmount, investmentSaved } = this.state
-
+        
         return (
             <div className="checkout-form">
                 <Card className={classes.card}>
@@ -195,7 +197,7 @@ class _CheckoutForm extends Component {
                     </CardContent>
                     {
                         investmentSaved &&
-                            investmentAmount >= 5 ?
+                            investmentAmount >= MINIMUM_AMOUNT ?
                             this.renderPaymentCard(classes) :
                             this.renderInvestmentCard(classes)
                     }
