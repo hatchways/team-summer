@@ -158,6 +158,8 @@ class App extends React.Component {
             setAuthenticated={this.setAuthenticated}
             notifications={notifications}
             setNotifications={this.setNotifications}
+            socket={this.socket}
+            activateToast={this.activateToast}
           />
 
           {/* Routes */}
