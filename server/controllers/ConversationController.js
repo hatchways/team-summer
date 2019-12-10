@@ -1,4 +1,4 @@
-const { Conversation, User } = require('../models');
+const { Conversation, Message, User } = require('../models');
 const mongoose = require('mongoose');
 import { mongoDbErrorHandler } from '../utils';
 
@@ -44,6 +44,7 @@ exports.deleteConversation = async (req, res) => {
 
   try {
     await Conversation.deleteOne({ _id: id });
+    await Message.deleteMany({ conversation: id });
     res.status(200).json({ success: true });
   } catch (error) {
     mongoDbErrorHandler(error, res);

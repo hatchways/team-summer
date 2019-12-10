@@ -58,7 +58,8 @@ class Messages extends React.Component {
   chatWindowRef = React.createRef();
 
   scrollChatToBottom = () => {
-    if (this.props.desktop || this.state.showChatPanel) {
+    if (this.state.conversations.length > 0 &&
+      (this.state.desktop || (!this.props.desktop && this.state.showChatPanel))) {
       const chatWindow = this.chatWindowRef.current;
 
       chatWindow.scrollTop = chatWindow.scrollHeight;
@@ -80,14 +81,6 @@ class Messages extends React.Component {
 
     this.setState({ conversations });
     this.scrollChatToBottom();
-  };
-
-  removeConversation = (id) => {
-    this.setState({
-      conversations: this.state.conversations.filter((conversation) => {
-        return conversation._id !== id;
-      })
-    });
   };
 
   async componentDidMount() {
@@ -120,7 +113,6 @@ class Messages extends React.Component {
       desktop: this.props.desktop,
       handleSetMessage: this.handleSetMessage,
       chatWindowRef: this.chatWindowRef,
-      removeConversation: this.removeConversation,
       ...this.props
     };
 

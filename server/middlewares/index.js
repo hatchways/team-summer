@@ -1,6 +1,12 @@
 const { decodeToken } = require('../utils');
 const { User, Project, Conversation } = require('../models');
 
+
+exports.isDev = (req, res, next) => {
+  console.log(process.env.NODE_ENV);
+  res.status(200).json({test: 2})
+};
+
 exports.isAuth = async (req, res, next) => {
   const { authorization } = req.headers;
   if (authorization) {
