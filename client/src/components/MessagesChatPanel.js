@@ -20,7 +20,7 @@ const ConversationGrid = styled('div')(({ theme }) => ({
   }
 }));
 
-const ConversationNavigation = styled('div')(({ theme }) => ({
+const ConversationNavigationStyles = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: '0 20px',
@@ -74,6 +74,78 @@ const MessageInput = styled('form')(({ theme }) => ({
   borderTop: `1px solid ${lighten(theme.palette.secondary.main, 0.7)}`
 }));
 
+const ConversationNavigation = ({ switchPanelDisplay }) => (
+  <ConversationNavigationStyles onClick={() => switchPanelDisplay(0)}>
+    <ChevronLeftIcon/>
+    <Typography variant="h6" component="p">Back to Conversation List</Typography>
+  </ConversationNavigationStyles>
+);
+
+const ConversationDetails = ({ classes, currentConversation }) => (
+  <CurrentConversationDetails>
+    <Avatar className={classes.userPicture} src={currentConversation.users[0].profilePic || null}>
+      {!currentConversation.users[0].profilePic && currentConversation.users[0].name.split('')[0]}
+    </Avatar>
+    <CurrentConversationUserInfo>
+      <Typography variant="h4">{currentConversation.users[0].name}</Typography>
+      <Typography variant="body1" color="secondary">{currentConversation.users[0].location}</Typography>
+    </CurrentConversationUserInfo>
+
+    <IconButton>
+      <SettingsIcon/>
+    </IconButton>
+  </CurrentConversationDetails>
+);
+
+const Chat = ({ classes, currentConversation, chatWindowRef, userDetails }) => (
+  <MessagesSection ref={chatWindowRef}>
+    {/* No Messages */}
+    {currentConversation.messages.length === 0 && (
+      <React.Fragment>
+        <Typography variant="h3" color="secondary" component="p" style={{ textAlign: 'center' }}>
+          No Messages
+        </Typography>
+        <Typography variant="h4" color="secondary" component="p" style={{ textAlign: 'center' }}>
+          Say hello!
+        </Typography>
+      </React.Fragment>
+
+    )}
+
+    {/* Message line */}
+    {currentConversation.messages.map((message, index) => (
+      <MessageItem key={index} sent={message.sender === userDetails.id}>
+        {message.sender !== userDetails.id && (
+          <Avatar className={classes.userPictureSmall} src={currentConversation.users[0].profilePic || null}>
+            {!currentConversation.users[0].profilePic && currentConversation.users[0].name.split('')[0]}
+          </Avatar>
+        )}
+        <MessageBubble>
+          <Typography variant="body2">{message.content}</Typography>
+        </MessageBubble>
+      </MessageItem>
+    ))}
+  </MessagesSection>
+);
+
+const NewMessageInput = ({ classes, sendMessage, currentConversation, outboundMessage, setOutboundMessage, desktop }) => (
+  <MessageInput onSubmit={sendMessage(currentConversation.users[0]._id, currentConversation._id)}>
+    <InputBase classes={{ root: classes.sendMessageInput }}
+               placeholder="Type your message"
+               value={outboundMessage}
+               onChange={(event) => setOutboundMessage(event.target.value)}
+    />
+    {desktop
+      ? <Button variant="contained" color="primary" disabled={!outboundMessage}
+                onClick={sendMessage(currentConversation.users[0]._id, currentConversation._id)}>
+        Submit</Button>
+      : <IconButton color="primary" type="submit" disabled={!outboundMessage}>
+        <SendIcon/>
+      </IconButton>
+    }
+  </MessageInput>
+);
+
 export default (props) => {
   const { classes } = props;
   const [outboundMessage, setOutboundMessage] = useState('');
@@ -100,68 +172,31 @@ export default (props) => {
     setOutboundMessage('');
   };
 
+  const commonProps = {
+    classes,
+    currentConversation,
+    desktop: props.desktop
+  };
+
   return (
     <ConversationGrid>
       {!props.desktop && (
-        <ConversationNavigation onClick={() => props.switchPanelDisplay(0)}>
-          <ChevronLeftIcon/>
-          <Typography variant="h6" component="p">Back to Conversation List</Typography>
-        </ConversationNavigation>
+        <ConversationNavigation switchPanelDisplay={props.switchPanelDisplay}/>
       )}
-      <CurrentConversationDetails>
-        <Avatar className={classes.userPicture} src={currentConversation.users[0].profilePic || null}>
-          {!currentConversation.users[0].profilePic && currentConversation.users[0].name.split('')[0]}
-        </Avatar>
-        <CurrentConversationUserInfo>
-          <Typography variant="h4">{currentConversation.users[0].name}</Typography>
-          <Typography variant="body1" color="secondary">{currentConversation.users[0].location}</Typography>
-        </CurrentConversationUserInfo>
 
-        <IconButton>
-          <SettingsIcon/>
-        </IconButton>
-      </CurrentConversationDetails>
+      <ConversationDetails currentConversation={currentConversation} {...commonProps} />
 
-      <MessagesSection ref={props.chatWindowRef}>
-        {currentConversation.messages.length === 0 && (
-          <React.Fragment>
-            <Typography variant="h3" color="secondary" component="p" style={{ textAlign: 'center' }}>
-              No Messages
-            </Typography>
-            <Typography variant="h4" color="secondary" component="p" style={{ textAlign: 'center' }}>
-              Say hello!
-            </Typography>
-          </React.Fragment>
+      <Chat
+        chatWindowRef={props.chatWindowRef}
+        userDetails={props.userDetails}
+        {...commonProps}
+      />
 
-        )}
-        {currentConversation.messages.map((message, index) => (
-          <MessageItem key={index} sent={message.sender === props.userDetails.id}>
-            {message.sender !== props.userDetails.id && (
-              <Avatar className={classes.userPictureSmall} src={currentConversation.users[0].profilePic || null}>
-                {!currentConversation.users[0].profilePic && currentConversation.users[0].name.split('')[0]}
-              </Avatar>
-            )}
-            <MessageBubble>
-              <Typography variant="body2">{message.content}</Typography>
-            </MessageBubble>
-          </MessageItem>
-        ))}
-      </MessagesSection>
-      <MessageInput onSubmit={sendMessage(currentConversation.users[0]._id, currentConversation._id)}>
-        <InputBase classes={{ root: classes.sendMessageInput }}
-                   placeholder="Type your message"
-                   value={outboundMessage}
-                   onChange={(event) => setOutboundMessage(event.target.value)}
-        />
-        {props.desktop
-          ? <Button variant="contained" color="primary" disabled={!outboundMessage}
-                    onClick={sendMessage(currentConversation.users[0]._id, currentConversation._id)}>
-            Submit</Button>
-          : <IconButton color="primary" type="submit" disabled={!outboundMessage}>
-            <SendIcon/>
-          </IconButton>
-        }
-      </MessageInput>
+      <NewMessageInput outboundMessage={outboundMessage}
+                       setOutboundMessage={setOutboundMessage}
+                       sendMessage={sendMessage}
+                       {...commonProps}
+      />
     </ConversationGrid>
   );
 }

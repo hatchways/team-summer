@@ -30,9 +30,13 @@ const NewCount = styled('div')(({ theme }) => ({
 
 const ConversationListStyled = styled('div')(({ theme }) => ({
   maxHeight: 460,
-  width: '80%',
+  width: '100%',
   overflowY: 'auto',
-  padding: 5
+  padding: 5,
+
+  [theme.breakpoints.up(416)]: {
+    width: '80%'
+  }
 }));
 
 const UserConversationCard = styled(({ active, ...props }) => <Card {...props}/>)(({ theme, ...props }) => ({
