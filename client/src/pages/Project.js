@@ -10,12 +10,12 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment'
 
-import * as ProjectStyles from '../components/ProjectPageStyles';
-import CardCarousel from '../components/CardCarousel';
-import PercentageProgressBar from '../components/PercentageProgressBar';
-import { getProject } from '../api/projects';
+import * as ProjectStyles from 'components/ProjectPageStyles';
+import CardCarousel from 'components/CardCarousel';
+import PercentageProgressBar from 'components/PercentageProgressBar';
+import { getProject } from 'api/projects';
 
-import { withPageContext } from '../components/pageContext';
+import { withPageContext } from 'components/pageContext';
 
 class Project extends React.Component {
   state = {
@@ -122,13 +122,22 @@ class Project extends React.Component {
     };
 
     const handleFundProject = () => {
-      //TODO: Implement fund logic
+      const { history, userDetails, match } = this.props
+
+      history.push({
+        pathname: '/checkout',
+        state: {
+          userId: userDetails.id,
+          projectId: match.params.id,
+          projectTitle: this.state.project.title
+        }
+      })
     };
 
     const disableFunding = () => {
       // TODO: Logic to handle disabling funding of project, maybe if project fund period has ended
       // Disabled by default for now until funding logic is added
-      return true;
+      return false;
     };
 
     const getButtonType = () => {

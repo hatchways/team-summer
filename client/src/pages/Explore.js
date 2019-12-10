@@ -3,13 +3,13 @@ import { Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 
-import * as ExploreStyles from '../styles/ExploreSyles';
-import ProjectCard from '../components/ProjectCard';
-import Loading from '../components/Loading';
-import { withPageContext } from '../components/pageContext';
-import { OutlinedSelect } from '../components/Inputs';
-import { getUserProjects } from '../api/projects';
-import ProjectGrid from '../components/ProjectGrid';
+import * as ExploreStyles from 'styles/ExploreSyles';
+import ProjectCard from 'components/ProjectCard';
+import Loading from 'components/Loading';
+import { withPageContext } from 'components/pageContext';
+import { OutlinedSelect } from 'components/Inputs';
+import { getUserProjects } from 'api/projects';
+import ProjectGrid from 'components/ProjectGrid';
 
 class Explore extends React.Component {
   state = {

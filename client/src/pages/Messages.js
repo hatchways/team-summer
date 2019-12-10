@@ -2,10 +2,10 @@ import React from 'react';
 import { styled, useMediaQuery } from '@material-ui/core';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-import MessagesConversationPanel from '../components/MessagesConversationPanel';
-import MessagesChatPanel from '../components/MessagesChatPanel';
-import { withPageContext } from '../components/pageContext';
-import { getConversations } from '../api/messages';
+import MessagesConversationPanel from 'components/MessagesConversationPanel';
+import MessagesChatPanel from 'components/MessagesChatPanel';
+import { withPageContext } from 'components/pageContext';
+import { getConversations } from 'api/messages';
 
 const avatarSize = 60;
 
