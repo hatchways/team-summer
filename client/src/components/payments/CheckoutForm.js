@@ -13,7 +13,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import { stripeStyle } from './stripeStyle';
 import { pay } from '../../api/payments';
-import { createNotification } from '../../api/notifications';
 import { toDollars } from '../../helpers/formatting';
 
 const styles = (muiBaseTheme) => ({
@@ -96,20 +95,13 @@ class _CheckoutForm extends Component {
 
         stripe.createToken().then((payload) => {
             pay(projectId, payload, investmentAmount)
-                // .then((investment) => console.log('im the investment!', investment))
-                .then((response) => {
-                    const { data: { investment } } = response;
-                    console.log(investment);
-                    createNotification(projectOwnerId, investment.value, investment.project)
-                        // .then(() => socket.emit('investment', {
-                        //     id: projectOwnerId,
-                        //     name: this.userDetails.name,
-                        //     projectName: projectTitle
-                        // }, { token: localStorage.getItem('jwtToken') }))
-                        .then(() => activateToast('success. you invested.', 'success'))
-                        .then(() => history.push("/explore"))
-                        .catch(() => activateToast('that was a fail', 'error'))
-                })
+                // .then(() => socket.emit('investment', {
+                //     id: projectOwnerId,
+                //     name: this.userDetails.name,
+                //     projectName: projectTitle
+                // }, { token: localStorage.getItem('jwtToken') }))
+                .then(() => activateToast('success. you invested.', 'success'))
+                .then(() => history.push("/explore"))
                 .catch(() => activateToast('that was a fail', 'error'))
         });
     };
