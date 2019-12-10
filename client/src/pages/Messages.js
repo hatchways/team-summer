@@ -49,63 +49,6 @@ const Main = styled('div')(({ theme }) => ({
   }
 }));
 
-// Placeholder Conversations
-/*
-* {
-      id: 1,
-      user: {
-        name: 'Evan',
-        avatar: null,
-        location: 'California'
-      },
-      messages: [
-        {
-          sender: 0,
-          content: 'This is a test message!'
-        },
-        {
-          sender: 0,
-          content: 'Test response'
-        },
-        {
-          sender: 1,
-          content: 'Test response'
-        },
-        {
-          sender: 0,
-          content: 'Test response'
-        },
-        {
-          sender: 1,
-          content: 'Test response'
-        },
-        {
-          sender: 0,
-          content: 'Test response'
-        },
-      ]
-    },
-    {
-      id: 2,
-      user: {
-        name: 'Kevin',
-        avatar: null,
-        location: 'New York'
-      },
-      messages: [
-        {
-          sender: 0,
-          content: 'This is a test message!'
-        },
-        {
-          sender: 1,
-          content: 'Test response'
-        }
-      ]
-    }
-*
-* */
-
 class Messages extends React.Component {
   state = {
     activeConversation: 0,
