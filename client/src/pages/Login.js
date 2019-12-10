@@ -109,7 +109,7 @@ class Login extends React.Component {
         this.props.setUserDetails(userLogin.id, userLogin.name, userLogin.about, userLogin.avatar, userLogin.location);
         this.props.setAuthenticated(true);
         this.props.setNotificationCount(userLogin.notificationCount);
-        this.props.history.push(`/profile/${userLogin.id}`);
+        this.props.history.push('/profile');
       }
     }
   };

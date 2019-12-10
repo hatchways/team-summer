@@ -123,7 +123,7 @@ class SignUp extends React.Component {
         this.props.activateToast('Successful registration', 'success');
         this.props.setUserDetails(userRegistration.id, userRegistration.name);
         this.props.setAuthenticated(true);
-        this.props.history.push(`/profile/${userRegistration.id}`);
+        this.props.history.push('/profile')
       }
     }
   };

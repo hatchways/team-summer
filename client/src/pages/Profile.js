@@ -14,6 +14,8 @@ const standinProfilePic = '/images/ee72493c158dc6aafc0831429481101b97cb10b7.png'
 const standinProjectPic = '/images/a8b330accea0c77385355109bf6d88761738e377.png';
 
 const FILTER_TYPES = ['projects', 'investments']
+// TODO: setUserDetails should take (id, profile)
+// this.props.setUserDetails(profileId, profile.data.name, profile.data.about, profile.data.profilePic, profile.data.location);
 
 const styles = (theme) => ({
   pageContent: {
@@ -58,27 +60,30 @@ class ProfilePage extends Component {
       return this.props.history.push('/login');
     }
 
-    const id = this.props.match.params.id
-    const isCurrentUser = id === this.props.userDetails.id;
-    getUser(id).then((profile) => {
-      // TODO: setUserDetails should take (id, profile)
-      this.props.setUserDetails(id, profile.data.name, profile.data.about, profile.data.profilePic, profile.data.location);
+    //if the route has an id param isCurrentUser is false
+    // const isCurrentUser = this.props.match.params.id === undefined ? true : false;
+    const profileId = this.props.match.params.id || this.props.userDetails.id;
+    getUser(profileId).then((profile) => {
       this.setState(
-        { 
-          profile: profile.data, 
-          isCurrentUser
+        {
+          profile: profile.data,
+          isCurrentUser: this.getUserType()
         }
       )
+    }).catch((err) => {
+      if (err) this.props.history.push('/'); //if id doesn't exist
     })
   }
 
-  setUserType = () => {
-    console.log("profile",this.state.profile)
-    
-  //   console.log("data",this.props.userDetails.id)
-    const isCurrentUser = this.state.profile._id === this.props.userDetails.id ?
-      true : false
-    this.setState({isCurrentUser})
+  getUserType = () => {
+    let isCurrentUser
+    if (this.props.match.params.id === undefined){
+      return true
+    } else if (this.props.match.params.id === this.props.userDetails.id){
+      return true
+    } else {
+      return false
+    }
   }
   
   renderUserInfo() {
