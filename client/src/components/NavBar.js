@@ -212,8 +212,8 @@ const NavBar = (props) => {
     const loadData = async () => {
       await loadNotifications();
     }
-    loadData();
-  }, [drawer])
+    if (props.userAuthenticated) loadData();
+  }, [])
 
   const loadNotifications = async () => {
     try {
