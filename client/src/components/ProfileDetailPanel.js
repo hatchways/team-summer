@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     [theme.breakpoints.up('md')]: {
       height: '100vh'
+      // padding: theme.spacing(3),
     },
   },
   avatar: {
@@ -16,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     height: 80,
     margin: '20px auto',
     [theme.breakpoints.up('md')]: {
-      margin: '45px auto 30px',
+      margin: '25px auto 30px',
       width: 100,
       height: 100,
     },

@@ -6,6 +6,7 @@ import moment from 'moment';
 
 import FilterTabs from 'components/FilterTabs';
 import ProjectCard from 'components/ProjectCard';
+import PlaceholderCard from 'components/PlaceholderCard';
 import ProfileDetailPanel from 'components/ProfileDetailPanel';
 import { getUser } from 'api/users';
 import { withPageContext } from 'components/pageContext';
@@ -16,21 +17,17 @@ const FILTER_TYPES = ['projects', 'investments']
 
 const styles = (theme) => ({
   pageContent: {
-    padding: '0 5%',
     [theme.breakpoints.up('md')]: {
       padding: '0',
     }
   },
   projectInvestmentWrapper: {
+    width: '75%',
     padding: '2em 3em'
   },
   projectInvestmentHeader: {
     marginBottom: '35px'
   },
-  // projectInvestmentContent: {
-  //   // margin: '25px 0 25px'
-  //   display: 'flexGrow',
-  // }
   header: {
     display: 'inline',
     paddingRight: '35px',
@@ -95,28 +92,45 @@ class ProfilePage extends Component {
     );
   }
 
+
   setFilter = (filter) => this.setState({displayFilter: filter});
+
+  renderTabs = (classes) => {
+    const {investments, projects} = this.state.profile;
+    if(investments.length !== 0 && projects.length !== 0 ){
+      return (
+        <div className={classes.projectInvestmentHeader}>
+          <FilterTabs filters={FILTER_TYPES} setFilter={this.setFilter} />
+        </div>
+      )
+    }
+  }
 
   renderData = () => {
     const { profile, displayFilter } = this.state;
-    const filteredData = profile[displayFilter] 
     let data
 
     if (displayFilter === 'investments') {
-      data = filteredData.map(inv => inv.project)
+      data = profile.investments.map(inv => inv.project)
     } else {
-      data = profile[displayFilter] 
+      data = profile.projects 
+    } 
+    console.log("dta",data.length)
+    if(data.length === 0) {
+      return <PlaceholderCard />
     }
-    
     if (data) {
       return (
-        <Grid container classes={{ root: 'project-section' }} spacing={8} justify="left">
+        <Grid container classes={{ root: 'project-section' }} 
+        spacing={8} 
+        
+        justify="left">
           {
             data ?
-              data.map((project, index) => (
-                <Grid item sm={12} md={6} key={index}>
+              data.map((project, ix) => (
+                <Grid item sm={12} alignItems="stretch" key={ix}>
                   <ProjectCard
-                    key={index}
+                    key={ix}
                     onClick={() => this.props.history.push(`/projects/${project._id}`)}
                     title={project.title}
                     image={project.images[0]}
@@ -144,10 +158,8 @@ class ProfilePage extends Component {
           </Grid>
           <Grid container item xs={12} md={9}>
             <div className={classes.projectInvestmentWrapper}>
-              <div className={classes.projectInvestmentHeader}>
-                <FilterTabs filters={FILTER_TYPES} setFilter={this.setFilter}/>
-              </div>
-              <div className={classes.projectInvestmentContent}>
+            {this.renderTabs(classes)}
+              <div>
                 {this.renderData()}
               </div>
             </div>
