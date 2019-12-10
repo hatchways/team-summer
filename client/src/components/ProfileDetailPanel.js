@@ -4,46 +4,42 @@ import { Avatar, Button, Paper, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
     width: '100%',
+    padding: theme.spacing(3),
+    textAlign: 'center',
     [theme.breakpoints.up('md')]: {
-      minWidth: '350px',
-      maxWidth: '400px',
-      minHeight: '100vh'
+      height: '100vh'
     },
   },
   avatar: {
     width: 80,
     height: 80,
-    margin: '10px auto',
+    margin: '20px auto',
     [theme.breakpoints.up('md')]: {
-      margin: '25px auto 30px',
+      margin: '45px auto 30px',
       width: 100,
       height: 100,
     },
   },
   button: {
-    margin: '20px 0px 15px 0px',
-    [theme.breakpoints.up('md')]: {
-      margin: '30px 0px 15px 0px',
-    },
+    width: '80% !important',
+    margin: '10px auto'
   }
 }));
 
-const ProfileDetailPanel = ({ id, profilePic, name, location, about, expertise, buttonType, history }) => {
-
+const ProfileDetailPanel = (props) => {
+  const { id, profilePic, name, location, about, expertise, isCurrentUser, history } = props
   const classes = useStyles();
 
-  const handleRedirect = (buttonType) => (event) => {
-    event.preventDefault();
-    if (buttonType === 'edit') {
+  const handleRedirect = (e) => {
+    e.preventDefault();
+    if (isCurrentUser === true) {
       const userInfo = { id, profilePic, name, location, about };
       history.push({
         pathname: `profile/edit/${id}`,
         state: userInfo
       });
-    } else if (buttonType === 'message') {
+    } else {
       // TO DO MESSAGING
     }
   }
@@ -58,8 +54,8 @@ const ProfileDetailPanel = ({ id, profilePic, name, location, about, expertise, 
         type="submit" 
         variant="outlined" 
         color="primary" 
-        onClick={handleRedirect(buttonType)}>
-        {buttonType}
+        onClick={handleRedirect}>
+        {isCurrentUser ? 'edit' : 'message'}
       </Button>
       <Typography variant="body1">{about}</Typography>
       <Typography variant="body1">{expertise}</Typography>
