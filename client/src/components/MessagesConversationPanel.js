@@ -7,17 +7,12 @@ const ConversationListPanel = styled(Paper)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  height: 'calc(100% - 120px)',
   padding: 60,
 
   [theme.breakpoints.up('lg')]: {
     paddingLeft: '25%'
   }
-}));
-
-const ConversationListStyled = styled('div')(({ theme }) => ({
-  maxHeight: 460,
-  overflowY: 'auto',
-  padding: 5
 }));
 
 const NewCount = styled('div')(({ theme }) => ({
@@ -33,6 +28,13 @@ const NewCount = styled('div')(({ theme }) => ({
   alignItems: 'center'
 }));
 
+const ConversationListStyled = styled('div')(({ theme }) => ({
+  maxHeight: 460,
+  width: '80%',
+  overflowY: 'auto',
+  padding: 5
+}));
+
 const UserConversationCard = styled(({ active, ...props }) => <Card {...props}/>)(({ theme, ...props }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -45,6 +47,12 @@ const UserConversationCard = styled(({ active, ...props }) => <Card {...props}/>
 
   '&:last-of-type': {
     marginBottom: 0
+  },
+
+  '& .conversation-user-picture': {
+    width: 60,
+    height: 60,
+    marginRight: 15
   }
 }));
 
@@ -64,7 +72,7 @@ const ConversationList = ({ conversations, classes, activeConversation, switchPa
           onClick={() => switchPanelDisplay(conversation.id)}
         >
 
-          <Avatar className={classes.userPicture} src={conversation.users[0].profilePic || null}>
+          <Avatar className="conversation-user-picture" src={conversation.users[0].profilePic || null}>
             {!conversation.users[0].profilePic && conversation.users[0].name.split('')[0]}
           </Avatar>
           <Grid container direction="column">

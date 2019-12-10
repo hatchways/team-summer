@@ -41,10 +41,10 @@ const styles = (theme) => ({
 });
 
 const Main = styled('div')(({ theme }) => ({
-  display: 'grid',
   height: 'calc(100vh - 74px)',
 
   [theme.breakpoints.up('md')]: {
+    display: 'grid',
     gridTemplateColumns: 'minmax(100px, 0.8fr) minmax(100px, 1.2fr)'
   }
 }));
@@ -55,13 +55,14 @@ class Messages extends React.Component {
     showChatPanel: false,
     conversations: []
   };
-
   chatWindowRef = React.createRef();
 
   scrollChatToBottom = () => {
-    const chatWindow = this.chatWindowRef.current;
+    if (this.props.desktop || this.state.showChatPanel) {
+      const chatWindow = this.chatWindowRef.current;
 
-    chatWindow.scrollTop = chatWindow.scrollHeight;
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
   };
 
   handleSetMessage = (conversationId, sender, content) => {
@@ -92,8 +93,8 @@ class Messages extends React.Component {
     this.scrollChatToBottom();
 
     this.props.socket.on('newMessage', (data) => {
-      this.handleSetMessage(data.conversation, data.sender, data.content)
-    })
+      this.handleSetMessage(data.conversation, data.sender, data.content);
+    });
   }
 
   switchPanelDisplay = (conversationId) => {
