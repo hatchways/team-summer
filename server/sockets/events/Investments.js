@@ -1,5 +1,5 @@
-exports.receiveInvestment = (io) => ({ id, name, projectName }) => {
+exports.receiveInvestment = (io, socket) => ({ id, name, projectName }) => {
+  socket.join(id);
   console.log(`${name} invested in your project, ${projectName}!`);
-  const newInvestmentNotification = `${name} invested in your project, ${projectName}!`;
-  io.to(id).emit('newInvestment', newInvestmentNotification);
+  io.to(id).emit('newInvestment', { name, projectName });
 };
