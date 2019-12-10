@@ -102,15 +102,10 @@ class _CheckoutForm extends Component {
                         projectName: projectTitle
                     }, { token: localStorage.getItem('jwtToken') })
                 })
-                .then(() => activateToast('success. you invested.', 'success'))
+                .then(() => activateToast(`Your payment was a success. Thank you for investing in ${projectTitle}!`, 'success'))
                 .then(() => history.push("/explore"))
                 .catch(() => activateToast('that was a fail', 'error'))
         });
-        // socket.emit('investment', {
-        //     id: projectOwnerId,
-        //     name: userName,
-        //     projectName: projectTitle
-        // }, { token: localStorage.getItem('jwtToken') })
     };
 
     renderPaymentCard = (classes) => {
