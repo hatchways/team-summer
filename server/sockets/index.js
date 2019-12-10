@@ -33,7 +33,7 @@ module.exports = (io) => {
 
     socket.on('message', messages.receiveMessage(io));
 
-    socket.on('investment', investments.receiveInvestment(io));
+    socket.on('investment', investments.receiveInvestment(io, socket));
     // Socket emitters
 
     // Client disconnect
