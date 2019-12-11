@@ -2,14 +2,9 @@ import httpClient from './httpClient';
 
 export const getNotifications = async (userId) => {
   const url = `/notifications/${userId}`;
-  const token = localStorage.getItem('jwtToken');
-  const authOptions = {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  };
+
   try {
-    const response = await httpClient.get(url, authOptions);
+    const response = await httpClient.get(url);
     if (response.data.err) return { ...response.data };
 
     return { data: response.data };
@@ -22,14 +17,9 @@ export const getNotifications = async (userId) => {
 export const createNotification = async (projectOwnerId, investmentAmount, projectId) => {
   const url = `/notifications/${projectOwnerId}`;
   const notificationData = { projectOwnerId, investmentAmount, projectId }
-  const token = localStorage.getItem('jwtToken');
-  const authOptions = {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  };
+
   try {
-    const response = await httpClient.post(url, notificationData, authOptions);
+    const response = await httpClient.post(url, notificationData);
     if (response.data.err) return { ...response.data };
 
     return { success: true };
