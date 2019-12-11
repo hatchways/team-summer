@@ -149,7 +149,9 @@ export default (props) => {
   const { classes } = props;
   const [outboundMessage, setOutboundMessage] = useState('');
 
-  const currentConversation = props.conversations.find((conversation) => conversation.id === props.activeConversation);
+  const currentConversation = props.conversations.find((conversation) => {
+    return conversation._id === props.activeConversation
+  });
 
   if (!currentConversation) return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

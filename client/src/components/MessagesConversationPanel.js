@@ -77,9 +77,9 @@ const ConversationList = ({ conversations, classes, activeConversation, switchPa
       {conversations.map((conversation, index) => (
         <UserConversationCard
           key={index}
-          active={conversation.id === activeConversation}
+          active={conversation._id === activeConversation}
           elevation={2}
-          onClick={() => switchPanelDisplay(conversation.id)}
+          onClick={() => switchPanelDisplay(conversation._id)}
         >
 
           <Avatar className="conversation-user-picture" src={conversation.users[0].profilePic || null}>

@@ -99,16 +99,14 @@ class Messages extends React.Component {
   }
 
   switchPanelDisplay = (conversationId) => {
-    this.setState({
-      showChatPanel: !this.state.showChatPanel,
-      activeConversation: conversationId
-    });
+    this.setState({ showChatPanel: !this.state.showChatPanel });
+    this.setState({activeConversation: conversationId})
   };
 
   renderPageComponents = () => {
     const componentProps = {
       conversations: this.state.conversations,
-      activeConversation: this.activeConversation,
+      activeConversation: this.state.activeConversation,
       switchPanelDisplay: this.switchPanelDisplay,
       desktop: this.props.desktop,
       handleSetMessage: this.handleSetMessage,
