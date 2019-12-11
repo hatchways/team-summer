@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const { ObjectId } = Schema;
 
-const EventSchema = new Schema({
+const NotificationSchema = new Schema({
     user: {
         type: ObjectId,
         required: true,
@@ -31,4 +31,4 @@ const EventSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('Event', EventSchema);
+module.exports = mongoose.model('Notification', NotificationSchema);
