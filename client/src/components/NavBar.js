@@ -209,7 +209,6 @@ const NavBar = (props) => {
   const [drawer, toggleDrawer] = useState(false);
 
   useEffect(() => {
-    console.log('mounted');
     const loadData = async () => {
       await loadNotifications();
     }
@@ -249,7 +248,6 @@ const NavBar = (props) => {
         {props.notifications && props.notifications.length > 0 &&
           <div>
             <NotificationDropdown
-              history={props.history}
               alerts={props.notifications.length}
               notifications={props.notifications}
             />

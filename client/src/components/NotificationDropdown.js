@@ -1,12 +1,11 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import MonitizationIcon from '@material-ui/icons/Send';
 import AlertBadge from './AlertBadge';
 
 const StyledMenu = withStyles({
@@ -40,7 +39,7 @@ const StyledMenuItem = withStyles(theme => ({
     },
 }))(MenuItem);
 
-function CustomizedMenus({ history, alerts, classes, notifications }) {
+function CustomizedMenus({ alerts, classes, notifications }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = event => {
@@ -50,10 +49,6 @@ function CustomizedMenus({ history, alerts, classes, notifications }) {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
-    const redirectToProfile = (profileId) => history.push(`/profile/${profileId}`)
-
-    const redirectToProject = (projectId) => history.push(`/projects/${projectId}`)
 
     return (
         <div>
@@ -72,17 +67,21 @@ function CustomizedMenus({ history, alerts, classes, notifications }) {
                             return (
                                 <StyledMenuItem key={_id}>
                                     <ListItemIcon>
-                                        <Avatar className={classes.investorIcon} src={investor.profilePic || null} onClick={() => redirectToProfile(investor._id)}>
-                                            {
-                                                investor.profilePic
-                                                    ? investor.profilePic
-                                                    : investor.name
-                                                        ? investor.name.split('')[0]
-                                                        : '?'
-                                            }
-                                        </Avatar>
+                                        <Link to={`/profile/${investor._id}`} >
+                                            <Avatar className={classes.investorIcon} src={investor.profilePic || null} >
+                                                {
+                                                    investor.profilePic
+                                                        ? investor.profilePic
+                                                        : investor.name
+                                                            ? investor.name.split('')[0]
+                                                            : '?'
+                                                }
+                                            </Avatar>
+                                        </Link>
                                     </ListItemIcon>
-                                    <ListItemText primary={notificationMessage} onClick={() => redirectToProject(project._id)} />
+                                    <Link to={`/projects/${project._id}`}>
+                                        <ListItemText primary={notificationMessage} />
+                                    </Link>
                                 </StyledMenuItem>
                             )
                         })
