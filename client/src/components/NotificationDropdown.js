@@ -1,7 +1,9 @@
 import React from 'react';
+import { Link, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Avatar from '@material-ui/core/Avatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MonitizationIcon from '@material-ui/icons/Send';
@@ -10,7 +12,7 @@ import AlertBadge from './AlertBadge';
 const StyledMenu = withStyles({
     paper: {
         border: '1px solid #d3d4d5',
-    },
+    }
 })(props => (
     <Menu
         elevation={0}
@@ -38,7 +40,7 @@ const StyledMenuItem = withStyles(theme => ({
     },
 }))(MenuItem);
 
-export default function CustomizedMenus({ alerts, messages, notifications }) {
+function CustomizedMenus({ history, alerts, classes, notifications }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = event => {
@@ -48,6 +50,10 @@ export default function CustomizedMenus({ alerts, messages, notifications }) {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const redirectToProfile = (profileId) => history.push(`/profile/${profileId}`)
+
+    const redirectToProject = (projectId) => history.push(`/projects/${projectId}`)
 
     return (
         <div>
@@ -62,13 +68,21 @@ export default function CustomizedMenus({ alerts, messages, notifications }) {
                     notifications.length
                         ? notifications.map((notification) => {
                             const { _id, investor, investmentAmount, project, } = notification
-                            const notificationMessage = `${investor.name} invested ${investmentAmount} in your project ${project.title}`
+                            const notificationMessage = `invested $${investmentAmount} in ${project.title}!`
                             return (
                                 <StyledMenuItem key={_id}>
                                     <ListItemIcon>
-                                        <MonitizationIcon fontSize="small" />
+                                        <Avatar className={classes.investorIcon} src={investor.profilePic || null} onClick={() => redirectToProfile(investor._id)}>
+                                            {
+                                                investor.profilePic
+                                                    ? investor.profilePic
+                                                    : investor.name
+                                                        ? investor.name.split('')[0]
+                                                        : '?'
+                                            }
+                                        </Avatar>
                                     </ListItemIcon>
-                                    <ListItemText primary={notificationMessage} />
+                                    <ListItemText primary={notificationMessage} onClick={() => redirectToProject(project._id)} />
                                 </StyledMenuItem>
                             )
                         })
@@ -78,3 +92,10 @@ export default function CustomizedMenus({ alerts, messages, notifications }) {
         </div>
     );
 }
+
+export default withStyles({
+    investorIcon: {
+        height: '25px',
+        width: '25px'
+    }
+})(CustomizedMenus)

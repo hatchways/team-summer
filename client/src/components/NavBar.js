@@ -249,6 +249,7 @@ const NavBar = (props) => {
         {props.notifications && props.notifications.length > 0 &&
           <div>
             <NotificationDropdown
+              history={props.history}
               alerts={props.notifications.length}
               notifications={props.notifications}
             />
