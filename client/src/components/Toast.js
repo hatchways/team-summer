@@ -20,8 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonStyle: {
     cursor: 'pointer',
-    padding: theme.spacing(1),
-    transform: 'uppercase'
+    padding: theme.spacing(1)
   }
 }));
 
