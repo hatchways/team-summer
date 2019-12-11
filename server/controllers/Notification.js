@@ -18,21 +18,3 @@ exports.getNotifications = (req, res) => {
       return res.status(200).json(notifications);
     });
 };
-
-exports.createNotification = async (req, res) => {
-  const investorId = req.user._id;
-  const { projectOwnerId, investmentAmount, projectId } = req.body;
-
-  const notification = await Notification.create({
-    user: ObjectId(projectOwnerId),
-    investmentAmount,
-    investor: ObjectId(investorId),
-    project: ObjectId(projectId)
-  })
-
-  if (notification) {
-    return res.status(200).json(notification);
-  } else {
-    return res.status(400).json({ err: 'Notification could not be created.' })
-  }
-};

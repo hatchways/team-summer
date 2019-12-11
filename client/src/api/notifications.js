@@ -13,19 +13,3 @@ export const getNotifications = async (userId) => {
     return { success: false };
   }
 };
-
-export const createNotification = async (projectOwnerId, investmentAmount, projectId) => {
-  const url = `/notifications/${projectOwnerId}`;
-  const notificationData = { projectOwnerId, investmentAmount, projectId }
-
-  try {
-    const response = await httpClient.post(url, notificationData);
-    if (response.data.err) return { ...response.data };
-
-    return { success: true };
-  } catch (error) {
-    console.log(error);
-    return { success: false };
-  }
-};
-
