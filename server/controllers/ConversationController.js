@@ -1,6 +1,6 @@
 const { Conversation, Message, User } = require('../models');
 const mongoose = require('mongoose');
-import { mongoDbErrorHandler } from '../utils';
+const { mongoDbErrorHandler } = require('../utils');
 
 exports.create = async (req, res) => {
   const { users } = req.body;
