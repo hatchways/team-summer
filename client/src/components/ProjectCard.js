@@ -19,11 +19,9 @@ const IndustryLabel = styled('div')(({ theme }) => ({
 
 const styles = (theme) => ({
   card: {
-    display: 'flex',
-    flexDirection: 'column',
+    maxWidth: '650px',
     transition: '0.3s',
     cursor: 'pointer',
-
     '&:hover': {
       boxShadow: '0 16px 70px -12.125px rgba(0,0,0,0.3)'
     }
@@ -41,9 +39,7 @@ const styles = (theme) => ({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
-
     padding: 0,
-
     '&:last-child': {
       padding: 0
     }
@@ -62,24 +58,16 @@ const styles = (theme) => ({
   },
   fundingAmounts: {
     display: 'flex',
-
     '& :nth-child(2), & :nth-child(3)': {
       marginRight: 5
     }
   },
   projectMeta: {
     display: 'flex',
-
     '& :first-child': {
       marginRight: 15
     }
   },
-  heading: {
-    fontWeight: 'bold'
-  },
-  subheading: {
-    lineHeight: 1.8
-  }
 });
 
 const ProjectHead = ({ classes, title }) => (

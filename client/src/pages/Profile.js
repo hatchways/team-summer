@@ -10,12 +10,9 @@ import ProjectCard from 'components/ProjectCard';
 import ProfileDetailPanel from 'components/ProfileDetailPanel';
 import { getUser } from 'api/users';
 import { withPageContext } from 'components/pageContext';
-const standinProfilePic = '/images/ee72493c158dc6aafc0831429481101b97cb10b7.png';
-const standinProjectPic = '/images/a8b330accea0c77385355109bf6d88761738e377.png';
-
+import Loading from 'components/Loading';
+const standinProfilePic = '/images/placeholderProfile.png';
 const FILTER_TYPES = ['projects', 'investments']
-// TODO: setUserDetails should take (id, profile)
-// this.props.setUserDetails(profileId, profile.data.name, profile.data.about, profile.data.profilePic, profile.data.location);
 
 const styles = (theme) => ({
   pageContent: {
@@ -24,8 +21,11 @@ const styles = (theme) => ({
     }
   },
   projectInvestmentWrapper: {
-    width: '75%',
-    padding: '2em 3em'
+    width: 'auto',
+    padding: '2em 3em',
+    [theme.breakpoints.up('md')]: {
+      width: '90%',
+    }
   },
   projectInvestmentHeader: {
     marginBottom: '35px'
@@ -41,27 +41,17 @@ const styles = (theme) => ({
   placeholderText: {
     maxHeight: 460,
     overflowY: 'auto',
-    padding: 5
+    padding: 5,
+    textAlign: 'left',
+    margin: '50px' 
   }
 });
-
-
-// const ConversationListPanel = styled(Paper)(({ theme }) => ({
-//   display: 'flex',
-//   flexDirection: 'column',
-//   alignItems: 'center',
-//   padding: 60,
-
-//   [theme.breakpoints.up('lg')]: {
-//     paddingLeft: '25%'
-//   }
-// }));
-
 
 class ProfilePage extends Component {
   state = {
     displayFilter: 'projects',
     isCurrentUser: false,
+    isPending: false,
     profile: {
       _id: '',
       name: '',
@@ -73,27 +63,28 @@ class ProfilePage extends Component {
   };
   
   componentDidMount() {
-    if (!this.props.userAuthenticated) { //TODO: this should be handled at higher level
+    if (!this.props.userAuthenticated) {
       this.props.activateToast('Please log in to view profiles', 'error');
       return this.props.history.push('/login');
     }
 
     //if the route has an id param isCurrentUser is false
+    this.setState({isPending: TextTrackCueList})
     const profileId = this.props.match.params.id || this.props.userDetails.id;
     getUser(profileId).then((profile) => {
       this.setState(
         {
+          isPending: false,
           profile: profile.data,
           isCurrentUser: this.getUserType()
         }
       )
     }).catch((err) => {
-      if (err) this.props.history.push('/');
+      this.props.history.push('/');
     })
   }
 
   getUserType = () => {
-    let isCurrentUser
     if (this.props.match.params.id === undefined){
       return true
     } else if (this.props.match.params.id === this.props.userDetails.id){
@@ -125,17 +116,36 @@ class ProfilePage extends Component {
 
   renderTabs = (classes) => {
     const {investments, projects} = this.state.profile;
-    if(investments.length !== 0 && projects.length !== 0 ){
+    if(investments.length !== 0 || projects.length !== 0 ){
       return (
         <div className={classes.projectInvestmentHeader}>
-          <FilterTabs filters={FILTER_TYPES} setFilter={this.setFilter} />
+          <FilterTabs 
+            filters={FILTER_TYPES}
+            setFilter={this.setFilter} />
         </div>
       )
     }
   }
 
-  renderData = () => {
-    const { profile, displayFilter, isCurrentUser } = this.state;
+  renderPlaceholderText = (classes) => {
+    return (
+      <Typography
+        variant="h3"
+        className={classes.placeholderText}
+        color="secondary"
+        component="p">
+        {
+          this.state.isCurrentUser ?
+            'You have no projects or investments' :
+            'This user has no projects or investments'
+        }
+      </Typography>
+    )
+  }
+
+  renderProjects = () => {
+    const { classes } = this.props;
+    const { profile, displayFilter } = this.state;
     let data
 
     if (displayFilter === 'investments') {
@@ -143,46 +153,36 @@ class ProfilePage extends Component {
     } else {
       data = profile.projects 
     } 
-    if(data.length === 0) {
-        return (
-          <Typography
-            variant="h3"
-            color="secondary"
-            component="p"
-            style={{ textAlign: 'center' }}>
-            {
-              isCurrentUser ? 
-              'You have no projects or investments' :
-              'This user has no projects or investments'
-            }
-          </Typography>
-        )
-    }
-    else if (data) {
+    
+    if (data.length > 0) {
       return (
-        <Grid container classes={{ root: 'project-section' }} 
-        spacing={8} 
-        
-        justify="left">
+        <Grid container 
+          classes={{ root: 'project-section' }} 
+          spacing={8} 
+          justify="left">
           {
-            data ?
-              data.map((project, ix) => (
-                <Grid item sm={12} alignItems="stretch" key={ix}>
-                  <ProjectCard
-                    key={ix}
-                    onClick={() => this.props.history.push(`/projects/${project._id}`)}
-                    title={project.title}
-                    image={project.images[0]}
-                    funding={project.funding.fundingTotal}
-                    fundingGoal={project.fundingGoal}
-                    industry={project.industry}
-                    daysLeft={moment({ hours: 0 }).diff(project.fundingDeadline, 'days') * -1}
-                  />
-                </Grid>
-              )) : ''
+            data.map((project, ix, arr) => (
+              <Grid item 
+                sm={12} md={arr.length > 1 ? 6 : 10} key={ix}>
+                <ProjectCard
+                  key={ix}
+                  onClick={() => this.props.history.push(`/projects/${project._id}`)}
+                  title={project.title}
+                  image={project.images[0]}
+                  funding={project.funding.fundingTotal}
+                  fundingGoal={project.fundingGoal}
+                  industry={project.industry}
+                  daysLeft={moment({ hours: 0 }).diff(project.fundingDeadline, 'days') * -1}
+                />
+              </Grid>
+            ))
           }
         </Grid >
       );
+    } else if (this.state.isPending) {
+       return <Loading />
+    } else {
+        return this.renderPlaceholderText(classes);
     }
   };
 
@@ -197,9 +197,9 @@ class ProfilePage extends Component {
           </Grid>
           <Grid container item xs={12} md={9}>
             <div className={classes.projectInvestmentWrapper}>
-            {this.renderTabs(classes)}
+              {this.renderTabs(classes)}
               <div>
-                {this.renderData()}
+                {this.renderProjects()}
               </div>
             </div>
           </Grid>
