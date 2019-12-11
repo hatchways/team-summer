@@ -4,11 +4,15 @@ const { User, Project } = require('../models');
 exports.isAuth = async (req, res, next) => {
   const { authorization } = req.headers;
   if (authorization) {
-    const token = authorization.split(' ')[1];
-    const { payload } = await decodeToken(token);
-    if (payload && payload._id) {
-      req.user = payload;
-      next();
+    try {
+      const token = authorization.split(' ')[1];
+      const { payload } = await decodeToken(token);
+      if (payload && payload._id) {
+        req.user = payload;
+        next();
+      }
+    } catch (err) {
+      res.status(403).send(err);
     }
   } else {
     return res.status(403).send({ error: 'Access denied' });
