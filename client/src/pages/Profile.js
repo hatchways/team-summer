@@ -45,11 +45,16 @@ class ProfilePage extends Component {
   };
 
   componentDidMount() {
-    if (!this.props.userAuthenticated) {
-      this.props.activateToast('Please log in to view profiles', 'error');
-      return this.props.history.push('/login');
-    }
+    this.fetchUserProfile()
+  }
 
+  async componentDidUpdate(prevProps, prevState) {
+    if (prevProps.match.params.id !== this.props.match.params.id) {
+      this.fetchUserProfile()
+    }
+  }
+
+  async fetchUserProfile() {
     const id = this.props.match.params.id || this.props.userDetails.id;
     getUser(id).then((profile) => {
       if (this.props.userDetails.id === id) this.props.setUserDetails(id, profile.data.name, profile.data.about, profile.data.profilePic, profile.data.location);

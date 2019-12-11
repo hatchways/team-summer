@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -39,7 +39,7 @@ const StyledMenuItem = withStyles(theme => ({
     },
 }))(MenuItem);
 
-function CustomizedMenus({ alerts, classes, notifications }) {
+function CustomizedMenus({ history, alerts, classes, notifications }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = event => {
@@ -49,6 +49,14 @@ function CustomizedMenus({ alerts, classes, notifications }) {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const redirectToProfile = (id) => {
+        return history.push(`/profile/${id}`)
+    }
+
+    const redirectToProject = (id) => {
+        return history.push(`/projects/${id}`)
+    }
 
     return (
         <div>
@@ -67,21 +75,17 @@ function CustomizedMenus({ alerts, classes, notifications }) {
                             return (
                                 <StyledMenuItem key={_id}>
                                     <ListItemIcon>
-                                        <Link to={`/profile/${investor._id}`} >
-                                            <Avatar className={classes.investorIcon} src={investor.profilePic || null} >
-                                                {
-                                                    investor.profilePic
-                                                        ? investor.profilePic
-                                                        : investor.name
-                                                            ? investor.name.split('')[0]
-                                                            : '?'
-                                                }
-                                            </Avatar>
-                                        </Link>
+                                        <Avatar className={classes.investorIcon} src={investor.profilePic || null} onClick={() => redirectToProfile(investor._id)}>
+                                            {
+                                                investor.profilePic
+                                                    ? investor.profilePic
+                                                    : investor.name
+                                                        ? investor.name.split('')[0]
+                                                        : '?'
+                                            }
+                                        </Avatar>
                                     </ListItemIcon>
-                                    <Link to={`/projects/${project._id}`}>
-                                        <ListItemText primary={notificationMessage} />
-                                    </Link>
+                                    <ListItemText primary={notificationMessage} onClick={() => redirectToProject(project._id)} />
                                 </StyledMenuItem>
                             )
                         })
@@ -92,9 +96,9 @@ function CustomizedMenus({ alerts, classes, notifications }) {
     );
 }
 
-export default withStyles({
+export default withRouter(withStyles({
     investorIcon: {
         height: '25px',
         width: '25px'
     }
-})(CustomizedMenus)
+})(CustomizedMenus))

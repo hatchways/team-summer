@@ -46,6 +46,16 @@ class Project extends React.Component {
   };
 
   async componentDidMount() {
+    this.fetchProjectData()
+  }
+
+  async componentDidUpdate(prevProps) {
+    if (prevProps.match.params.id !== this.props.match.params.id) {
+      this.fetchProjectData()
+    }
+  }
+
+  async fetchProjectData() {
     try {
       const response = await getProject(this.props.match.params.id);
       const project = response.data;
