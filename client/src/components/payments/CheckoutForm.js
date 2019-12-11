@@ -9,11 +9,12 @@ import {
     OutlinedInput,
     InputAdornment
 } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import { withStyles } from '@material-ui/core/styles';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import { stripeStyle } from './stripeStyle';
-import { pay } from '../../api/payments';
-import { toDollars } from '../../helpers/formatting';
+import { pay } from 'api/payments';
+import { toDollars } from 'helpers/formatting';
 
 const styles = (muiBaseTheme) => ({
     card: {
@@ -62,7 +63,12 @@ const styles = (muiBaseTheme) => ({
         paddingBottom: "17px",
         textAlign: "right",
         marginRight: "8px"
-    }
+    },
+    icon: {
+        horizontalAlign: "right",
+        position: "relative",
+        top: "1px"
+    },
 });
 
 class _CheckoutForm extends Component {
@@ -84,21 +90,21 @@ class _CheckoutForm extends Component {
         if (this.state.investmentAmount >= 5) {
             this.setState({ investmentSaved: true })
         } else {
-            this.props.activateToast('Sorry, $5 minimum', 'neutral')
+            // this.props.activateToast('Sorry, $5 minimum', 'neutral')
+            console.log("no go")
         }
     }
 
     handlePaymentSubmit = (e) => {
         e.preventDefault();
-        const { projectId, stripe, history, activateToast } = this.props
+        const { projectId, stripe } = this.props
         const { investmentAmount } = this.state
 
         stripe.createToken().then((payload) => {
             pay(projectId, payload, investmentAmount)
-                .then((investment) => investment)
-                .then(() => activateToast('success. you invested.', 'success'))
-                .then(() => history.push("/explore"))
-                .catch(() => activateToast('that was a fail', 'error'))
+                .then((investment) => console.log(investment))
+                .then(this.props.handlePaymentCompletion(true))
+                .catch((err) => this.props.handlePaymentCompletion(false))
         });
     };
 
@@ -127,7 +133,7 @@ class _CheckoutForm extends Component {
                         <button
                             style={stripeStyle.button}>
                             invest
-            </button>
+                        </button>
                     </CardContent>
                 </form>
             </Fragment>
@@ -186,11 +192,12 @@ class _CheckoutForm extends Component {
         return (
             <div className="checkout-form">
                 <Card className={classes.card}>
+                    <CloseIcon className={classes.icon}></CloseIcon>
                     <CardContent className={classes.content}>
                         <Typography
-                            className={"MuiTypography--heading"}
-                            variant={"h2"} >
-                            {projectTitle}
+                        className={"MuiTypography--heading"}
+                        variant={"h2"} >
+                        {projectTitle}
                         </Typography>
                     </CardContent>
                     {
@@ -212,6 +219,4 @@ _CheckoutForm.propTypes = {
     projectId: PropTypes.string.isRequired,
     projectTitle: PropTypes.string.isRequired,
     stripe: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
-    activateToast: PropTypes.func.isRequired
 };

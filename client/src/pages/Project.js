@@ -13,6 +13,7 @@ import moment from 'moment'
 import * as ProjectStyles from 'components/ProjectPageStyles';
 import CardCarousel from 'components/CardCarousel';
 import PercentageProgressBar from 'components/PercentageProgressBar';
+import Checkout from 'components/payments/Checkout';
 import { getProject } from 'api/projects';
 
 import { withPageContext } from 'components/pageContext';
@@ -41,7 +42,9 @@ class Project extends React.Component {
       _id: '',
       name: '',
       avatar: ''
-    }
+    },
+    stripeSuccess: false,
+    checkoutOpen: false
   };
 
   async componentDidMount() {
@@ -94,6 +97,35 @@ class Project extends React.Component {
     );
   }
 
+  renderCheckoutForm = () => {
+    const { userDetails, match } = this.props
+    
+    return (
+      <Checkout
+        userId={userDetails.id}
+        projectId={match.params.id}
+        handlePaymentCompletion={this.handlePaymentCompletion}
+        projectTitle={this.state.project.title} />
+    )
+  }
+
+  handleSelectFundProject = (e) => {
+    e.preventDefault()
+    this.setState({checkoutOpen: true})
+  };
+  
+  handlePaymentCompletion = (isSuccess) => {
+    if(isSuccess) {
+      this.props.activateToast('success. you invested.', 'success')
+    } else {
+      this.props.activateToast('that was a fail', 'error')
+    }
+    this.setState({
+      stripeSuccess: isSuccess,
+      checkoutOpen: false
+    })
+  }
+
   projectFundraisingCard() {
     const { classes } = this.props;
     const { user } = this.state;
@@ -119,19 +151,6 @@ class Project extends React.Component {
 
     const handleSendMessage = () => {
       this.props.history.push(`/messages/${user.id}`);
-    };
-
-    const handleFundProject = () => {
-      const { history, userDetails, match } = this.props
-
-      history.push({
-        pathname: '/checkout',
-        state: {
-          userId: userDetails.id,
-          projectId: match.params.id,
-          projectTitle: this.state.project.title
-        }
-      })
     };
 
     const disableFunding = () => {
@@ -187,7 +206,12 @@ class Project extends React.Component {
         <ProjectStyles.ProjectActionButtons>
           {getButtonType()}
           {!disableFunding() && (
-            <Button variant="contained" color="primary" onClick={handleFundProject}>Fund This Project</Button>
+            <Button 
+                variant="contained" 
+                color="primary" 
+                onClick={this.handleSelectFundProject}>
+                Fund This Project
+              </Button>
           )}
         </ProjectStyles.ProjectActionButtons>
       </Card>
@@ -199,6 +223,10 @@ class Project extends React.Component {
       <ProjectStyles.Main>
         {this.projectHeaderContent()}
         <ProjectStyles.ProjectGrid>
+          {
+            this.state.checkoutOpen &&
+              this.renderCheckoutForm()
+          }
           {this.projectDetailsCard()}
           {this.projectFundraisingCard()}
         </ProjectStyles.ProjectGrid>
