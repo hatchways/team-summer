@@ -186,13 +186,15 @@ class _CheckoutForm extends Component {
     }
 
     render() {
-        const { projectTitle, classes } = this.props
+        const { projectTitle, classes, handleClosePopup } = this.props
         const { investmentAmount, investmentSaved } = this.state
 
         return (
             <div className="checkout-form">
                 <Card className={classes.card}>
-                    <CloseIcon className={classes.icon}></CloseIcon>
+                    <button onClick={handleClosePopup}>
+                        <CloseIcon className={classes.icon}></CloseIcon>
+                    </button>
                     <CardContent className={classes.content}>
                         <Typography
                         className={"MuiTypography--heading"}

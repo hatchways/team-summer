@@ -14,6 +14,7 @@ import * as ProjectStyles from 'components/ProjectPageStyles';
 import CardCarousel from 'components/CardCarousel';
 import PercentageProgressBar from 'components/PercentageProgressBar';
 import Checkout from 'components/payments/Checkout';
+import Modal from 'components/Modal';
 import { getProject } from 'api/projects';
 
 import { withPageContext } from 'components/pageContext';
@@ -99,13 +100,16 @@ class Project extends React.Component {
 
   renderCheckoutForm = () => {
     const { userDetails, match } = this.props
-    
+
     return (
-      <Checkout
-        userId={userDetails.id}
-        projectId={match.params.id}
-        handlePaymentCompletion={this.handlePaymentCompletion}
-        projectTitle={this.state.project.title} />
+      <Modal handleClosePopup={this.handleClosePopup}>
+        <Checkout
+          userId={userDetails.id}
+          projectId={match.params.id}
+          handleClosePopup={this.handleClosePopup}
+          handlePaymentCompletion={this.handlePaymentCompletion}
+          projectTitle={this.state.project.title} />
+      </Modal>
     )
   }
 
@@ -113,6 +117,12 @@ class Project extends React.Component {
     e.preventDefault()
     this.setState({checkoutOpen: true})
   };
+
+  handleClosePopup = (e) => {
+    e.preventDefault()
+    this.setState({ checkoutOpen: false })
+  };
+
   
   handlePaymentCompletion = (isSuccess) => {
     if(isSuccess) {

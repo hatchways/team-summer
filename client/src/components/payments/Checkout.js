@@ -6,13 +6,19 @@ const stripeApiKey = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
 class Checkout extends Component {
 
     render() {
-        const { projectId, projectTitle, userId, handlePaymentCompletion } = this.props
+        const { 
+            projectId, 
+            projectTitle, 
+            userId,
+            handleClosePopup,
+            handlePaymentCompletion } = this.props
         
         return (
-            <div className="checkout">
+            <div className="checkout" style={this.checkoutStyle}>
                 <StripeProvider apiKey={stripeApiKey}>
                     <Elements>
                         <CheckoutForm
+                            handleClosePopup={handleClosePopup}
                             handlePaymentCompletion={handlePaymentCompletion}
                             projectId={projectId}
                             projectTitle={projectTitle}
