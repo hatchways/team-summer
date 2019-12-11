@@ -5,7 +5,7 @@ import { withPageContext } from '../components/pageContext';
 class ProtectedRoute extends Component {
 
     handleUnAuth = (activateToast, location) => {
-        activateToast('that was a fail', 'error')
+        activateToast('you have to be logged in to view this page', 'error')
         return (
             <Redirect to={{
                 pathname: '/login',
