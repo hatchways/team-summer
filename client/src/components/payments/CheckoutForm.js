@@ -36,7 +36,7 @@ const styles = (muiBaseTheme) => ({
         padding: muiBaseTheme.spacing.unit
     },
     investmentTypo: {
-        marginBottom: '40px'
+        marginBottom: '40px',
     },
     paymentTypo: {
         textAlign: "center", margin: "15px 0 -10px"
@@ -69,6 +69,12 @@ const styles = (muiBaseTheme) => ({
         position: "relative",
         top: "1px"
     },
+    iconButton: {
+        position: 'absolute',
+        left: '505px',
+        top: '60px',
+        border: 'none'
+    }
 });
 
 class _CheckoutForm extends Component {
@@ -192,7 +198,7 @@ class _CheckoutForm extends Component {
         return (
             <div className="checkout-form">
                 <Card className={classes.card}>
-                    <button onClick={handleClosePopup}>
+                    <button onClick={handleClosePopup} className={classes.iconButton}>
                         <CloseIcon className={classes.icon}></CloseIcon>
                     </button>
                     <CardContent className={classes.content}>
