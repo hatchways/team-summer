@@ -9,7 +9,7 @@ chai.use(chaiHttp);
 
 describe("/POST Invest", () => {
     let userInfo, projectId;
-    before((done) => {
+    before('Setup project and user', (done) => {
         chai.request(app)
             .post(`/api/auth/register`)
             .send({ email: faker.internet.email(), name: faker.name.findName(), password: faker.internet.password() })
