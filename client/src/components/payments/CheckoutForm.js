@@ -86,7 +86,6 @@ class _CheckoutForm extends Component {
     e.preventDefault();
     if (this.state.investmentAmount >= MINIMUM_AMOUNT) {
       this.setState({ investmentSaved: true });
-      addInvestment(this.state.investmentAmount)
     } else {
       this.props.activateToast(`Sorry, $${MINIMUM_AMOUNT} minimum`, 'neutral');
     }
