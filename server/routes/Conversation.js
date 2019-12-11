@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { isAuth, isDev, conversationById } = require('../middlewares');
 const conversationController = require('../controllers/ConversationController');
-const messageRoutes = require('./Message');
 
 router.get('/', isAuth, conversationController.getConversationsForUser);
 router.get('/:id', conversationController.getConversation);
