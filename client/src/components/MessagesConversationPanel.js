@@ -60,6 +60,12 @@ const UserConversationCard = styled(({ active, ...props }) => <Card {...props}/>
   }
 }));
 
+const getLastMessageByUser = (conversation, userId) => {
+  const message = conversation.messages.find((message) => message.sender === userId);
+
+  return message ? message.content : null
+};
+
 const ConversationList = ({ conversations, classes, activeConversation, switchPanelDisplay }) => {
   return (
     <ConversationListStyled>
@@ -87,7 +93,7 @@ const ConversationList = ({ conversations, classes, activeConversation, switchPa
                         noWrap
                         color="secondary"
                         className={classes.messagePreview}>
-              {'Hello! This is my last message'}
+              {getLastMessageByUser(conversation, conversation.users[0]._id)}
             </Typography>
           </Grid>
 

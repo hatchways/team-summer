@@ -5,11 +5,8 @@ import {
   IconButton,
   Typography,
   InputBase,
-  Button,
-  Menu,
-  MenuItem
+  Button
 } from '@material-ui/core';
-import SettingsIcon from '@material-ui/icons/Settings';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import SendIcon from '@material-ui/icons/Send';
 
