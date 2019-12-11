@@ -34,6 +34,7 @@ exports.getUser = (req, res) => {
 };
 
 exports.editUser = (req, res) => {
+  if (req.params.id !== req.user._id) return res.status(403).send({ error: 'Access denied' });
   singleUpload(req, res, function (err) {
     if (err) return res.status(422).json({
       errors: [{
