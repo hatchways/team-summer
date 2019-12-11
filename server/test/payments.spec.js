@@ -39,6 +39,7 @@ describe("/POST Invest", () => {
             .set({ Authorization: `Bearer ${userInfo.token}` })
             .send({ projectId, token: { token:  {id: 'tok_visa'} }, investmentAmount: 2 })
             .end((err, res) => {
+                console.log(res)
                 res.should.have.status(200);
                 res.body.investment.should.have.property('user').eql(userInfo.user._id);
                 res.body.investment.should.have.property('project').eql(projectId);
