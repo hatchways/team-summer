@@ -35,7 +35,3 @@ class ProtectedRoute extends Component {
 }
 
 export default withPageContext(ProtectedRoute);
-
-// Render a Route to the desired path rather than preventing it from rendering at all
-// because this won't cause issues with non-matching routesin a Switch. 
-// Setup render prop to make determination about what component to render.
