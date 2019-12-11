@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Button, Paper, Typography } from '@material-ui/core';
+// import { createConversation } from '../api/messages'; //SOCKETS WHEN DONE
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -9,7 +10,6 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     [theme.breakpoints.up('md')]: {
       height: '100vh'
-      // padding: theme.spacing(3),
     },
   },
   avatar: {
@@ -29,19 +29,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProfileDetailPanel = (props) => {
-  const { id, profilePic, name, location, about, expertise, isCurrentUser, history } = props
+  const { 
+    id, 
+    profilePic, 
+    name, 
+    location, 
+    about, 
+    expertise, 
+    currentUserId,
+    isCurrentUser, 
+    history } = props
   const classes = useStyles();
 
-  const handleRedirect = (e) => {
+  const handleRedirect = async (e) => {
     e.preventDefault();
     if (isCurrentUser === true) {
-      const userInfo = { id, profilePic, name, location, about };
       history.push({
         pathname: `profile/edit/${id}`,
-        state: userInfo
+        state: { id, profilePic, name, location, about }
       });
     } else {
-      // TO DO MESSAGING
+      console.log("create convo goes here when done")
+        // await createConversation([currentUserId, id])
+        //   .catch((error) => console.log(error));
+        history.push('/messages');
     }
   }
 

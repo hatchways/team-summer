@@ -49,9 +49,10 @@ const styles = (theme) => ({
 
 class ProfilePage extends Component {
   state = {
-    displayFilter: 'projects',
-    isCurrentUser: false,
     isPending: false,
+    isCurrentUser: false,
+    currentUserId: '',
+    displayFilter: 'projects',
     profile: {
       _id: '',
       name: '',
@@ -69,6 +70,7 @@ class ProfilePage extends Component {
     }
 
     //if the route has an id param isCurrentUser is false
+    const currentUserId = this.props.userDetails.id
     this.setState({isPending: TextTrackCueList})
     const profileId = this.props.match.params.id || this.props.userDetails.id;
     getUser(profileId).then((profile) => {
@@ -76,6 +78,7 @@ class ProfilePage extends Component {
         {
           isPending: false,
           profile: profile.data,
+          currentUserId: this.props.userDetails.id,
           isCurrentUser: this.getUserType()
         }
       )
@@ -100,6 +103,7 @@ class ProfilePage extends Component {
       <Fragment>
         <ProfileDetailPanel
           id={this.props.userDetails.id}
+          currentUserId={this.props.currentUserId}
           isCurrentUser={this.state.isCurrentUser}
           profilePic={avatarPic}
           name={name}
