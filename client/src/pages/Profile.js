@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { 
   withStyles, 
-  Grid } from '@material-ui/core';
+  Grid,
+  Typography } from '@material-ui/core';
 import moment from 'moment';
 
 import FilterTabs from 'components/FilterTabs';
 import ProjectCard from 'components/ProjectCard';
-import PlaceholderCard from 'components/PlaceholderCard';
 import ProfileDetailPanel from 'components/ProfileDetailPanel';
 import { getUser } from 'api/users';
 import { withPageContext } from 'components/pageContext';
@@ -38,7 +38,25 @@ const styles = (theme) => ({
       color: theme.palette.primary.main
     }
   },
+  placeholderText: {
+    maxHeight: 460,
+    overflowY: 'auto',
+    padding: 5
+  }
 });
+
+
+// const ConversationListPanel = styled(Paper)(({ theme }) => ({
+//   display: 'flex',
+//   flexDirection: 'column',
+//   alignItems: 'center',
+//   padding: 60,
+
+//   [theme.breakpoints.up('lg')]: {
+//     paddingLeft: '25%'
+//   }
+// }));
+
 
 class ProfilePage extends Component {
   state = {
@@ -61,7 +79,6 @@ class ProfilePage extends Component {
     }
 
     //if the route has an id param isCurrentUser is false
-    // const isCurrentUser = this.props.match.params.id === undefined ? true : false;
     const profileId = this.props.match.params.id || this.props.userDetails.id;
     getUser(profileId).then((profile) => {
       this.setState(
@@ -71,7 +88,7 @@ class ProfilePage extends Component {
         }
       )
     }).catch((err) => {
-      if (err) this.props.history.push('/'); //if id doesn't exist
+      if (err) this.props.history.push('/');
     })
   }
 
@@ -81,8 +98,6 @@ class ProfilePage extends Component {
       return true
     } else if (this.props.match.params.id === this.props.userDetails.id){
       return true
-    } else {
-      return false
     }
   }
   
@@ -120,7 +135,7 @@ class ProfilePage extends Component {
   }
 
   renderData = () => {
-    const { profile, displayFilter } = this.state;
+    const { profile, displayFilter, isCurrentUser } = this.state;
     let data
 
     if (displayFilter === 'investments') {
@@ -129,9 +144,21 @@ class ProfilePage extends Component {
       data = profile.projects 
     } 
     if(data.length === 0) {
-      return <PlaceholderCard />
+        return (
+          <Typography
+            variant="h3"
+            color="secondary"
+            component="p"
+            style={{ textAlign: 'center' }}>
+            {
+              isCurrentUser ? 
+              'You have no projects or investments' :
+              'This user has no projects or investments'
+            }
+          </Typography>
+        )
     }
-    if (data) {
+    else if (data) {
       return (
         <Grid container classes={{ root: 'project-section' }} 
         spacing={8} 
