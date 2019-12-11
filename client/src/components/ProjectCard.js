@@ -19,7 +19,6 @@ const IndustryLabel = styled('div')(({ theme }) => ({
 
 const styles = (theme) => ({
   card: {
-    maxWidth: '650px',
     transition: '0.3s',
     cursor: 'pointer',
     '&:hover': {
