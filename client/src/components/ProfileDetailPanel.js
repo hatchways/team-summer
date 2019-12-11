@@ -58,13 +58,15 @@ const ProfileDetailPanel = (props) => {
 
   return (
     <Paper className={classes.paper}>
-      <Avatar className={classes.avatar} src={profilePic || null} />
+      <Avatar className={classes.avatar} src={profilePic || null}>
+        <Typography variant="h1">{profilePic === null && name[0]}</Typography>
+      </Avatar>
       <Typography variant="h3">{name}</Typography>
       <Typography variant="body1">{location}</Typography>
       <Button 
         classes={{ root: classes.button }} 
         type="submit" 
-        variant="outlined" 
+        variant="outlined"
         color="primary" 
         onClick={handleRedirect}>
         {isCurrentUser ? 'edit' : 'message'}

@@ -11,7 +11,6 @@ import ProfileDetailPanel from 'components/ProfileDetailPanel';
 import { getUser } from 'api/users';
 import { withPageContext } from 'components/pageContext';
 import Loading from 'components/Loading';
-const standinProfilePic = '/images/placeholderProfile.png';
 const FILTER_TYPES = ['projects', 'investments']
 
 const styles = (theme) => ({
@@ -97,7 +96,7 @@ class ProfilePage extends Component {
   
   renderUserInfo() {
     const { profilePic, name, location, about, expertise } = this.state.profile;
-    const avatarPic = profilePic ? profilePic : standinProfilePic
+    const avatarPic = profilePic ? profilePic : null;
 
     return (
       <Fragment>
