@@ -14,7 +14,6 @@ import { CardElement, injectStripe } from 'react-stripe-elements';
 import { stripeStyle } from './stripeStyle';
 import { pay } from 'api/payments';
 import { toDollars } from 'helpers/formatting';
-import { addInvestment } from 'api/investments';
 
 const styles = (muiBaseTheme) => ({
     card: {
@@ -124,14 +123,14 @@ class _CheckoutForm extends Component {
                         Investment amount: {toDollars(investmentAmount)}
                     </Typography>
                 </CardContent>
-                <Divider className={classes.divider}></Divider>
+                <Divider className={classes.divider}/>
                 <form onSubmit={this.handlePaymentSubmit} >
                     <CardContent className={classes.content}>
                         <CardElement
                             {...stripeStyle.card()}
                         />
                     </CardContent>
-                    <Divider className={classes.divider}></Divider>
+                    <Divider className={classes.divider}/>
                     <CardContent className={classes.content}>
                         <button
                             style={stripeStyle.button}>
