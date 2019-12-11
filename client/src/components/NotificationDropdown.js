@@ -38,7 +38,7 @@ const StyledMenuItem = withStyles(theme => ({
     },
 }))(MenuItem);
 
-export default function CustomizedMenus({ alerts, messages, notifications }) {
+export default function CustomizedMenus({ alerts, messages, investmentNotifications }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = event => {
@@ -59,8 +59,8 @@ export default function CustomizedMenus({ alerts, messages, notifications }) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose} >
                 {
-                    notifications.length
-                        ? notifications.map((notification) => {
+                    investmentNotifications.length
+                        ? investmentNotifications.map((notification) => {
                             const { _id, investor, investmentAmount, project, } = notification
                             const notificationMessage = `${investor.name} invested ${investmentAmount} in your project ${project.title}`
                             return (

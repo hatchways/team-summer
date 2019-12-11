@@ -17,7 +17,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 import SvgProductLaunchLogo from './ProductLaunchLogo';
 import NotificationDropdown from './NotificationDropdown';
-import { getNotifications } from '../api/notifications';
+import { getNotifications } from 'api/notifications';
 
 const useStyles = makeStyles((theme) => ({
   navBar: {
@@ -250,7 +250,7 @@ const NavBar = (props) => {
           <div>
             <NotificationDropdown
               alerts={props.notifications.length}
-              notifications={props.notifications}
+              investmentNotifications={props.notifications}
             />
           </div>
         }
