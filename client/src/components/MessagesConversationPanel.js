@@ -15,28 +15,11 @@ const ConversationListPanel = styled(Paper)(({ theme }) => ({
   }
 }));
 
-const NewCount = styled('div')(({ theme }) => ({
-  backgroundColor: theme.palette.primary.main,
-  color: theme.palette.primary.contrastText,
-  borderRadius: 100,
-
-  width: 39,
-  height: 25,
-
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center'
-}));
-
 const ConversationListStyled = styled('div')(({ theme }) => ({
   maxHeight: 460,
   width: '100%',
   overflowY: 'auto',
   padding: 5,
-
-  [theme.breakpoints.up(416)]: {
-    width: '80%'
-  }
 }));
 
 const UserConversationCard = styled(({ active, ...props }) => <Card {...props}/>)(({ theme, ...props }) => ({
@@ -111,9 +94,6 @@ export default (props) => {
 
       <Grid container alignItems="center" className={classes.conversationListHeader}>
         <Typography variant="h4" component="h3" className={classes.userListHeader}>Messages</Typography>
-        <NewCount>
-          <Typography variant="h6" component="p">2</Typography>
-        </NewCount>
       </Grid>
 
       <ConversationList {...props}/>

@@ -131,7 +131,9 @@ class Project extends React.Component {
       history.push({
         pathname: '/checkout',
         state: {
+          projectOwnerId: this.state.user._id,
           userId: userDetails.id,
+          userName: userDetails.name,
           projectId: match.params.id,
           projectTitle: this.state.project.title
         }
