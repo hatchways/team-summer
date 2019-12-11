@@ -30,7 +30,7 @@ module.exports = (io) => {
     /* Connects userId to a room, allows for the ability to send to a user id */
     socket.on('authenticate', (id) => socket.join(id));
 
-    socket.on('message', messages.receiveMessage(io));
+    socket.on('sendMessage', messages.receiveMessage(io));
 
     // Socket emitters
 
