@@ -6,6 +6,10 @@ exports.create = async (req, res) => {
   const { users } = req.body;
 
   try {
+    // If the conversation exists, just return it
+    const existingConversation = await Conversation.findOne({ users });
+    if (existingConversation) return res.status(200).json(existingConversation);
+
     const conversation = await Conversation.create({ users });
     await User.updateMany({_id: {$in: users}}, {conversations: conversation._id});
     return res.status(200).json(conversation);
@@ -46,7 +50,7 @@ exports.deleteConversation = async (req, res) => {
   try {
     await Conversation.deleteOne({ _id: id });
     await Message.deleteMany({ conversation: id });
-    await User.updateMany({conversations: id}, {$pull: {conversations: id}});
+    await User.updateMany({ conversations: id }, { $pull: { conversations: id } });
     res.status(200).json({ success: true });
   } catch (error) {
     mongoDbErrorHandler(error, res);
