@@ -106,7 +106,7 @@ class _CheckoutForm extends Component {
                 })
                 .then(() => activateToast(`Your payment was a success. Thank you for investing in ${projectTitle}!`, 'success'))
                 .then(() => history.push("/explore"))
-                .catch(() => activateToast('that was a fail', 'error'))
+                .catch(() => activateToast('Sorry. but you were unable to invest.', 'error'))
         });
     };
 
