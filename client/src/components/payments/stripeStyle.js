@@ -38,5 +38,5 @@ const card = () => {
 
 export const stripeStyle = {
     card,
-    button: buttonStyle,
+    stripeButton: buttonStyle,
 }

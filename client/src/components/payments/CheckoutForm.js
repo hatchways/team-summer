@@ -133,7 +133,7 @@ class _CheckoutForm extends Component {
                     <Divider className={classes.divider}></Divider>
                     <CardContent className={classes.content}>
                         <button
-                            style={stripeStyle.button}>
+                            style={stripeStyle.stripeButton}>
                             invest
             </button>
                     </CardContent>
