@@ -111,7 +111,7 @@ class Project extends React.Component {
 
   renderCheckoutForm = () => {
     const { userDetails, match, socket } = this.props
-    console.log(socket)
+
     return (
       <Modal handleClosePopup={this.handleClosePopup}>
         <Checkout
@@ -149,7 +149,7 @@ class Project extends React.Component {
 
   handlePaymentCompletion = (isSuccess) => {
     if (isSuccess) {
-      this.props.activateToast('success. you invested.', 'success')
+      this.props.activateToast('Payment successful. Thank you for your investment!', 'success')
       this.emitSocketInvestment()
     } else {
       this.props.activateToast('payment was not successful', 'error')

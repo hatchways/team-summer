@@ -222,6 +222,9 @@ const NavBar = (props) => {
       const response = await getNotifications(props.userDetails.id);
       const { data } = response;
       props.setNotifications(data);
+      props.socket.on('newInvestment', (data) => {
+        props.activateToast(`${data.name} invested in your project, ${data.projectName}!`, 'success');
+      })
     } catch (err) {
       console.log(err);
     }
