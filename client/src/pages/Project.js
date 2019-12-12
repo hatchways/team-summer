@@ -170,9 +170,13 @@ class Project extends React.Component {
       });
     };
 
+    const handleViewProfile = () => {
+      this.props.history.push(`/profile/${this.state.user._id}`);
+    };
+
     const handleSendMessage = async () => {
-      await createConversation([this.props.userDetails.id, this.state.user._id])
-        .catch((error) => console.log(error));
+      // await createConversation([this.props.userDetails.id, this.state.user._id])
+      //   .catch((error) => console.log(error));
 
       this.props.history.push('/messages');
     };
@@ -211,14 +215,19 @@ class Project extends React.Component {
           </ProjectStyles.FundraisingStat>
         </ProjectStyles.FundraisingStatContainer>
 
-        <ProjectStyles.CreatorProfile>
-          <Avatar>
-            {user.avatar
-              ? <img src={user.avatar} alt="Project creator avatar" />
-              : user.name.split('')[0]
-            }
-          </Avatar>
-          <Typography variant="h6">{user.name}</Typography>
+        <ProjectStyles.CreatorProfile >
+          <Button
+            onClick={handleViewProfile}
+            style={{ width: 'auto', display: 'block' }}>
+            <Avatar
+              style={{ margin: 'auto' }}>
+              {user.avatar
+                ? <img src={user.avatar} alt="Project creator avatar" />
+                : user.name.split('')[0]
+              }
+            </Avatar>
+            <Typography variant="h6">{user.name}</Typography>
+          </Button>
         </ProjectStyles.CreatorProfile>
 
         <ProjectStyles.ProjectActionButtons>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Button, Paper, Typography } from '@material-ui/core';
-// import { createConversation } from '../api/messages'; //SOCKETS WHEN DONE
+import { createConversation } from 'api/messages';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -50,8 +50,8 @@ const ProfileDetailPanel = (props) => {
       });
     } else {
       console.log("create convo goes here when done")
-        // await createConversation([currentUserId, id])
-        //   .catch((error) => console.log(error));
+        await createConversation([currentUserId, id])
+          .catch((error) => console.log(error));
         history.push('/messages');
     }
   }
