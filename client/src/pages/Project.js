@@ -163,7 +163,7 @@ class Project extends React.Component {
   projectFundraisingCard() {
     const { classes } = this.props;
     const { user } = this.state;
-    const { funding, fundingGoal, daysLeft, equalityExchange } = this.state.project;
+    const { funding, fundingGoal, daysLeft } = this.state.project;
 
     const calculateCompleted = () => {
       if (!funding.fundingTotal) return 0;
