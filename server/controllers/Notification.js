@@ -24,15 +24,18 @@ exports.setNotificationToSeen = (req, res) => {
   const { notificationId } = req.params;
 
   try {
-    Notification.updateOne({ _id: notificationId }, { seen: true })
-      .exec((err, updatedNotification) => {
+    Notification.findByIdAndUpdate(
+      { _id: notificationId },
+      { seen: true },
+      (err, updatedNotification) => {
         if (err) {
           return res.status(400).json({
             error: 'Notification could not be updated.'
           })
         }
         return res.status(200).json(updatedNotification);
-      })
+      }
+    )
   } catch (err) {
     console.log(err)
   }
