@@ -32,12 +32,12 @@ describe("/POST Invest", () => {
             });
     });
 
-    it("it should return 200 for successful investment", done => {
+    it('it should return 200 for successful investment', (done) => {
         chai
             .request(app)
             .post(`/api/investments/invest`)
             .set({ Authorization: `Bearer ${userInfo.token}` })
-            .send({ projectId, token: { token:  {id: 'tok_visa'} }, investmentAmount: 2 })
+            .send({ projectId, token: { token:  {id: 'tok_visa'} }, investmentAmount: 200 })
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.investment.should.have.property('user').eql(userInfo.user._id);
