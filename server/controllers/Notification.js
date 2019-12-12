@@ -1,5 +1,4 @@
 const { Notification } = require('../models');
-const { ObjectId } = require('mongoose').Types;
 
 exports.getNotifications = (req, res) => {
   if (req.user._id !== req.params.userId) {
