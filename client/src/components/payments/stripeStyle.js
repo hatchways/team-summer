@@ -103,5 +103,3 @@ export const stripeStyle = {
     checkoutStyles,
     stripeButton: buttonStyle,
 }
-
-
