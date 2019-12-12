@@ -209,14 +209,12 @@ class Project extends React.Component {
 
         <ProjectStyles.ProjectActionButtons>
           {getButtonType()}
-          {!disableFunding() && (
             <Button 
                 variant="contained" 
                 color="primary" 
                 onClick={this.handleSelectFundProject}>
                 Fund This Project
               </Button>
-          )}
         </ProjectStyles.ProjectActionButtons>
       </Card>
     );
