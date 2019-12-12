@@ -13,6 +13,8 @@ import moment from 'moment'
 import * as ProjectStyles from 'components/ProjectPageStyles';
 import CardCarousel from 'components/CardCarousel';
 import PercentageProgressBar from 'components/PercentageProgressBar';
+import Checkout from 'components/payments/Checkout';
+import Modal from 'components/Modal';
 import { getProject } from 'api/projects';
 
 import { withPageContext } from 'components/pageContext';
@@ -42,7 +44,9 @@ class Project extends React.Component {
       _id: '',
       name: '',
       avatar: ''
-    }
+    },
+    stripeSuccess: false,
+    checkoutOpen: false
   };
 
   async componentDidMount() {
@@ -95,6 +99,54 @@ class Project extends React.Component {
     );
   }
 
+  renderCheckoutForm = () => {
+    const { userDetails, match } = this.props
+
+    return (
+      <Modal handleClosePopup={this.handleClosePopup}>
+        <Checkout
+          userId={userDetails.id}
+          projectId={match.params.id}
+          handleClosePopup={this.handleClosePopup}
+          handlePaymentCompletion={this.handlePaymentCompletion}
+          projectTitle={this.state.project.title} />
+      </Modal>
+    )
+  }
+
+  handleSelectFundProject = (e) => {
+    e.preventDefault()
+    this.setState({ checkoutOpen: true })
+  };
+
+  handleClosePopup = (e) => {
+    e.preventDefault()
+    this.setState({ checkoutOpen: false })
+  };
+
+  emitSocketInvestment = () => {
+    const { user: { _id, name }, project: { title } } = this.state
+
+    this.props.socket.emit('investment', {
+      id: _id,
+      name: name,
+      projectName: title
+    }, { token: localStorage.getItem('jwtToken') })
+  }
+
+  handlePaymentCompletion = (isSuccess) => {
+    if (isSuccess) {
+      this.props.activateToast('success. you invested.', 'success')
+      this.emitSocketInvestment()
+    } else {
+      this.props.activateToast('payment was not successful', 'error')
+    }
+    this.setState({
+      stripeSuccess: isSuccess,
+      checkoutOpen: false
+    })
+  }
+
   projectFundraisingCard() {
     const { classes } = this.props;
     const { user } = this.state;
@@ -123,27 +175,6 @@ class Project extends React.Component {
         .catch((error) => console.log(error));
 
       this.props.history.push('/messages');
-    };
-
-    const handleFundProject = () => {
-      const { history, userDetails, match } = this.props
-
-      history.push({
-        pathname: '/checkout',
-        state: {
-          projectOwnerId: this.state.user._id,
-          userId: userDetails.id,
-          userName: userDetails.name,
-          projectId: match.params.id,
-          projectTitle: this.state.project.title
-        }
-      })
-    };
-
-    const disableFunding = () => {
-      // TODO: Logic to handle disabling funding of project, maybe if project fund period has ended
-      // Disabled by default for now until funding logic is added
-      return false;
     };
 
     const getButtonType = () => {
@@ -192,9 +223,12 @@ class Project extends React.Component {
 
         <ProjectStyles.ProjectActionButtons>
           {getButtonType()}
-          {!disableFunding() && (
-            <Button variant="contained" color="primary" onClick={handleFundProject}>Fund This Project</Button>
-          )}
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={this.handleSelectFundProject}>
+            Fund This Project
+            </Button>
         </ProjectStyles.ProjectActionButtons>
       </Card>
     );
@@ -205,6 +239,10 @@ class Project extends React.Component {
       <ProjectStyles.Main>
         {this.projectHeaderContent()}
         <ProjectStyles.ProjectGrid>
+          {
+            this.state.checkoutOpen &&
+            this.renderCheckoutForm()
+          }
           {this.projectDetailsCard()}
           {this.projectFundraisingCard()}
         </ProjectStyles.ProjectGrid>
