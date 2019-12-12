@@ -95,9 +95,6 @@ class _CheckoutForm extends Component {
         e.preventDefault();
         if (this.state.investmentAmount >= 5) {
             this.setState({ investmentSaved: true })
-        } else {
-            // this.props.activateToast('Sorry, $5 minimum', 'neutral')
-            console.log("no go")
         }
     }
 

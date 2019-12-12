@@ -163,12 +163,6 @@ class Project extends React.Component {
       this.props.history.push(`/messages/${user.id}`);
     };
 
-    const disableFunding = () => {
-      // TODO: Logic to handle disabling funding of project, maybe if project fund period has ended
-      // Disabled by default for now until funding logic is added
-      return false;
-    };
-
     const getButtonType = () => {
       const userId = this.state.user._id;
       return this.props.userAuthenticated && userId === this.props.userDetails.id
