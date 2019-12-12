@@ -214,9 +214,7 @@ const NavBar = (props) => {
         const response = await getNotifications(props.userDetails.id);
         const { data } = response;
         props.setNotifications(data);
-        props.socket.on('newInvestment', (data) => {
-          props.activateToast(`${data.name} invested in your project, ${data.projectName}!`, 'success');
-        })
+
       } catch (err) {
         console.log(err);
       }
@@ -225,6 +223,11 @@ const NavBar = (props) => {
     if (props.userAuthenticated) {
       loadData();
     }
+
+    props.socket.on('newInvestment', async (notification) => {
+      loadData();
+      props.activateToast(`${notification.name} invested in your project, ${notification.projectName}!`, 'success');
+    })
   }, [])
 
   // If navbar is in desktop mode and drawer is still set to open,
