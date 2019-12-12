@@ -225,7 +225,7 @@ const NavBar = (props) => {
     if (props.userAuthenticated) {
       loadData();
     }
-  })
+  }, [])
 
   // If navbar is in desktop mode and drawer is still set to open,
   // toggle the drawer closed
