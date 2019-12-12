@@ -145,25 +145,39 @@ class Project extends Component {
 
   handlePaymentCompletion = (investmentAmount) => {
     if (investmentAmount !== null) {
-      this.props.activateToast('success. you invested.', 'success')
+      this.props.activateToast('Success. you invested.', 'success')
       this.emitSocketInvestment()
       this.applyInvestment(investmentAmount)
     } else {
-      this.props.activateToast('payment was not successful', 'error')
+      this.props.activateToast('Payment was not successful', 'error')
     }
   }
 
   applyInvestment = (investment) => {
+    const donorCount = this.state.project.funding.donorCount + 1
+    const fundingTotal = this.state.project.funding.fundingTotal + parseInt(investment)
 
-    this.setState((prevState, props) => {
-      return { 
-        stripeSuccess: investment !== null,
-        checkoutOpen: false,
-        donorCount: prevState.donorCount + 1,
-        fundingTotal: prevState.fundingTotal + investment
+    const newState = {
+      ...this.state,
+      stripeSuccess: true,
+      checkoutOpen: false,
+      project: {
+        ...this.state.project,
+        title: 'new',
+        funding: {
+          ...this.state.project.funding,
+          donorCount,
+          fundingTotal
+        }
       }
-    })
+    }
+
+    this.setState(newState)
   }
+
+
+
+
 
   projectFundraisingCard() {
     const { user, project: { funding, fundingGoal, daysLeft }} = this.state;
