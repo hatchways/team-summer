@@ -1,4 +1,5 @@
 const { Notification } = require('../models');
+const { ObjectId } = require('mongoose').Types;
 
 exports.getNotifications = (req, res) => {
   if (req.user._id !== req.params.userId) {
@@ -18,3 +19,15 @@ exports.getNotifications = (req, res) => {
       return res.status(200).json(notifications);
     });
 };
+
+exports.deleteNotification = (req, res) => {
+  const { notificationId } = req.params;
+  const { _id } = req.user;
+
+  Notification.deleteOne({ _id: notificationId, 'user._id': _id }, function (err) {
+    if (err) {
+      return res.status(400).json({ err });
+    }
+    return res.status(200).json('Notification successfully deleted.');
+  })
+}
