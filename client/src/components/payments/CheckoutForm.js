@@ -40,21 +40,13 @@ class _CheckoutForm extends Component {
 
     handlePaymentSubmit = (e) => {
         e.preventDefault();
-        const { userName, projectId, stripe, projectOwnerId, projectTitle, socket } = this.props
+        const {  projectId, stripe } = this.props
         const { investmentAmount } = this.state
-        console.log(userName)
         stripe.createToken().then((payload) => {
             pay(projectId, payload, investmentAmount)
                 .then(this.props.handlePaymentCompletion(true))
                 .catch((err) => this.props.handlePaymentCompletion(false))
         })
-            .then(() => {
-                socket.emit('investment', {
-                    id: projectOwnerId,
-                    name: userName,
-                    projectTitle
-                }, { token: localStorage.getItem('jwtToken') })
-            })
     };
 
     renderPaymentCard = (classes) => {

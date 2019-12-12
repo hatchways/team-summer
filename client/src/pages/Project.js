@@ -110,19 +110,15 @@ class Project extends React.Component {
   }
 
   renderCheckoutForm = () => {
-    const { userDetails, match, socket } = this.props
+    const { match } = this.props
 
     return (
       <Modal handleClosePopup={this.handleClosePopup}>
         <Checkout
-          userId={userDetails.id}
-          userName={userDetails.name}
           projectId={match.params.id}
           handleClosePopup={this.handleClosePopup}
           handlePaymentCompletion={this.handlePaymentCompletion}
-          projectTitle={this.state.project.title}
-          projectOwner={this.state.user._id}
-          socket={socket} />
+        />
       </Modal>
     )
   }
@@ -138,7 +134,8 @@ class Project extends React.Component {
   };
 
   emitSocketInvestment = () => {
-    const { user: { _id, name }, project: { title } } = this.state
+    const { user: { _id }, project: { title } } = this.state
+    const { name } = this.props.userDetails;
 
     this.props.socket.emit('investment', {
       id: _id,
