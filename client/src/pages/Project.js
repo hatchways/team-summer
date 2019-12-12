@@ -154,24 +154,18 @@ class Project extends Component {
   }
 
   applyInvestment = (investment) => {
-    const donorCount = this.state.project.funding.donorCount + 1
-    const fundingTotal = this.state.project.funding.fundingTotal + parseInt(investment)
-
-    const newState = {
-      ...this.state,
+    this.setState(({project}) => ({
       stripeSuccess: true,
       checkoutOpen: false,
       project: {
-        ...this.state.project,
+        ...project,
         funding: {
-          ...this.state.project.funding,
-          donorCount,
-          fundingTotal
+          ...project.funding,
+          donorCount: project.funding.donorCount + 1,
+          fundingTotal: project.funding.fundingTotal + parseInt(investment)
         }
       }
-    }
-
-    this.setState(newState)
+    }))
   }
 
   projectFundraisingCard() {
