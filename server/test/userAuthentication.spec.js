@@ -3,21 +3,19 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
 const app = require('../app.js');
+const db = require('../DbConnection');
 const mongoose = require('mongoose');
 
 chai.should();
 chai.use(chaiHttp);
 
-// before('Setup project and user', (done) => {
-//   // Clear test  database
-//   const connection = mongoose.connection;
-//   connection.once('open', () => connection.db.dropDatabase());
-
 describe('User authentication and creation', () => {
-  before('Setup project and user', (done) => {
-    // Clear test  database
-    const connection = mongoose.connection;
-    connection.once('open', () => connection.db.dropDatabase());
+  before('Connect to database', (done) => {
+    db.open().then(() => done()).catch(done);
+  });
+
+  after('Disconnect database', (done) => {
+    db.close().then(() => done()).catch(done)
   });
 
   it('Registers a user', (done) => {
@@ -27,8 +25,9 @@ describe('User authentication and creation', () => {
       .post('/api/auth/register')
       .send({ email: faker.internet.email(), name: faker.name.findName(), password: faker.internet.password() })
       .end((err, res) => {
-        userInfo = res.body
-        res.status.should.have.status(200)
+        userInfo = res.body;
+        res.should.have.status(201);
+        done()
       });
   });
 });
