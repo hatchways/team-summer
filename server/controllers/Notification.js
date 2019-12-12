@@ -20,14 +20,38 @@ exports.getNotifications = (req, res) => {
     });
 };
 
+exports.setNotificationToSeen = (req, res) => {
+  const { notificationId } = req.params;
+
+  try {
+    Notification.updateOne({ _id: notificationId }, { seen: true })
+      .exec((err, updatedNotification) => {
+        if (err) {
+          return res.status(400).json({
+            error: 'Notification could not be updated.'
+          })
+        }
+        return res.status(200).json(updatedNotification);
+      })
+  } catch (err) {
+    console.log(err)
+  }
+};
+
 exports.deleteNotification = (req, res) => {
   const { notificationId } = req.params;
   const { _id } = req.user;
 
-  Notification.deleteOne({ _id: notificationId, 'user._id': _id }, function (err) {
-    if (err) {
-      return res.status(400).json({ err });
-    }
-    return res.status(200).json('Notification successfully deleted.');
-  })
+  try {
+    Notification.deleteOne({ _id: notificationId, user: ObjectId(_id) }, function (err) {
+      if (err) {
+        return res.status(400).json({
+          error: 'Notification could not be deleted.'
+        });
+      }
+      return res.status(200).json('Notification successfully deleted.');
+    })
+  } catch (err) {
+    console.log(err)
+  }
 }
