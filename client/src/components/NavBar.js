@@ -250,6 +250,7 @@ const NavBar = (props) => {
             <NotificationDropdown
               alerts={props.notifications.length}
               investmentNotifications={props.notifications}
+              setNotifications={props.setNotifications}
             />
           </div>
         }
