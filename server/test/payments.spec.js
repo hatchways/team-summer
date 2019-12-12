@@ -3,6 +3,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
 const app = require('../app.js');
+const db = require('../DbConnection');
 const mongoose = require('mongoose');
 
 chai.should();
@@ -12,30 +13,32 @@ describe('/POST Invest', () => {
   let userInfo, projectId;
 
   before('Setup project and user', (done) => {
-    // Clear test  database
-    const connection = mongoose.connection;
-    connection.once('open', () => connection.db.dropDatabase());
+    db.open().then(() => {
+      chai.request(app)
+        .post(`/api/auth/register`)
+        .send({ email: faker.internet.email(), name: faker.name.findName(), password: faker.internet.password() })
+        .end((err, res) => {
+          userInfo = res.body;
+          chai.request(app)
+            .post(`/api/projects`)
+            .set({ Authorization: `Bearer ${userInfo.token}` })
+            .send({
+              'title': faker.lorem.word(),
+              'description': faker.lorem.words(),
+              'industry': faker.random.word(),
+              'location': faker.address.state(),
+              'fundingGoal': faker.random.number()
+            })
+            .end((err, res) => {
+              projectId = res.body._id;
+              done();
+            });
+        });
+    }).catch(done);
+  });
 
-    chai.request(app)
-      .post(`/api/auth/register`)
-      .send({ email: faker.internet.email(), name: faker.name.findName(), password: faker.internet.password() })
-      .end((err, res) => {
-        userInfo = res.body;
-        chai.request(app)
-          .post(`/api/projects`)
-          .set({ Authorization: `Bearer ${userInfo.token}` })
-          .send({
-            'title': faker.lorem.word(),
-            'description': faker.lorem.words(),
-            'industry': faker.random.word(),
-            'location': faker.address.state(),
-            'fundingGoal': faker.random.number()
-          })
-          .end((err, res) => {
-            projectId = res.body._id;
-            done();
-          });
-      });
+  after('Closes database connection', (done) => {
+    db.close().then(() => done()).catch(done)
   });
 
   it('it should return 200 for successful investment', (done) => {

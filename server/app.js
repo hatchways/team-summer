@@ -1,7 +1,7 @@
 const createError = require('http-errors');
-const express  = require('express');
+const express = require('express');
 const { json, urlencoded } = require('express');
-const { join }= require('path');
+const { join } = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
@@ -10,13 +10,16 @@ const pingRouter = require('./routes/ping');
 
 const app = express();
 
-const LoggerMiddleware = (req, res, next) => {
-  console.log(`Logged  ${req.url}  ${req.method} -- ${new Date()}`);
-  next();
-};
-app.use(LoggerMiddleware);
+if (process.env.hasOwnProperty('NODE_ENV') && process.env.NODE_ENV !== 'test') {
+  const LoggerMiddleware = (req, res, next) => {
+    console.log(`Logged  ${req.url}  ${req.method} -- ${new Date()}`);
+    next();
+  };
+  app.use(LoggerMiddleware);
 
-app.use(logger('dev'));
+  app.use(logger('dev'));
+}
+
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
