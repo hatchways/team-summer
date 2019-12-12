@@ -149,6 +149,7 @@ class Project extends Component {
       this.emitSocketInvestment()
       this.applyInvestment(investmentAmount)
     } else {
+      this.setState({checkoutOpen: false})
       this.props.activateToast('Payment was not successful', 'error')
     }
   }
