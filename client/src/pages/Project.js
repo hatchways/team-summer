@@ -18,6 +18,7 @@ import Modal from 'components/Modal';
 import { getProject } from 'api/projects';
 
 import { withPageContext } from 'components/pageContext';
+import { createConversation } from '../api/messages';
 
 class Project extends React.Component {
   state = {
@@ -115,7 +116,7 @@ class Project extends React.Component {
 
   handleSelectFundProject = (e) => {
     e.preventDefault()
-    this.setState({checkoutOpen: true})
+    this.setState({ checkoutOpen: true })
   };
 
   handleClosePopup = (e) => {
@@ -123,12 +124,22 @@ class Project extends React.Component {
     this.setState({ checkoutOpen: false })
   };
 
-  
+  emitSocketInvestment = () => {
+    const { user: { _id, name }, project: { title } } = this.state
+
+    this.props.socket.emit('investment', {
+      id: _id,
+      name: name,
+      projectName: title
+    }, { token: localStorage.getItem('jwtToken') })
+  }
+
   handlePaymentCompletion = (isSuccess) => {
-    if(isSuccess) {
+    if (isSuccess) {
       this.props.activateToast('success. you invested.', 'success')
+      this.emitSocketInvestment()
     } else {
-      this.props.activateToast('that was a fail', 'error')
+      this.props.activateToast('payment was not successful', 'error')
     }
     this.setState({
       stripeSuccess: isSuccess,
@@ -157,10 +168,13 @@ class Project extends React.Component {
         pathname: `edit/${id}`,
         state: projectInfo
       });
-    }
+    };
 
-    const handleSendMessage = () => {
-      this.props.history.push(`/messages/${user.id}`);
+    const handleSendMessage = async () => {
+      await createConversation([this.props.userDetails.id, this.state.user._id])
+        .catch((error) => console.log(error));
+
+      this.props.history.push('/messages');
     };
 
     const getButtonType = () => {
@@ -209,12 +223,12 @@ class Project extends React.Component {
 
         <ProjectStyles.ProjectActionButtons>
           {getButtonType()}
-            <Button 
-                variant="contained" 
-                color="primary" 
-                onClick={this.handleSelectFundProject}>
-                Fund This Project
-              </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={this.handleSelectFundProject}>
+            Fund This Project
+            </Button>
         </ProjectStyles.ProjectActionButtons>
       </Card>
     );
@@ -227,7 +241,7 @@ class Project extends React.Component {
         <ProjectStyles.ProjectGrid>
           {
             this.state.checkoutOpen &&
-              this.renderCheckoutForm()
+            this.renderCheckoutForm()
           }
           {this.projectDetailsCard()}
           {this.projectFundraisingCard()}

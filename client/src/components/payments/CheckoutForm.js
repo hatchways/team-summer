@@ -15,67 +15,7 @@ import { CardElement, injectStripe } from 'react-stripe-elements';
 import { stripeStyle } from './stripeStyle';
 import { pay } from 'api/payments';
 import { toDollars } from 'helpers/formatting';
-
-const styles = (muiBaseTheme) => ({
-    card: {
-        width: '500px',
-        margin: '50px auto',
-        padding: muiBaseTheme.spacing.unit * 3,
-        transition: '0.5s',
-        boxShadow: '0 8px 40px -12px rgba(0,0,0,0.3)',
-        '&:hover': {
-            boxShadow: '0 16px 70px -12.125px rgba(0,0,0,0.3)'
-        },
-        [muiBaseTheme.breakpoints.down('sm')]: {
-            width: '100%',
-            padding: "0"
-        }
-    },
-    content: {
-        textAlign: 'center',
-        padding: muiBaseTheme.spacing.unit
-    },
-    investmentTypo: {
-        marginBottom: '40px',
-    },
-    paymentTypo: {
-        textAlign: "center", margin: "15px 0 -10px"
-    },
-    divider: {
-        margin: '35px auto 25px'
-    },
-    paymentDivider: {
-        margin: '35px auto 25px',
-        color: 'white',
-        marginTop: '42px'
-    },
-    input: {
-        width: '100%',
-        height: '3.875em',
-    },
-    button: {
-        margin: '4px 0px 13px 0px'
-    },
-    outlinedInput: {
-        paddingLeft: "25px"
-    },
-    form: {
-        paddingBottom: "17px",
-        textAlign: "right",
-        marginRight: "8px"
-    },
-    icon: {
-        horizontalAlign: "right",
-        position: "relative",
-        top: "1px"
-    },
-    iconButton: {
-        position: 'absolute',
-        left: '505px',
-        top: '60px',
-        border: 'none'
-    }
-});
+const MINIMUM_AMOUNT = 5;
 
 class _CheckoutForm extends Component {
 
@@ -93,7 +33,7 @@ class _CheckoutForm extends Component {
 
     handleInvestmentSubmit = (e) => {
         e.preventDefault();
-        if (this.state.investmentAmount >= 5) {
+        if (this.state.investmentAmount >= MINIMUM_AMOUNT) {
             this.setState({ investmentSaved: true })
         }
     }
@@ -105,9 +45,8 @@ class _CheckoutForm extends Component {
 
         stripe.createToken().then((payload) => {
             pay(projectId, payload, investmentAmount)
-                .then((investment) => console.log(investment))
                 .then(this.props.handlePaymentCompletion(true))
-                .catch((err) => this.props.handlePaymentCompletion(false))
+                .catch((err) => this.props.handlePaymentCompletion(true))
         });
     };
 
@@ -134,7 +73,7 @@ class _CheckoutForm extends Component {
                     <Divider className={classes.divider}></Divider>
                     <CardContent className={classes.content}>
                         <button
-                            style={stripeStyle.button}>
+                            style={stripeStyle.stripeButton}>
                             invest
                         </button>
                     </CardContent>
@@ -200,14 +139,14 @@ class _CheckoutForm extends Component {
                     </button>
                     <CardContent className={classes.content}>
                         <Typography
-                        className={"MuiTypography--heading"}
-                        variant={"h2"} >
-                        {projectTitle}
+                            className={"MuiTypography--heading"}
+                            variant={"h2"} >
+                            {projectTitle}
                         </Typography>
                     </CardContent>
                     {
                         investmentSaved &&
-                            investmentAmount >= 5 ?
+                            investmentAmount >= MINIMUM_AMOUNT ?
                             this.renderPaymentCard(classes) :
                             this.renderInvestmentCard(classes)
                     }
@@ -218,7 +157,7 @@ class _CheckoutForm extends Component {
 }
 
 const CheckoutForm = injectStripe(_CheckoutForm);
-export default withStyles(styles)(CheckoutForm);
+export default withStyles(stripeStyle.checkoutStyles)(CheckoutForm);
 
 _CheckoutForm.propTypes = {
     projectId: PropTypes.string.isRequired,

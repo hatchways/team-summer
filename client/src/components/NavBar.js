@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import {
   AppBar,
@@ -17,7 +17,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 import SvgProductLaunchLogo from './ProductLaunchLogo';
 import NotificationDropdown from './NotificationDropdown';
-import { messages } from '../dummyData/dropDownItems'; //standin data
+import { getNotifications } from 'api/notifications';
 
 const useStyles = makeStyles((theme) => ({
   navBar: {
@@ -137,7 +137,7 @@ const Navigation = (props) => {
       localStorage.removeItem('jwtToken');
       props.setAuthenticated(false);
       props.setUserDetails(null, '', '', '', '');
-      props.setNotificationCount(0);
+      props.setNotifications([]);
       props.history.push('/login');
     } else {
       props.history.push(route);
@@ -208,6 +208,25 @@ const NavBar = (props) => {
   const desktop = useMediaQuery(props.theme.breakpoints.up('md'));
   const [drawer, toggleDrawer] = useState(false);
 
+  useEffect(() => {
+    const loadData = async () => {
+      await loadNotifications();
+    }
+    if (props.userAuthenticated) {
+      loadData();
+    }
+  }, [])
+
+  const loadNotifications = async () => {
+    try {
+      const response = await getNotifications(props.userDetails.id);
+      const { data } = response;
+      props.setNotifications(data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   // If navbar is in desktop mode and drawer is still set to open,
   // toggle the drawer closed
   if (desktop && drawer) toggleDrawer(false);
@@ -223,11 +242,11 @@ const NavBar = (props) => {
             <Typography variant="h1">Product Launch</Typography>
           </Link>
         </div>
-        {props.notificationCount > 0 &&
+        {props.notifications && props.notifications.length > 0 &&
           <div>
             <NotificationDropdown
-              alerts={props.notificationCount}
-              messages={messages}
+              alerts={props.notifications.length}
+              investmentNotifications={props.notifications}
             />
           </div>
         }
