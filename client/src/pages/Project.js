@@ -163,7 +163,6 @@ class Project extends Component {
       checkoutOpen: false,
       project: {
         ...this.state.project,
-        title: 'new',
         funding: {
           ...this.state.project.funding,
           donorCount,
@@ -174,10 +173,6 @@ class Project extends Component {
 
     this.setState(newState)
   }
-
-
-
-
 
   projectFundraisingCard() {
     const { user, project: { funding, fundingGoal, daysLeft }} = this.state;
