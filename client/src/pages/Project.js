@@ -16,6 +16,7 @@ import PercentageProgressBar from 'components/PercentageProgressBar';
 import { getProject } from 'api/projects';
 
 import { withPageContext } from 'components/pageContext';
+import { createConversation } from '../api/messages';
 
 class Project extends React.Component {
   state = {
@@ -115,10 +116,13 @@ class Project extends React.Component {
         pathname: `edit/${id}`,
         state: projectInfo
       });
-    }
+    };
 
-    const handleSendMessage = () => {
-      this.props.history.push(`/messages/${user.id}`);
+    const handleSendMessage = async () => {
+      await createConversation([this.props.userDetails.id, this.state.user._id])
+        .catch((error) => console.log(error));
+
+      this.props.history.push('/messages');
     };
 
     const handleFundProject = () => {
@@ -127,7 +131,9 @@ class Project extends React.Component {
       history.push({
         pathname: '/checkout',
         state: {
+          projectOwnerId: this.state.user._id,
           userId: userDetails.id,
+          userName: userDetails.name,
           projectId: match.params.id,
           projectTitle: this.state.project.title
         }

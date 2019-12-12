@@ -45,6 +45,12 @@ const UserSchema = new Schema({
       type: ObjectId,
       ref: 'Investment'
     }
+  ],
+  conversations: [
+    {
+      type: ObjectId,
+      ref: 'Conversation'
+    }
   ]
 });
 

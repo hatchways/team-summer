@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StripeProvider, Elements } from 'react-stripe-elements';
 import CheckoutForm from '../components/payments/CheckoutForm';
 import { withPageContext } from '../components/pageContext';
-const apiKey = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
+const stripeApiKey = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
 
 class Checkout extends Component {
 
@@ -10,18 +10,22 @@ class Checkout extends Component {
         const {
             history,
             activateToast,
-            location: { state: { projectId, projectTitle, userId } }
+            location: { state: { projectOwnerId, projectId, projectTitle, userId, userName } },
+            socket
         } = this.props
 
         return (
-            <StripeProvider apiKey={apiKey}>
+            <StripeProvider apiKey={stripeApiKey}>
                 <Elements>
                     <CheckoutForm
+                        projectOwnerId={projectOwnerId}
                         projectId={projectId}
                         history={history}
                         projectTitle={projectTitle}
                         userId={userId}
-                        activateToast={activateToast} />
+                        userName={userName}
+                        activateToast={activateToast}
+                        socket={socket} />
                 </Elements>
             </StripeProvider>
         );

@@ -19,9 +19,7 @@ exports.getInvestment = async (req, res) => {
     })
 }
 
-const invest = async (userId, projectId, investmentAmount) => {
-  const dollarAmount = toDollarsWithCents(investmentAmount)
-
+const invest = async (userId, projectId, dollarAmount) => {
   try {
     const investment = await Investment.create({
       user: ObjectId(userId),
@@ -29,12 +27,13 @@ const invest = async (userId, projectId, investmentAmount) => {
       value: dollarAmount
     });
     await User.updateOne(
-      { _id: userId }, 
+      { _id: userId },
       { $push: { investments: investment._id } }
     );
     await Project.updateOne(
       { _id: projectId },
-      { $inc: {
+      {
+        $inc: {
           'funding.donorCount': 1,
           'funding.fundingTotal': dollarAmount
         }
@@ -65,17 +64,20 @@ exports.makePayment = async (req, res) => {
     description: 'investment'
   }
   try {
-    const investment = await invest(userId, projectId, investmentAmount);
+    const investment = await invest(userId, projectId, dollarAmount / 100);
     if (investment) {
-      stripe.charges.create(order, (err, charge) => {
+      stripe.charges.create(order, (err) => {
         if (err) {
-          return res.status(400).json({ message: 'an error occurred' });
+          return res.status(400).json(err);
         } else {
           return res.status(200).json({ investment });
         }
       })
+        .catch(err => {
+          res.status(500).send({ error: "Purchase Failed" });
+        });
     }
   } catch (err) {
-    return res.status(400).json({ message: 'an error occurred' });
+    return res.status(400).json({ message: 'an error occurred while creating the investment' });
   }
 }

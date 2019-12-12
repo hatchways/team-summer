@@ -65,6 +65,8 @@ const styles = (muiBaseTheme) => ({
     }
 });
 
+const MINIMUM_AMOUNT = 5;
+
 class _CheckoutForm extends Component {
 
     state = {
@@ -81,24 +83,30 @@ class _CheckoutForm extends Component {
 
     handleInvestmentSubmit = (e) => {
         e.preventDefault();
-        if (this.state.investmentAmount >= 5) {
+        if (this.state.investmentAmount >= MINIMUM_AMOUNT) {
             this.setState({ investmentSaved: true })
         } else {
-            this.props.activateToast('Sorry, $5 minimum', 'neutral')
+            this.props.activateToast(`Sorry, $${MINIMUM_AMOUNT} minimum`, 'neutral')
         }
     }
 
     handlePaymentSubmit = (e) => {
         e.preventDefault();
-        const { projectId, stripe, history, activateToast } = this.props
+        const { userName, projectOwnerId, projectId, projectTitle, stripe, history, activateToast, socket } = this.props
         const { investmentAmount } = this.state
 
         stripe.createToken().then((payload) => {
             pay(projectId, payload, investmentAmount)
-                .then((investment) => investment)
-                .then(() => activateToast('success. you invested.', 'success'))
+                .then(() => {
+                    socket.emit('investment', {
+                        id: projectOwnerId,
+                        name: userName,
+                        projectName: projectTitle
+                    }, { token: localStorage.getItem('jwtToken') })
+                })
+                .then(() => activateToast(`Your payment was a success. Thank you for investing in ${projectTitle}!`, 'success'))
                 .then(() => history.push("/explore"))
-                .catch(() => activateToast('that was a fail', 'error'))
+                .catch(() => activateToast('Sorry. but you were unable to invest.', 'error'))
         });
     };
 
@@ -182,7 +190,7 @@ class _CheckoutForm extends Component {
     render() {
         const { projectTitle, classes } = this.props
         const { investmentAmount, investmentSaved } = this.state
-
+        
         return (
             <div className="checkout-form">
                 <Card className={classes.card}>
@@ -195,7 +203,7 @@ class _CheckoutForm extends Component {
                     </CardContent>
                     {
                         investmentSaved &&
-                            investmentAmount >= 5 ?
+                            investmentAmount >= MINIMUM_AMOUNT ?
                             this.renderPaymentCard(classes) :
                             this.renderInvestmentCard(classes)
                     }

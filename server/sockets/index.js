@@ -1,4 +1,5 @@
 const messages = require('./events/Messages');
+const investments = require('./events/Investments');
 const middleware = require('./middleware');
 
 
@@ -30,8 +31,9 @@ module.exports = (io) => {
     /* Connects userId to a room, allows for the ability to send to a user id */
     socket.on('authenticate', (id) => socket.join(id));
 
-    socket.on('message', messages.receiveMessage(io));
+    socket.on('sendMessage', messages.receiveMessage(io));
 
+    socket.on('investment', investments.receiveInvestment(io, socket));
     // Socket emitters
 
     // Client disconnect
