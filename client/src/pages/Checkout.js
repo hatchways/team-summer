@@ -10,18 +10,22 @@ class Checkout extends Component {
         const {
             history,
             activateToast,
-            location: { state: { projectId, projectTitle, userId } }
+            location: { state: { projectOwnerId, projectId, projectTitle, userId, userName } },
+            socket
         } = this.props
 
         return (
             <StripeProvider apiKey={stripeApiKey}>
                 <Elements>
                     <CheckoutForm
+                        projectOwnerId={projectOwnerId}
                         projectId={projectId}
                         history={history}
                         projectTitle={projectTitle}
                         userId={userId}
-                        activateToast={activateToast} />
+                        userName={userName}
+                        activateToast={activateToast}
+                        socket={socket} />
                 </Elements>
             </StripeProvider>
         );

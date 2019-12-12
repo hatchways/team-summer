@@ -38,7 +38,7 @@ const StyledMenuItem = withStyles(theme => ({
     },
 }))(MenuItem);
 
-export default function CustomizedMenus({ alerts, messages }) {
+export default function CustomizedMenus({ alerts, messages, investmentNotifications }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = event => {
@@ -59,16 +59,20 @@ export default function CustomizedMenus({ alerts, messages }) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose} >
                 {
-                    messages.map((msg, ix) => {
-                        return (
-                            <StyledMenuItem>
-                                <ListItemIcon>
-                                    <MonitizationIcon fontSize="small" />
-                                </ListItemIcon>
-                                <ListItemText primary={msg.content} />
-                            </StyledMenuItem>
-                        )
-                    })
+                    investmentNotifications.length
+                        ? investmentNotifications.map((notification) => {
+                            const { _id, investor, investmentAmount, project, } = notification
+                            const notificationMessage = `${investor.name} invested ${investmentAmount} in your project ${project.title}`
+                            return (
+                                <StyledMenuItem key={_id}>
+                                    <ListItemIcon>
+                                        <MonitizationIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText primary={notificationMessage} />
+                                </StyledMenuItem>
+                            )
+                        })
+                        : ''
                 }
             </StyledMenu>
         </div>

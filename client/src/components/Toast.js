@@ -48,7 +48,7 @@ export const Toast = (props) => {
         'aria-describedby': 'message-id',
         className: `classes.toastStyles, ${classes[props.variant || 'neutral']}`
       }}
-      message={<span id="message-id">{props.toastMessage || 'Placeholder text'}</span>}
+      message={<span id="message-id">{props.toastMessage.toUpperCase() || 'Placeholder text'}</span>}
       action={
         <div className={classes.buttonStyle} onClick={handleClose}>
           {props.buttonText || 'CLOSE'}
