@@ -1,39 +1,58 @@
 import React, { Component, Fragment } from 'react';
-import { withStyles, Typography, Grid } from '@material-ui/core';
+import {
+  withStyles,
+  Grid,
+  Typography
+} from '@material-ui/core';
 import moment from 'moment';
 
+import FilterTabs from 'components/FilterTabs';
 import ProjectCard from 'components/ProjectCard';
 import ProfileDetailPanel from 'components/ProfileDetailPanel';
 import { getUser } from 'api/users';
 import { withPageContext } from 'components/pageContext';
-
-import './profile.css';
+import Loading from 'components/Loading';
+const FILTER_TYPES = ['projects', 'investments']
 
 const styles = (theme) => ({
   pageContent: {
-    display: 'flex',
+    [theme.breakpoints.up('md')]: {
+      padding: '0',
+    }
   },
-  headerContainer: {
-    display: 'flex',
-    flexDirection: 'row',
+  projectInvestmentWrapper: {
+    width: 'auto',
+    padding: '2em 3em',
+    [theme.breakpoints.up('md')]: {
+      width: '90%',
+    }
+  },
+  projectInvestmentHeader: {
+    marginBottom: '35px'
   },
   header: {
     display: 'inline',
-    margin: '10px',
-    padding: '20px',
+    paddingRight: '35px',
     '&:hover': {
       cursor: 'pointer',
       color: theme.palette.primary.main
     }
   },
-  projectInvestmentContent: {
-    padding: '20px',
+  placeholderText: {
+    maxHeight: 460,
+    overflowY: 'auto',
+    padding: 5,
+    textAlign: 'left',
+    margin: '50px'
   }
 });
 
 class ProfilePage extends Component {
   state = {
-    setDisplay: 'projects',
+    isPending: false,
+    isCurrentUser: false,
+    currentUserId: '',
+    displayFilter: 'projects',
     profile: {
       _id: '',
       name: '',
@@ -55,56 +74,108 @@ class ProfilePage extends Component {
   }
 
   async fetchUserProfile() {
-    const id = this.props.match.params.id || this.props.userDetails.id;
-    getUser(id).then((profile) => {
-      if (this.props.userDetails.id === id) this.props.setUserDetails(id, profile.data.name, profile.data.about, profile.data.profilePic, profile.data.location);
-      this.setState({ profile: profile.data });
-    });
+    //if the route has an id param isCurrentUser is false
+    const currentUserId = this.props.userDetails.id
+    this.setState({ isPending: TextTrackCueList })
+    const profileId = this.props.match.params.id || this.props.userDetails.id;
+    getUser(profileId).then((profile) => {
+      if (this.props.userDetails.id === currentUserId) this.props.setUserDetails(currentUserId, profile.data.name, profile.data.about, profile.data.profilePic, profile.data.location);
+      this.setState(
+        {
+          isPending: false,
+          profile: profile.data,
+          currentUserId: this.props.userDetails.id,
+          isCurrentUser: this.getUserType()
+        }
+      )
+    }).catch((err) => {
+      this.props.history.push('/');
+    })
   }
 
-  changeDisplay = (display) => {
-    this.setState({ setDisplay: display })
+  getUserType = () => {
+    if (this.props.match.params.id === undefined) {
+      return true
+    } else if (this.props.match.params.id === this.props.userDetails.id) {
+      return true
+    }
   }
 
   renderUserInfo() {
     const { profilePic, name, location, about, expertise } = this.state.profile;
+    const avatarPic = profilePic ? profilePic : null;
 
     return (
       <Fragment>
         <ProfileDetailPanel
           id={this.props.userDetails.id}
-          profilePic={profilePic}
+          currentUserId={this.props.currentUserId}
+          isCurrentUser={this.state.isCurrentUser}
+          profilePic={avatarPic}
           name={name}
           location={location}
           about={about}
           expertise={expertise}
-          buttonType={this.getButtonType()}
           history={this.props.history}
         />
       </Fragment>
     );
   }
 
-  getButtonType() {
-    const { profile } = this.state;
-    return this.props.userAuthenticated && profile._id === this.props.userDetails.id ? 'edit' : 'message';
+  setFilter = (filter) => this.setState({ displayFilter: filter });
+
+  renderTabs = (classes) => {
+    const { investments, projects } = this.state.profile;
+    if (investments.length !== 0 || projects.length !== 0) {
+      return (
+        <div className={classes.projectInvestmentHeader}>
+          <FilterTabs
+            filters={FILTER_TYPES}
+            setFilter={this.setFilter} />
+        </div>
+      )
+    }
   }
 
-  handleClick() {
-    console.log('clicked');
-    //TODO: edit page
-    //TODO: msg functionality
-  }
-
-  renderData = (data) => {
+  renderPlaceholderText = (classes) => {
     return (
-      <Grid container classes={{ root: 'project-section' }} spacing={3} justify="center">
+      <Typography
+        variant="h3"
+        className={classes.placeholderText}
+        color="secondary"
+        component="p">
         {
-          data ?
-            data.map((project, index) => (
-              <Grid item xs={12} md={6} key={index}>
+          this.state.isCurrentUser ?
+            'You have no projects or investments' :
+            'This user has no projects or investments'
+        }
+      </Typography>
+    )
+  }
+
+  renderProjects = () => {
+    const { classes } = this.props;
+    const { profile, displayFilter } = this.state;
+    let data
+
+    if (displayFilter === 'investments') {
+      data = profile.investments.map(inv => inv.project)
+    } else {
+      data = profile.projects
+    }
+
+    if (data.length > 0) {
+      return (
+        <Grid container
+          classes={{ root: 'project-section' }}
+          spacing={8}
+          justify="left">
+          {
+            data.map((project, ix, arr) => (
+              <Grid item
+                sm={12} md={arr.length > 1 ? 6 : 10} key={ix}>
                 <ProjectCard
-                  key={index}
+                  key={ix}
                   onClick={() => this.props.history.push(`/projects/${project._id}`)}
                   title={project.title}
                   image={project.images[0]}
@@ -114,28 +185,35 @@ class ProfilePage extends Component {
                   daysLeft={moment({ hours: 0 }).diff(project.fundingDeadline, 'days') * -1}
                 />
               </Grid>
-            )) : ''
-        }
-      </Grid >
-    );
+            ))
+          }
+        </Grid >
+      );
+    } else if (this.state.isPending) {
+      return <Loading />
+    } else {
+      return this.renderPlaceholderText(classes);
+    }
   };
 
   render() {
     const { classes } = this.props;
-    const { projects, investments } = this.state.profile;
-    const investedProjects = investments ? investments.map(investment => investment.project) : [];
 
     return (
       <main className={classes.pageContent}>
-        {this.renderUserInfo()}
-        <div className={classes.projectInvestmentContent}>
-          <div className={classes.headerContent}>
-            <Typography className={classes.header} variant="h2" onClick={() => this.changeDisplay('projects')}>Projects</Typography>
-            <Typography className={classes.header} variant="h2" onClick={() => this.changeDisplay('investments')}>Investments</Typography>
-          </div>
-          {this.state.setDisplay === 'projects' && this.renderData(projects)}
-          {this.state.setDisplay === 'investments' && this.renderData(investedProjects)}
-        </div>
+        <Grid container spacing={2}>
+          <Grid container item xs={12} md={3}>
+            {this.renderUserInfo()}
+          </Grid>
+          <Grid container item xs={12} md={9}>
+            <div className={classes.projectInvestmentWrapper}>
+              {this.renderTabs(classes)}
+              <div>
+                {this.renderProjects()}
+              </div>
+            </div>
+          </Grid>
+        </Grid>
       </main>
     );
   }

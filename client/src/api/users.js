@@ -1,7 +1,11 @@
 import httpClient from './httpClient';
 
 export const getUser = (id) => {
-  return httpClient.get(`/users/${id}`);
+  try {
+    return httpClient.get(`/users/${id}`);
+  } catch (err) {
+    return {success: false}
+  }
 };
 
 export const createOrLoginUser = async (method, userData) => {

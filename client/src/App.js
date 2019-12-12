@@ -6,6 +6,7 @@ import socketClient from 'socket.io-client';
 import { theme } from 'themes/theme';
 
 import NavBar from 'components/NavBar';
+import ProtectedRoute from 'components/ProtectedRoute';
 import SignUp from 'pages/SignUp';
 import Login from 'pages/Login';
 import ProfilePage from 'pages/Profile';
@@ -180,16 +181,16 @@ class App extends React.Component {
                 path="/"
                 render={() => <Redirect to={userAuthenticated ? '/profile' : '/signup'} />}
               />
-              <Route path="/signup" component={SignUp} />
-              <Route path="/login" component={Login} />
-              <Route path="/profile/:id?" exact component={ProfilePage} />
-              <Route path="/profile/edit/:id" exact component={EditProfile} />
-              <Route path="/launch" component={AddProject} />
-              <Route path="/projects/:id" exact component={Project} />
-              <Route path="/projects/edit/:id" exact component={EditProject} />
-              <Route path="/explore" component={Explore} />
-              <Route path="/messages" component={Messages} />
-              <Route path="/checkout" component={Checkout} />
+              <Route path="/signup" component={SignUp}/>
+              <Route path="/login" component={Login}/>
+              <Route path="/profile/:id?" exact component={ProfilePage}/>
+              <ProtectedRoute exact path="/profile/edit/:id" component={EditProfile} />
+              <ProtectedRoute path="/launch" component={AddProject}/>
+              <Route path="/projects/:id" exact component={Project}/>
+              <ProtectedRoute path="/projects/edit/:id" exact component={EditProject}/>
+              <Route path="/explore" component={Explore}/>
+              <ProtectedRoute path="/messages" component={Messages}/>
+              <ProtectedRoute path="/checkout" component={Checkout}/>
             </Switch>
           </PageContext.Provider>
           <Toast
