@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
   Typography,
   Grid,
@@ -18,9 +18,9 @@ import Modal from 'components/Modal';
 import { getProject } from 'api/projects';
 
 import { withPageContext } from 'components/pageContext';
-import { createConversation } from '../api/messages';
+import { createConversation } from 'api/messages';
 
-class Project extends React.Component {
+class Project extends Component {
   state = {
     project: {
       _id: null,
@@ -35,7 +35,6 @@ class Project extends React.Component {
       },
       fundingGoal: 0,
       daysLeft: 0,
-      equalityExchange: 0,
       images: [
         '/images/image-not-found.png'
       ]
@@ -46,18 +45,28 @@ class Project extends React.Component {
       avatar: ''
     },
     stripeSuccess: false,
-    checkoutOpen: false
+    checkoutOpen: false,
+    isCurrentUser: false
   };
 
   async componentDidMount() {
     try {
       const response = await getProject(this.props.match.params.id);
       const project = response.data;
-      project.daysLeft = Math.max(0, moment({ hours: 0 }).diff(project.fundingDeadline, 'days') * -1);
+      const isCurrentUser = this.props.userDetails.id === project.user._id
+      project.daysLeft = Math.max(0, moment({ hours: 0 })
+        .diff(project.fundingDeadline, 'days') * -1);
 
-      if (project.images.length === 0 || project.images[0] === '/images/image-not-found.png') project.images = ['/images/image-not-found.png'];
+      if (project.images.length === 0 || project.images[0] === '/images/image-not-found.png') {
+        project.images = ['/images/image-not-found.png']
+      }
 
-      this.setState({ project, user: project.user });
+      this.setState({ 
+        project, 
+        isCurrentUser,
+        user: project.user
+      });
+
     } catch (err) {
       console.log(err)
     }
@@ -134,23 +143,30 @@ class Project extends React.Component {
     }, { token: localStorage.getItem('jwtToken') })
   }
 
-  handlePaymentCompletion = (isSuccess) => {
-    if (isSuccess) {
+  handlePaymentCompletion = (investmentAmount) => {
+    if (investmentAmount !== null) {
       this.props.activateToast('success. you invested.', 'success')
       this.emitSocketInvestment()
+      this.applyInvestment(investmentAmount)
     } else {
       this.props.activateToast('payment was not successful', 'error')
     }
-    this.setState({
-      stripeSuccess: isSuccess,
-      checkoutOpen: false
+  }
+
+  applyInvestment = (investment) => {
+
+    this.setState((prevState, props) => {
+      return { 
+        stripeSuccess: investment !== null,
+        checkoutOpen: false,
+        donorCount: prevState.donorCount + 1,
+        fundingTotal: prevState.fundingTotal + investment
+      }
     })
   }
 
   projectFundraisingCard() {
-    const { classes } = this.props;
-    const { user } = this.state;
-    const { funding, fundingGoal, daysLeft, equalityExchange } = this.state.project;
+    const { user, project: { funding, fundingGoal, daysLeft }} = this.state;
 
     const calculateCompleted = () => {
       if (!funding.fundingTotal) return 0;
@@ -159,7 +175,7 @@ class Project extends React.Component {
       return Math.min(percentageComplete, 100);
     };
 
-    const handleEditProjectRedirect = () => {
+    const handleEditProject = () => {
       const { project } = this.state;
       const { _id: id, title, subtitle, description, industry, images, location, fundingGoal, fundingDeadline } = project;
       const projectUserId = this.state.user._id;
@@ -178,10 +194,16 @@ class Project extends React.Component {
     };
 
     const getButtonType = () => {
-      const userId = this.state.user._id;
-      return this.props.userAuthenticated && userId === this.props.userDetails.id
-        ? <Button variant="outlined" color="primary" onClick={handleEditProjectRedirect}>Edit</Button>
-        : <Button variant="outlined" color="secondary" onClick={handleSendMessage}>Send Message</Button>;
+      const {isCurrentUser: cur} = this.state
+
+      return (
+        <Button 
+          variant="outlined" 
+          color={cur ? 'primary' : 'secondary'} 
+          onClick={cur ? handleEditProject : handleSendMessage} >
+          {cur ? 'Edit' : 'Send'}
+        </Button>
+      )
     }
 
     return (
@@ -195,9 +217,6 @@ class Project extends React.Component {
         </ProjectStyles.FundraisingAmounts>
 
         <PercentageProgressBar value={calculateCompleted()} />
-
-        <Typography variant="body1" className={classes.fundraisingEquity}>Equity
-          Exchange: {equalityExchange}% </Typography>
 
         <ProjectStyles.FundraisingStatContainer>
           <ProjectStyles.FundraisingStat>
@@ -215,7 +234,7 @@ class Project extends React.Component {
           <Avatar>
             {user.avatar
               ? <img src={user.avatar} alt="Project creator avatar" />
-              : user.name.split('')[0]
+              : user.name[0]
             }
           </Avatar>
           <Typography variant="h6">{user.name}</Typography>
