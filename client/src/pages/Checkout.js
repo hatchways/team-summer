@@ -10,7 +10,7 @@ class Checkout extends Component {
         const {
             history,
             activateToast,
-            location: { state: { projectOwnerId, projectId, projectTitle, userId, userName } },
+            location: { state: { projectOwnerId, projectId, projectTitle, userName } },
             socket
         } = this.props
 
@@ -22,7 +22,6 @@ class Checkout extends Component {
                         projectId={projectId}
                         history={history}
                         projectTitle={projectTitle}
-                        userId={userId}
                         userName={userName}
                         activateToast={activateToast}
                         socket={socket} />

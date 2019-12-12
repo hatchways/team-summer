@@ -94,7 +94,6 @@ class _CheckoutForm extends Component {
         e.preventDefault();
         const { userName, projectOwnerId, projectId, projectTitle, stripe, history, activateToast, socket } = this.props
         const { investmentAmount } = this.state
-
         stripe.createToken().then((payload) => {
             pay(projectId, payload, investmentAmount)
                 .then(() => {
@@ -190,7 +189,7 @@ class _CheckoutForm extends Component {
     render() {
         const { projectTitle, classes } = this.props
         const { investmentAmount, investmentSaved } = this.state
-        
+
         return (
             <div className="checkout-form">
                 <Card className={classes.card}>

@@ -137,7 +137,6 @@ class Project extends React.Component {
 
     const handleFundProject = () => {
       const { history, userDetails, match } = this.props
-
       history.push({
         pathname: '/checkout',
         state: {
