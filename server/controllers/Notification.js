@@ -11,6 +11,7 @@ exports.getNotifications = (req, res) => {
     .populate({ path: 'user', select: 'name' })
     .populate({ path: 'investor', select: 'name profilePic' })
     .populate({ path: 'project', select: 'title' })
+    .sort([['date', 'desc']])
     .exec((err, notifications) => {
       if (err) return res.status(400).json({ err });
 
