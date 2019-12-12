@@ -64,14 +64,10 @@ function CustomizedMenus({ history, alerts, classes, investmentNotifications, se
 
     const markAsSeen = (id, idx) => {
         setNotificationToSeen(id)
-            .then((response) => {
-                console.log(response.data);
-                investmentNotifications[idx] = response.data;
-                console.log(idx, investmentNotifications)
-                return investmentNotifications
-                // setNotifications(investmentNotifications);
+            .then(() => {
+                investmentNotifications[idx].seen = true;
+                setNotifications(investmentNotifications);
             })
-            .then((investmentNotifications) => setNotifications(investmentNotifications))
             .catch(err => console.log(err));
     }
 
@@ -99,12 +95,7 @@ function CustomizedMenus({ history, alerts, classes, investmentNotifications, se
                             const { _id, investor, investmentAmount, project, seen } = notification
                             const notificationMessage = `invested $${investmentAmount} in ${project.title}!`
                             return (
-                                <StyledMenuItem className={classes.styledMenuItem} key={_id}>
-                                    {
-                                        seen && (
-                                            <div className={classes.isSeenFade}></div>
-                                        )
-                                    }
+                                <StyledMenuItem className={seen ? classes.isSeenFade : classes.styledMenuItem} key={_id}>
                                     <ListItemIcon className={classes.listItem}>
                                         <Avatar className={classes.investorIcon} src={investor.profilePic || null} onClick={() => redirectToProfile(investor._id)}>
                                             {
@@ -134,11 +125,8 @@ export default withRouter(withStyles({
         padding: '8px'
     },
     isSeenFade: {
-        position: 'absolute',
-        backgroundColor: 'grey',
-        opacity: '50%',
-        height: '100%',
-        width: '86%'
+        padding: '8px',
+        opacity: '40%',
     },
     listItem: {
         minWidth: '40px'
@@ -148,6 +136,7 @@ export default withRouter(withStyles({
         width: '25px'
     },
     seenIcon: {
+        marginLeft: '5px',
         marginRight: '5px'
     },
     deleteIcon: {
