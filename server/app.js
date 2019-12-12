@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 
-const { MONGO_URI } = process.env;
+const { MONGO_URI, MONGO_TEST_URI } = process.env;
 
 const indexRouter = require('./routes/index');
 const pingRouter = require('./routes/ping');
@@ -20,8 +20,15 @@ const LoggerMiddleware = (req, res, next) => {
 app.use(LoggerMiddleware);
 
 // DB config
+let databaseUri;
+if (process.env.hasOwnProperty('NODE_ENV') && process.env.NODE_ENV === 'test') {
+  databaseUri = MONGO_TEST_URI
+} else {
+  databaseUri = MONGO_URI
+}
+
 mongoose
-  .connect(MONGO_URI, {
+  .connect(databaseUri, {
     useNewUrlParser: true,
     useFindAndModify: false,
     useCreateIndex: true,
