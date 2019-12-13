@@ -9,6 +9,7 @@ require("dotenv").config();
 
 var app = require("../app");
 var http = require("http");
+const db = require("../DbConnection")
 const socketIO = require("socket.io");
 const handleSockets = require("../sockets")
 
@@ -38,6 +39,7 @@ handleSockets(io)
  * Listen on provided port, on all network interfaces.
  */
 
+db.open().catch((error) => console.log(error))
 server.listen(port);
 server.on("error", onError);
 server.on("listening", onListening);

@@ -1,34 +1,25 @@
-import createError from 'http-errors';
-import express, { json, urlencoded } from 'express';
-import { join } from 'path';
-import cookieParser from 'cookie-parser';
-import logger from 'morgan';
-const mongoose = require('mongoose');
+const createError = require('http-errors');
+const express = require('express');
+const { json, urlencoded } = require('express');
+const { join } = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-const { MONGO_URI } = process.env;
-
-import indexRouter from './routes/index';
-import pingRouter from './routes/ping';
+const indexRouter = require('./routes/index');
+const pingRouter = require('./routes/ping');
 
 const app = express();
 
-const LoggerMiddleware = (req, res, next) => {
-  console.log(`Logged  ${req.url}  ${req.method} -- ${new Date()}`);
-  next();
-};
-app.use(LoggerMiddleware);
+if (!process.env.hasOwnProperty('NODE_ENV') || process.env.NODE_ENV !== 'test') {
+  const LoggerMiddleware = (req, res, next) => {
+    console.log(`Logged  ${req.url}  ${req.method} -- ${new Date()}`);
+    next();
+  };
+  app.use(LoggerMiddleware);
 
-// DB config
-mongoose
-  .connect(MONGO_URI, {
-    useNewUrlParser: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-    useUnifiedTopology: true
-  })
-  .then(() => console.log('DB Connected'));
+  app.use(logger('dev'));
+}
 
-app.use(logger('dev'));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());

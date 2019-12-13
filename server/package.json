@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "babel-node ./bin/www",
-    "dev": "nodemon --exec babel-node ./bin/www",
-    "test": "NODE_ENV=test ./node_modules/.bin/mocha --require @babel/register --exit --timeout 30000"
+    "dev": "cross-env NODE_ENV=dev nodemon --exec babel-node ./bin/www",
+    "test": "cross-env NODE_ENV=test ./node_modules/.bin/mocha --require @babel/register --exit --timeout 120000"
   },
   "dependencies": {
     "aws-sdk": "^2.576.0",
@@ -34,8 +34,10 @@
     "@babel/register": "^7.5.5",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "cross-env": "^6.0.3",
     "faker": "^4.1.0",
     "mocha": "^6.2.0",
+    "mockgoose": "^8.0.4",
     "prettier": "^1.19.1"
   }
 }
