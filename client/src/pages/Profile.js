@@ -12,19 +12,20 @@ import ProfileDetailPanel from 'components/ProfileDetailPanel';
 import { getUser } from 'api/users';
 import { withPageContext } from 'components/pageContext';
 import Loading from 'components/Loading';
-const FILTER_TYPES = ['projects', 'investments']
+
+const FILTER_TYPES = ['projects', 'investments'];
 
 const styles = (theme) => ({
   pageContent: {
     [theme.breakpoints.up('md')]: {
-      padding: '0',
+      padding: '0'
     }
   },
   projectInvestmentWrapper: {
     width: 'auto',
     padding: '2em 3em',
     [theme.breakpoints.up('md')]: {
-      width: '90%',
+      width: '90%'
     }
   },
   projectInvestmentHeader: {
@@ -64,19 +65,19 @@ class ProfilePage extends Component {
   };
 
   componentDidMount() {
-    this.fetchUserProfile()
+    this.fetchUserProfile();
   }
 
   async componentDidUpdate(prevProps, prevState) {
     if (prevProps.match.params.id !== this.props.match.params.id) {
-      this.fetchUserProfile()
+      this.fetchUserProfile();
     }
   }
 
   async fetchUserProfile() {
     //if the route has an id param isCurrentUser is false
-    const currentUserId = this.props.userDetails.id
-    this.setState({ isPending: TextTrackCueList })
+    const currentUserId = this.props.userDetails.id;
+    this.setState({ isPending: TextTrackCueList });
     const profileId = this.props.match.params.id || this.props.userDetails.id;
     getUser(profileId).then((profile) => {
       if (this.props.userDetails.id === currentUserId) this.props.setUserDetails(currentUserId, profile.data.name, profile.data.about, profile.data.profilePic, profile.data.location);
@@ -87,19 +88,19 @@ class ProfilePage extends Component {
           currentUserId: this.props.userDetails.id,
           isCurrentUser: this.getUserType()
         }
-      )
+      );
     }).catch((err) => {
       this.props.history.push('/');
-    })
+    });
   }
 
   getUserType = () => {
     if (this.props.match.params.id === undefined) {
-      return true
+      return true;
     } else if (this.props.match.params.id === this.props.userDetails.id) {
-      return true
+      return true;
     }
-  }
+  };
 
   renderUserInfo() {
     const { profilePic, name, location, about, expertise } = this.state.profile;
@@ -131,11 +132,11 @@ class ProfilePage extends Component {
         <div className={classes.projectInvestmentHeader}>
           <FilterTabs
             filters={FILTER_TYPES}
-            setFilter={this.setFilter} />
+            setFilter={this.setFilter}/>
         </div>
-      )
+      );
     }
-  }
+  };
 
   renderPlaceholderText = (classes) => {
     return (
@@ -150,30 +151,30 @@ class ProfilePage extends Component {
             'This user has no projects or investments'
         }
       </Typography>
-    )
-  }
+    );
+  };
 
   renderProjects = () => {
     const { classes } = this.props;
     const { profile, displayFilter } = this.state;
-    let data
+    let data;
 
     if (displayFilter === 'investments') {
-      data = profile.investments.map(inv => inv.project)
+      data = profile.investments.map(inv => inv.project);
     } else {
-      data = profile.projects
+      data = profile.projects;
     }
 
     if (data.length > 0) {
       return (
         <Grid container
-          classes={{ root: 'project-section' }}
-          spacing={8}
-          justify="flex-start">
+              classes={{ root: 'project-section' }}
+              spacing={8}
+              justify="flex-start">
           {
             data.map((project, ix, arr) => (
               <Grid item
-                sm={12} md={arr.length > 1 ? 6 : 10} key={ix}>
+                    sm={12} md={arr.length > 1 ? 6 : 10} key={ix}>
                 <ProjectCard
                   key={ix}
                   onClick={() => this.props.history.push(`/projects/${project._id}`)}
@@ -187,10 +188,10 @@ class ProfilePage extends Component {
               </Grid>
             ))
           }
-        </Grid >
+        </Grid>
       );
     } else if (this.state.isPending) {
-      return <Loading />
+      return <Loading/>;
     } else {
       return this.renderPlaceholderText(classes);
     }

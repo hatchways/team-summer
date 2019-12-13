@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Button, Paper, Typography } from '@material-ui/core';
-// import { createConversation } from '../api/messages'; //SOCKETS WHEN DONE
+import { createConversation } from '../api/messages';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     [theme.breakpoints.up('md')]: {
       height: '100vh'
-    },
+    }
   },
   avatar: {
     width: 80,
@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       margin: '25px auto 30px',
       width: 100,
-      height: 100,
-    },
+      height: 100
+    }
   },
   button: {
     width: '80% !important',
@@ -37,7 +37,8 @@ const ProfileDetailPanel = (props) => {
     about,
     expertise,
     isCurrentUser,
-    history } = props
+    history
+  } = props;
   const classes = useStyles();
 
   const handleRedirect = async (e) => {
@@ -48,12 +49,12 @@ const ProfileDetailPanel = (props) => {
         state: { id, profilePic, name, location, about }
       });
     } else {
-      console.log("create convo goes here when done")
-      // await createConversation([currentUserId, id])
-      //   .catch((error) => console.log(error));
+      await createConversation([props.currentUserId, id])
+        .catch((error) => console.log(error));
+
       history.push('/messages');
     }
-  }
+  };
 
   return (
     <Paper className={classes.paper}>
