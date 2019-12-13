@@ -248,7 +248,7 @@ const NavBar = (props) => {
         {props.notifications && props.notifications.length > 0 &&
           <div>
             <NotificationDropdown
-              alerts={props.notifications.length}
+              alerts={props.notifications.filter(notification => notification.seen === false).length}
               investmentNotifications={props.notifications}
               setNotifications={props.setNotifications}
             />
