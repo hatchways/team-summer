@@ -180,12 +180,7 @@ class Project extends Component {
   }
 
   projectFundraisingCard() {
-<<<<<<< HEAD
-    const { user } = this.state;
-    const { funding, fundingGoal, daysLeft } = this.state.project;
-=======
-    const { user, project: { funding, fundingGoal, daysLeft }} = this.state;
->>>>>>> dev
+    const { user, project: { funding, fundingGoal, daysLeft } } = this.state;
 
     const calculateCompleted = () => {
       if (!funding.fundingTotal) return 0;
@@ -243,41 +238,37 @@ class Project extends Component {
 
         <PercentageProgressBar value={calculateCompleted()} />
 
-<<<<<<< HEAD
+        <ProjectStyles.FundraisingStatContainer>
+          <ProjectStyles.FundraisingStat>
+            <Typography variant="h4">{funding.donorCount}</Typography>
+            <Typography variant="body1" color="secondary">Backers</Typography>
+          </ProjectStyles.FundraisingStat>
 
-=======
->>>>>>> dev
-    <ProjectStyles.FundraisingStatContainer>
-      <ProjectStyles.FundraisingStat>
-        <Typography variant="h4">{funding.donorCount}</Typography>
-        <Typography variant="body1" color="secondary">Backers</Typography>
-      </ProjectStyles.FundraisingStat>
+          <ProjectStyles.FundraisingStat>
+            <Typography variant="h4">{daysLeft}</Typography>
+            <Typography variant="body1" color="secondary">Days to go</Typography>
+          </ProjectStyles.FundraisingStat>
+        </ProjectStyles.FundraisingStatContainer>
 
-      <ProjectStyles.FundraisingStat>
-        <Typography variant="h4">{daysLeft}</Typography>
-        <Typography variant="body1" color="secondary">Days to go</Typography>
-      </ProjectStyles.FundraisingStat>
-    </ProjectStyles.FundraisingStatContainer>
+        <ProjectStyles.CreatorProfile>
+          <Avatar>
+            {user.avatar
+              ? <img src={user.avatar} alt="Project creator avatar" />
+              : user.name[0]
+            }
+          </Avatar>
+          <Typography variant="h6">{user.name}</Typography>
+        </ProjectStyles.CreatorProfile>
 
-      <ProjectStyles.CreatorProfile>
-        <Avatar>
-          {user.avatar
-            ? <img src={user.avatar} alt="Project creator avatar" />
-            : user.name[0]
-          }
-        </Avatar>
-        <Typography variant="h6">{user.name}</Typography>
-      </ProjectStyles.CreatorProfile>
-
-      <ProjectStyles.ProjectActionButtons>
-        {getButtonType()}
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={this.handleSelectFundProject}>
-          Fund This Project
+        <ProjectStyles.ProjectActionButtons>
+          {getButtonType()}
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={this.handleSelectFundProject}>
+            Fund This Project
             </Button>
-      </ProjectStyles.ProjectActionButtons>
+        </ProjectStyles.ProjectActionButtons>
       </Card >
     );
   }
