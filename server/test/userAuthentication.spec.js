@@ -39,11 +39,20 @@ describe('User authentication and creation', () => {
   it('User logs in', (done) => {
     chai.request(app)
       .post('/api/auth/authenticate')
-      .send({email: userInfo.user.email, password: fakePassword})
+      .send({ email: userInfo.user.email, password: fakePassword })
       .set({ Authorization: `Bearer ${userInfo.token}` })
       .end((err, res) => {
         res.should.have.status(200);
+        res.body.should.have.keys('token', 'user');
+        res.body.user.should.have.all.keys([
+          '_id',
+          'email',
+          'name',
+          'projects',
+          'investments',
+          'notificationCount'
+        ]);
         done();
-      })
-  })
+      });
+  });
 });
