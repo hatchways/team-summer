@@ -15,19 +15,35 @@ describe('User authentication and creation', () => {
   });
 
   after('Disconnect database', (done) => {
-    db.close().then(() => done()).catch(done)
+    db.close().then(() => done()).catch(done);
   });
 
-  it('Registers a user', (done) => {
-    let userInfo;
+  let userInfo;
+  const fakePassword = faker.internet.password();
 
+  it('Registers a user', (done) => {
     chai.request(app)
       .post('/api/auth/register')
-      .send({ email: faker.internet.email(), name: faker.name.findName(), password: faker.internet.password() })
+      .send({ email: faker.internet.email(), name: faker.name.findName(), password: fakePassword })
       .end((err, res) => {
         userInfo = res.body;
         res.should.have.status(201);
-        done()
+        res.body.should.have.property('token');
+        res.body.user.should.have.property('_id');
+        res.body.user.should.have.property('name');
+        res.body.user.should.have.property('email');
+        done();
       });
   });
+
+  it('User logs in', (done) => {
+    chai.request(app)
+      .post('/api/auth/authenticate')
+      .send({email: userInfo.user.email, password: fakePassword})
+      .set({ Authorization: `Bearer ${userInfo.token}` })
+      .end((err, res) => {
+        res.should.have.status(200);
+        done();
+      })
+  })
 });
