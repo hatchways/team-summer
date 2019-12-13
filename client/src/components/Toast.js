@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles, Snackbar } from '@material-ui/core';
+import { capitalize } from '@material-ui/core/utils';
 import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
@@ -48,7 +49,7 @@ export const Toast = (props) => {
         'aria-describedby': 'message-id',
         className: `classes.toastStyles, ${classes[props.variant || 'neutral']}`
       }}
-      message={<span id="message-id">{props.toastMessage.toUpperCase() || 'Placeholder text'}</span>}
+      message={<span id="message-id">{capitalize(props.toastMessage) || 'Placeholder text'}</span>}
       action={
         <div className={classes.buttonStyle} onClick={handleClose}>
           {props.buttonText || 'CLOSE'}

@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     },
     descriptionText: {
         textAlign: 'center',
-        marginBottom: 40
+        marginBottom: 20
     },
 });
 

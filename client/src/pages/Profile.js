@@ -169,7 +169,7 @@ class ProfilePage extends Component {
         <Grid container
           classes={{ root: 'project-section' }}
           spacing={8}
-          justify="left">
+          justify="flex-start">
           {
             data.map((project, ix, arr) => (
               <Grid item
