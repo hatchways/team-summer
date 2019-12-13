@@ -29,9 +29,8 @@ describe('User authentication and creation', () => {
         userInfo = res.body;
         res.should.have.status(201);
         res.body.should.have.property('token');
-        res.body.user.should.have.property('_id');
-        res.body.user.should.have.property('name');
-        res.body.user.should.have.property('email');
+        res.body.should.have.property('user');
+        res.body.user.should.have.all.keys(['_id', 'email', 'name']);
         done();
       });
   });
