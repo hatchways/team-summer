@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Typography,
   Grid,
@@ -50,6 +50,16 @@ class Project extends Component {
   };
 
   async componentDidMount() {
+    this.fetchProjectData()
+  }
+
+  async componentDidUpdate(prevProps) {
+    if (prevProps.match.params.id !== this.props.match.params.id) {
+      this.fetchProjectData()
+    }
+  }
+
+  async fetchProjectData() {
     try {
       const response = await getProject(this.props.match.params.id);
       const project = response.data;
@@ -61,8 +71,8 @@ class Project extends Component {
         project.images = ['/images/image-not-found.png']
       }
 
-      this.setState({ 
-        project, 
+      this.setState({
+        project,
         isCurrentUser,
         user: project.user
       });
@@ -109,16 +119,15 @@ class Project extends Component {
   }
 
   renderCheckoutForm = () => {
-    const { userDetails, match } = this.props
+    const { match } = this.props
 
     return (
       <Modal handleClosePopup={this.handleClosePopup}>
         <Checkout
-          userId={userDetails.id}
           projectId={match.params.id}
           handleClosePopup={this.handleClosePopup}
           handlePaymentCompletion={this.handlePaymentCompletion}
-          projectTitle={this.state.project.title} />
+        />
       </Modal>
     )
   }
@@ -134,7 +143,8 @@ class Project extends Component {
   };
 
   emitSocketInvestment = () => {
-    const { user: { _id, name }, project: { title } } = this.state
+    const { user: { _id }, project: { title } } = this.state
+    const { name } = this.props.userDetails;
 
     this.props.socket.emit('investment', {
       id: _id,
@@ -149,13 +159,13 @@ class Project extends Component {
       this.emitSocketInvestment()
       this.applyInvestment(investmentAmount)
     } else {
-      this.setState({checkoutOpen: false})
+      this.setState({ checkoutOpen: false })
       this.props.activateToast('Payment was not successful', 'error')
     }
   }
 
   applyInvestment = (investment) => {
-    this.setState(({project}) => ({
+    this.setState(({ project }) => ({
       stripeSuccess: true,
       checkoutOpen: false,
       project: {
@@ -170,7 +180,7 @@ class Project extends Component {
   }
 
   projectFundraisingCard() {
-    const { user, project: { funding, fundingGoal, daysLeft }} = this.state;
+    const { user, project: { funding, fundingGoal, daysLeft } } = this.state;
 
     const calculateCompleted = () => {
       if (!funding.fundingTotal) return 0;
@@ -197,13 +207,19 @@ class Project extends Component {
       this.props.history.push('/messages');
     };
 
+    // const disableFunding = () => {
+    //   // TODO: Logic to handle disabling funding of project, maybe if project fund period has ended
+    //   // Disabled by default for now until funding logic is added
+    //   return false;
+    // };
+
     const getButtonType = () => {
-      const {isCurrentUser: cur} = this.state
+      const { isCurrentUser: cur } = this.state
 
       return (
-        <Button 
-          variant="outlined" 
-          color={cur ? 'primary' : 'secondary'} 
+        <Button
+          variant="outlined"
+          color={cur ? 'primary' : 'secondary'}
           onClick={cur ? handleEditProject : handleSendMessage} >
           {cur ? 'Edit' : 'Send'}
         </Button>
@@ -253,7 +269,7 @@ class Project extends Component {
             Fund This Project
             </Button>
         </ProjectStyles.ProjectActionButtons>
-      </Card>
+      </Card >
     );
   }
 

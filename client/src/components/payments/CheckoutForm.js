@@ -42,7 +42,6 @@ class _CheckoutForm extends Component {
         e.preventDefault();
         const { projectId, stripe } = this.props
         const { investmentAmount } = this.state
-
         stripe.createToken().then((payload) => {
             pay(projectId, payload, investmentAmount)
                 .then(this.props.handlePaymentCompletion(investmentAmount))

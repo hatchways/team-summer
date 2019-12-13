@@ -106,8 +106,8 @@ class EditProject extends Component {
   }
 
   componentDidMount() {
-    const { 
-      id: projectId, title, subtitle, description, industry, location, 
+    const {
+      id: projectId, title, subtitle, description, industry, location,
       images: updatedImages, fundingGoal, projectUserId } = this.props.location.state
     const fundingDeadline = moment(this.props.location.state.fundingDeadline).format('YYYY-MM-DD');
     const project = { projectId, title, subtitle, description, industry, location, updatedImages, fundingGoal, fundingDeadline }

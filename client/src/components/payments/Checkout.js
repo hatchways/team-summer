@@ -10,7 +10,7 @@ class Checkout extends Component {
             projectId,
             projectTitle,
             handleClosePopup,
-            handlePaymentCompletion} = this.props
+            handlePaymentCompletion } = this.props
 
         return (
             <div className="checkout">
@@ -20,7 +20,8 @@ class Checkout extends Component {
                             projectId={projectId}
                             projectTitle={projectTitle}
                             handleClosePopup={handleClosePopup}
-                            handlePaymentCompletion={handlePaymentCompletion} />
+                            handlePaymentCompletion={handlePaymentCompletion}
+                        />
                     </Elements>
                 </StripeProvider>
             </div>

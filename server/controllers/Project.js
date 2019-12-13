@@ -32,7 +32,6 @@ exports.getUserProjects = (req, res) => {
 
   const order = req.query.order || 'asc';
   const sortBy = req.query.sortBy || 'fundingDeadline';
-  const limit = parseInt(req.query.limit) || 6;
   const cutoff = new Date();
 
   const filterOptions = {
@@ -46,7 +45,6 @@ exports.getUserProjects = (req, res) => {
   Project.find(filterOptions)
     .populate({ path: 'user', select: 'name' })
     .sort([[sortBy, order]])
-    .limit(limit)
     .exec((err, projects) => {
       if (err) {
         return res.status(400).json({
