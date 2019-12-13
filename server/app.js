@@ -10,7 +10,7 @@ const pingRouter = require('./routes/ping');
 
 const app = express();
 
-if (process.env.hasOwnProperty('NODE_ENV') && process.env.NODE_ENV !== 'test') {
+if (!process.env.hasOwnProperty('NODE_ENV') || process.env.NODE_ENV !== 'test') {
   const LoggerMiddleware = (req, res, next) => {
     console.log(`Logged  ${req.url}  ${req.method} -- ${new Date()}`);
     next();
