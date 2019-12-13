@@ -89,10 +89,6 @@ const ConversationDetails = ({ classes, currentConversation }) => (
       <Typography variant="h4">{currentConversation.users[0].name}</Typography>
       <Typography variant="body1" color="secondary">{currentConversation.users[0].location}</Typography>
     </CurrentConversationUserInfo>
-
-    {/*<IconButton onClick={(event) => toggleConversationActions(event.currentTarget)}>*/}
-    {/*  <SettingsIcon/>*/}
-    {/*</IconButton>*/}
   </CurrentConversationDetails>
 );
 

@@ -6,7 +6,8 @@ export default (globalAppState) => {
   if (jwtToken) {
     try {
       const data = jwtVerify(jwtToken, process.env.REACT_APP_JWT_SECRET).payload;
-      globalAppState.userDetails = { name: data.name, id: data._id, avatar: data.profilePic, location: data.location, about: data.about };
+      globalAppState.userDetails = { name: data.name, id: data._id, location: data.location, about: data.about };
+      globalAppState.userDetails.avatar = localStorage.getItem('profilePic');
       globalAppState.userAuthenticated = true;
     } catch (error) {
       if (error.name === 'TokenExpiredError') {

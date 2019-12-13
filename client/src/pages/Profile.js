@@ -80,7 +80,6 @@ class ProfilePage extends Component {
     this.setState({ isPending: TextTrackCueList });
     const profileId = this.props.match.params.id || this.props.userDetails.id;
     getUser(profileId).then((profile) => {
-      if (this.props.userDetails.id === currentUserId) this.props.setUserDetails(currentUserId, profile.data.name, profile.data.about, profile.data.profilePic, profile.data.location);
       this.setState(
         {
           isPending: false,
@@ -110,7 +109,7 @@ class ProfilePage extends Component {
       <Fragment>
         <ProfileDetailPanel
           id={this.props.userDetails.id}
-          currentUserId={this.props.currentUserId}
+          currentUserId={this.state.profile._id}
           isCurrentUser={this.state.isCurrentUser}
           profilePic={avatarPic}
           name={name}
@@ -138,6 +137,22 @@ class ProfilePage extends Component {
     }
   };
 
+  noProjectsInvestmentText = () => {
+    const { profile: { projects, investments }, isCurrentUser } = this.state;
+    const noProjects = projects.length === 0;
+    const noInvestments = investments.length === 0;
+
+    if (isCurrentUser) {
+      if (noProjects && noInvestments) return 'You have no projects or investments';
+      if (noProjects) return 'You have no projects';
+      if (noInvestments) return 'You have no investments';
+    } else {
+      if (noProjects && noInvestments) return 'This user has no projects or investments';
+      if (noProjects) return 'This user has no projects';
+      if (noInvestments) return 'This user has no investments';
+    }
+  };
+
   renderPlaceholderText = (classes) => {
     return (
       <Typography
@@ -145,11 +160,7 @@ class ProfilePage extends Component {
         className={classes.placeholderText}
         color="secondary"
         component="p">
-        {
-          this.state.isCurrentUser ?
-            'You have no projects or investments' :
-            'This user has no projects or investments'
-        }
+        {this.noProjectsInvestmentText()}
       </Typography>
     );
   };

@@ -19,6 +19,8 @@ export const createOrLoginUser = async (method, userData) => {
     if (response.data.hasOwnProperty('err')) return { ...response.data };
 
     localStorage.setItem('jwtToken', response.data.token);
+    localStorage.setItem('profilePic', response.data.user.profilePic);
+
     return {
       success: true,
       id: response.data.user._id,
