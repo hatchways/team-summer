@@ -40,13 +40,13 @@ class _CheckoutForm extends Component {
 
     handlePaymentSubmit = (e) => {
         e.preventDefault();
-        const {  projectId, stripe } = this.props
+        const { projectId, stripe } = this.props
         const { investmentAmount } = this.state
         stripe.createToken().then((payload) => {
             pay(projectId, payload, investmentAmount)
-                .then(this.props.handlePaymentCompletion(true))
-                .catch((err) => this.props.handlePaymentCompletion(false))
-        })
+                .then(this.props.handlePaymentCompletion(investmentAmount))
+                .catch((err) => this.props.handlePaymentCompletion(null))
+        });
     };
 
     renderPaymentCard = (classes) => {
