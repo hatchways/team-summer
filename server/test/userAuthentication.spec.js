@@ -48,8 +48,7 @@ describe('User authentication and creation', () => {
           'email',
           'name',
           'projects',
-          'investments',
-          'notificationCount'
+          'investments'
         ]);
         done();
       });
