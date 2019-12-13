@@ -6,7 +6,7 @@ const singleUpload = upload.single('image');
 const multiUpload = upload.array('images');
 
 exports.imageUpload = (req, res) => {
-  singleUpload(req, res, function (err) {
+  singleUpload(req, res, function(err) {
     if (err)
       return res
         .status(422)
@@ -115,8 +115,21 @@ exports.editProject = async (req, res) => {
       const { projectId } = req.params;
       const { title, subtitle, description, industry, location, fundingGoal, stringImage, fundingDeadline } = req.body;
       let images = req.files ? req.files.map((file) => file.location) : stringImage;
-      if (req.files && stringImage) images = [...images, stringImage];
-      const newProject = { title, subtitle, description, industry, location, fundingGoal: parseInt(fundingGoal), fundingDeadline, images };
+      if (typeof stringImage === 'object') {
+        if (req.files && stringImage) images = [...images, ...stringImage];
+      } else {
+        if (req.files && stringImage) images = [...images, stringImage];
+      }
+      const newProject = {
+        title,
+        subtitle,
+        description,
+        industry,
+        location,
+        fundingGoal: parseInt(fundingGoal),
+        fundingDeadline,
+        images
+      };
       await Project.findByIdAndUpdate(
         { _id: projectId },
         { $set: newProject },
@@ -125,16 +138,16 @@ exports.editProject = async (req, res) => {
           if (err) {
             return res.status(400).json({
               error: 'Project could not be updated.'
-            })
+            });
           }
           return res.status(200).json(newProject);
         }
-      )
+      );
     } catch (err) {
       res.status(400).json({
         error: 'User project\'s could not be updated',
         err
-      })
+      });
     }
-  })
-}
+  });
+};
