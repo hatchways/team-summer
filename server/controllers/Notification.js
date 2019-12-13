@@ -10,8 +10,9 @@ exports.getNotifications = (req, res) => {
   const { userId } = req.params;
   Notification.find({ user: userId })
     .populate({ path: 'user', select: 'name' })
-    .populate({ path: 'investor', select: 'name' })
+    .populate({ path: 'investor', select: 'name profilePic' })
     .populate({ path: 'project', select: 'title' })
+    .sort([['date', 'desc']])
     .exec((err, notifications) => {
       if (err) return res.status(400).json({ err });
 
@@ -19,20 +20,41 @@ exports.getNotifications = (req, res) => {
     });
 };
 
-exports.createNotification = async (req, res) => {
-  const investorId = req.user._id;
-  const { projectOwnerId, investmentAmount, projectId } = req.body;
+exports.setNotificationToSeen = (req, res) => {
+  const { notificationId } = req.params;
 
-  const notification = await Notification.create({
-    user: ObjectId(projectOwnerId),
-    investmentAmount,
-    investor: ObjectId(investorId),
-    project: ObjectId(projectId)
-  })
-
-  if (notification) {
-    return res.status(200).json(notification);
-  } else {
-    return res.status(400).json({ err: 'Notification could not be created.' })
+  try {
+    Notification.findByIdAndUpdate(
+      { _id: notificationId },
+      { seen: true },
+      (err, updatedNotification) => {
+        if (err) {
+          return res.status(400).json({
+            error: 'Notification could not be updated.'
+          })
+        }
+        return res.status(200).json(updatedNotification);
+      }
+    )
+  } catch (err) {
+    console.log(err)
   }
 };
+
+exports.deleteNotification = (req, res) => {
+  const { notificationId } = req.params;
+  const { _id } = req.user;
+
+  try {
+    Notification.deleteOne({ _id: notificationId, user: ObjectId(_id) }, function (err) {
+      if (err) {
+        return res.status(400).json({
+          error: 'Notification could not be deleted.'
+        });
+      }
+      return res.status(200).json('Notification successfully deleted.');
+    })
+  } catch (err) {
+    console.log(err)
+  }
+}

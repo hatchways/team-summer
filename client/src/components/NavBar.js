@@ -210,22 +210,25 @@ const NavBar = (props) => {
 
   useEffect(() => {
     const loadData = async () => {
-      await loadNotifications();
+      try {
+        const response = await getNotifications(props.userDetails.id);
+        const { data } = response;
+        props.setNotifications(data);
+
+      } catch (err) {
+        console.log(err);
+      }
     }
+
     if (props.userAuthenticated) {
       loadData();
     }
-  }, [])
 
-  const loadNotifications = async () => {
-    try {
-      const response = await getNotifications(props.userDetails.id);
-      const { data } = response;
-      props.setNotifications(data);
-    } catch (err) {
-      console.log(err);
-    }
-  }
+    props.socket.on('newInvestment', async (notification) => {
+      loadData();
+      props.activateToast(`${notification.name} invested in your project, ${notification.projectName}!`, 'success');
+    })
+  }, [])
 
   // If navbar is in desktop mode and drawer is still set to open,
   // toggle the drawer closed
@@ -245,8 +248,9 @@ const NavBar = (props) => {
         {props.notifications && props.notifications.length > 0 &&
           <div>
             <NotificationDropdown
-              alerts={props.notifications.length}
+              alerts={props.notifications.filter(notification => notification.seen === false).length}
               investmentNotifications={props.notifications}
+              setNotifications={props.setNotifications}
             />
           </div>
         }

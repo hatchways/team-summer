@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import { 
-  withStyles, 
+import {
+  withStyles,
   Grid,
-  Typography } from '@material-ui/core';
+  Typography
+} from '@material-ui/core';
 import moment from 'moment';
 
 import FilterTabs from 'components/FilterTabs';
@@ -42,7 +43,7 @@ const styles = (theme) => ({
     overflowY: 'auto',
     padding: 5,
     textAlign: 'left',
-    margin: '50px' 
+    margin: '50px'
   }
 });
 
@@ -61,18 +62,24 @@ class ProfilePage extends Component {
       investments: []
     }
   };
-  
-  componentDidMount() {
-    if (!this.props.userAuthenticated) {
-      this.props.activateToast('Please log in to view profiles', 'error');
-      return this.props.history.push('/login');
-    }
 
+  componentDidMount() {
+    this.fetchUserProfile()
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    if (prevProps.match.params.id !== this.props.match.params.id) {
+      this.fetchUserProfile()
+    }
+  }
+
+  async fetchUserProfile() {
     //if the route has an id param isCurrentUser is false
     const currentUserId = this.props.userDetails.id
-    this.setState({isPending: TextTrackCueList})
+    this.setState({ isPending: TextTrackCueList })
     const profileId = this.props.match.params.id || this.props.userDetails.id;
     getUser(profileId).then((profile) => {
+      if (this.props.userDetails.id === currentUserId) this.props.setUserDetails(currentUserId, profile.data.name, profile.data.about, profile.data.profilePic, profile.data.location);
       this.setState(
         {
           isPending: false,
@@ -87,13 +94,13 @@ class ProfilePage extends Component {
   }
 
   getUserType = () => {
-    if (this.props.match.params.id === undefined){
+    if (this.props.match.params.id === undefined) {
       return true
-    } else if (this.props.match.params.id === this.props.userDetails.id){
+    } else if (this.props.match.params.id === this.props.userDetails.id) {
       return true
     }
   }
-  
+
   renderUserInfo() {
     const { profilePic, name, location, about, expertise } = this.state.profile;
     const avatarPic = profilePic ? profilePic : null;
@@ -115,14 +122,14 @@ class ProfilePage extends Component {
     );
   }
 
-  setFilter = (filter) => this.setState({displayFilter: filter});
+  setFilter = (filter) => this.setState({ displayFilter: filter });
 
   renderTabs = (classes) => {
-    const {investments, projects} = this.state.profile;
-    if(investments.length !== 0 || projects.length !== 0 ){
+    const { investments, projects } = this.state.profile;
+    if (investments.length !== 0 || projects.length !== 0) {
       return (
         <div className={classes.projectInvestmentHeader}>
-          <FilterTabs 
+          <FilterTabs
             filters={FILTER_TYPES}
             setFilter={this.setFilter} />
         </div>
@@ -154,18 +161,18 @@ class ProfilePage extends Component {
     if (displayFilter === 'investments') {
       data = profile.investments.map(inv => inv.project)
     } else {
-      data = profile.projects 
-    } 
-    
+      data = profile.projects
+    }
+
     if (data.length > 0) {
       return (
-        <Grid container 
-          classes={{ root: 'project-section' }} 
-          spacing={8} 
+        <Grid container
+          classes={{ root: 'project-section' }}
+          spacing={8}
           justify="left">
           {
             data.map((project, ix, arr) => (
-              <Grid item 
+              <Grid item
                 sm={12} md={arr.length > 1 ? 6 : 10} key={ix}>
                 <ProjectCard
                   key={ix}
@@ -183,9 +190,9 @@ class ProfilePage extends Component {
         </Grid >
       );
     } else if (this.state.isPending) {
-       return <Loading />
+      return <Loading />
     } else {
-        return this.renderPlaceholderText(classes);
+      return this.renderPlaceholderText(classes);
     }
   };
 

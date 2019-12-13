@@ -1,16 +1,21 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Avatar from '@material-ui/core/Avatar';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import MonitizationIcon from '@material-ui/icons/Send';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import AlertBadge from './AlertBadge';
+
+import { setNotificationToSeen, deleteNotification } from 'api/notifications';
 
 const StyledMenu = withStyles({
     paper: {
         border: '1px solid #d3d4d5',
-    },
+    }
 })(props => (
     <Menu
         elevation={0}
@@ -38,7 +43,7 @@ const StyledMenuItem = withStyles(theme => ({
     },
 }))(MenuItem);
 
-export default function CustomizedMenus({ alerts, messages, investmentNotifications }) {
+function CustomizedMenus({ history, alerts, classes, investmentNotifications, setNotifications }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = event => {
@@ -48,6 +53,32 @@ export default function CustomizedMenus({ alerts, messages, investmentNotificati
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const redirectToProfile = (id) => {
+        return history.push(`/profile/${id}`)
+    }
+
+    const redirectToProject = (id) => {
+        return history.push(`/projects/${id}`)
+    }
+
+    const markAsSeen = (id, idx) => {
+        setNotificationToSeen(id)
+            .then(() => {
+                investmentNotifications[idx].seen = true;
+                setNotifications(investmentNotifications);
+            })
+            .catch(err => console.log(err));
+    }
+
+    const handleDeleteNotification = (id) => {
+        deleteNotification(id)
+            .then(() => {
+                const filteredInvestments = investmentNotifications.filter(notification => notification._id !== id)
+                setNotifications(filteredInvestments)
+            })
+            .catch(err => console.log(err));
+    }
 
     return (
         <div>
@@ -60,15 +91,25 @@ export default function CustomizedMenus({ alerts, messages, investmentNotificati
                 onClose={handleClose} >
                 {
                     investmentNotifications.length
-                        ? investmentNotifications.map((notification) => {
-                            const { _id, investor, investmentAmount, project, } = notification
-                            const notificationMessage = `${investor.name} invested ${investmentAmount} in your project ${project.title}`
+                        ? investmentNotifications.map((notification, idx) => {
+                            const { _id, investor, investmentAmount, project, seen } = notification
+                            const notificationMessage = `invested $${investmentAmount} in ${project.title}!`
                             return (
-                                <StyledMenuItem key={_id}>
-                                    <ListItemIcon>
-                                        <MonitizationIcon fontSize="small" />
+                                <StyledMenuItem className={seen ? classes.isSeenFade : classes.styledMenuItem} key={_id}>
+                                    <ListItemIcon className={classes.listItem}>
+                                        <Avatar className={classes.investorIcon} src={investor.profilePic || null} onClick={() => redirectToProfile(investor._id)}>
+                                            {
+                                                investor.profilePic
+                                                    ? investor.profilePic
+                                                    : investor.name
+                                                        ? investor.name.split('')[0]
+                                                        : '?'
+                                            }
+                                        </Avatar>
                                     </ListItemIcon>
-                                    <ListItemText primary={notificationMessage} />
+                                    <ListItemText primary={notificationMessage} onClick={() => redirectToProject(project._id)} />
+                                    <VisibilityIcon className={classes.seenIcon} onClick={() => markAsSeen(_id, idx)} />
+                                    <HighlightOffIcon onClick={() => handleDeleteNotification(_id)} />
                                 </StyledMenuItem>
                             )
                         })
@@ -78,3 +119,27 @@ export default function CustomizedMenus({ alerts, messages, investmentNotificati
         </div>
     );
 }
+
+export default withRouter(withStyles({
+    styledMenuItem: {
+        padding: '8px'
+    },
+    isSeenFade: {
+        padding: '8px',
+        opacity: '40%',
+    },
+    listItem: {
+        minWidth: '40px'
+    },
+    investorIcon: {
+        height: '25px',
+        width: '25px'
+    },
+    seenIcon: {
+        marginLeft: '5px',
+        marginRight: '5px'
+    },
+    deleteIcon: {
+        marginRight: '5px'
+    }
+})(CustomizedMenus))

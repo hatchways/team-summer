@@ -14,12 +14,28 @@ export const getNotifications = async (userId) => {
   }
 };
 
-export const createNotification = async (projectOwnerId, investmentAmount, projectId) => {
-  const url = `/notifications/${projectOwnerId}`;
-  const notificationData = { projectOwnerId, investmentAmount, projectId }
+export const setNotificationToSeen = async (notificationId) => {
+  const url = `/notifications/${notificationId}`;
 
   try {
-    const response = await httpClient.post(url, notificationData);
+    const response = await httpClient.put(url);
+    if (response.data.err) return { ...response.data };
+
+    return {
+      data: response.data,
+      success: true
+    };
+  } catch (error) {
+    console.log(error);
+    return { success: false };
+  }
+}
+
+export const deleteNotification = async (notificationId) => {
+  const url = `/notifications/${notificationId}`;
+
+  try {
+    const response = await httpClient.delete(url);
     if (response.data.err) return { ...response.data };
 
     return { success: true };
@@ -27,5 +43,4 @@ export const createNotification = async (projectOwnerId, investmentAmount, proje
     console.log(error);
     return { success: false };
   }
-};
-
+}

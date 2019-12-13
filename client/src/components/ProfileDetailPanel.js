@@ -29,15 +29,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProfileDetailPanel = (props) => {
-  const { 
-    id, 
-    profilePic, 
-    name, 
-    location, 
-    about, 
-    expertise, 
-    currentUserId,
-    isCurrentUser, 
+  const {
+    id,
+    profilePic,
+    name,
+    location,
+    about,
+    expertise,
+    isCurrentUser,
     history } = props
   const classes = useStyles();
 
@@ -50,9 +49,9 @@ const ProfileDetailPanel = (props) => {
       });
     } else {
       console.log("create convo goes here when done")
-        // await createConversation([currentUserId, id])
-        //   .catch((error) => console.log(error));
-        history.push('/messages');
+      // await createConversation([currentUserId, id])
+      //   .catch((error) => console.log(error));
+      history.push('/messages');
     }
   }
 
@@ -63,11 +62,11 @@ const ProfileDetailPanel = (props) => {
       </Avatar>
       <Typography variant="h3">{name}</Typography>
       <Typography variant="body1">{location}</Typography>
-      <Button 
-        classes={{ root: classes.button }} 
-        type="submit" 
+      <Button
+        classes={{ root: classes.button }}
+        type="submit"
         variant="outlined"
-        color="primary" 
+        color="primary"
         onClick={handleRedirect}>
         {isCurrentUser ? 'edit' : 'message'}
       </Button>
