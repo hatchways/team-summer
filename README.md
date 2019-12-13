@@ -1,4 +1,12 @@
-# EXPRESS-STARTER
+# Product Launch - Team Summer
+### Project Brief
+Today, in some areas of the world it’s really tough to raise money! And on the flip, those who want to invest, don’t know how to meet and find entrepreneurs that are working on projects they find exciting. This website will allow startups to raise money (like Kickstarter) and reward investors with equity in their company!
+
+#### Who’s it for?
+Startups (entrepreneurs) and investors!
+#### Scope of Project:
+Create a marketplace for entrepreneurs to upload their startups and for investors to browse through ideas they might be interested in investing in.
+
 
 ### Prerequisites
 #### Setting up MongoDB
