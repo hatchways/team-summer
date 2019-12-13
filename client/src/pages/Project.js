@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
   Typography,
   Grid,
@@ -13,12 +13,14 @@ import moment from 'moment'
 import * as ProjectStyles from 'components/ProjectPageStyles';
 import CardCarousel from 'components/CardCarousel';
 import PercentageProgressBar from 'components/PercentageProgressBar';
+import Checkout from 'components/payments/Checkout';
+import Modal from 'components/Modal';
 import { getProject } from 'api/projects';
 
 import { withPageContext } from 'components/pageContext';
-import { createConversation } from '../api/messages';
+import { createConversation } from 'api/messages';
 
-class Project extends React.Component {
+class Project extends Component {
   state = {
     project: {
       _id: null,
@@ -33,7 +35,6 @@ class Project extends React.Component {
       },
       fundingGoal: 0,
       daysLeft: 0,
-      equalityExchange: 0,
       images: [
         '/images/image-not-found.png'
       ]
@@ -42,18 +43,30 @@ class Project extends React.Component {
       _id: '',
       name: '',
       avatar: ''
-    }
+    },
+    stripeSuccess: false,
+    checkoutOpen: false,
+    isCurrentUser: false
   };
 
   async componentDidMount() {
     try {
       const response = await getProject(this.props.match.params.id);
       const project = response.data;
-      project.daysLeft = Math.max(0, moment({ hours: 0 }).diff(project.fundingDeadline, 'days') * -1);
+      const isCurrentUser = this.props.userDetails.id === project.user._id
+      project.daysLeft = Math.max(0, moment({ hours: 0 })
+        .diff(project.fundingDeadline, 'days') * -1);
 
-      if (project.images.length === 0 || project.images[0] === '/images/image-not-found.png') project.images = ['/images/image-not-found.png'];
+      if (project.images.length === 0 || project.images[0] === '/images/image-not-found.png') {
+        project.images = ['/images/image-not-found.png']
+      }
 
-      this.setState({ project, user: project.user });
+      this.setState({ 
+        project, 
+        isCurrentUser,
+        user: project.user
+      });
+
     } catch (err) {
       console.log(err)
     }
@@ -95,10 +108,69 @@ class Project extends React.Component {
     );
   }
 
+  renderCheckoutForm = () => {
+    const { userDetails, match } = this.props
+
+    return (
+      <Modal handleClosePopup={this.handleClosePopup}>
+        <Checkout
+          userId={userDetails.id}
+          projectId={match.params.id}
+          handleClosePopup={this.handleClosePopup}
+          handlePaymentCompletion={this.handlePaymentCompletion}
+          projectTitle={this.state.project.title} />
+      </Modal>
+    )
+  }
+
+  handleSelectFundProject = (e) => {
+    e.preventDefault()
+    this.setState({ checkoutOpen: true })
+  };
+
+  handleClosePopup = (e) => {
+    e.preventDefault()
+    this.setState({ checkoutOpen: false })
+  };
+
+  emitSocketInvestment = () => {
+    const { user: { _id, name }, project: { title } } = this.state
+
+    this.props.socket.emit('investment', {
+      id: _id,
+      name: name,
+      projectName: title
+    }, { token: localStorage.getItem('jwtToken') })
+  }
+
+  handlePaymentCompletion = (investmentAmount) => {
+    if (investmentAmount !== null) {
+      this.props.activateToast('Success. you invested.', 'success')
+      this.emitSocketInvestment()
+      this.applyInvestment(investmentAmount)
+    } else {
+      this.setState({checkoutOpen: false})
+      this.props.activateToast('Payment was not successful', 'error')
+    }
+  }
+
+  applyInvestment = (investment) => {
+    this.setState(({project}) => ({
+      stripeSuccess: true,
+      checkoutOpen: false,
+      project: {
+        ...project,
+        funding: {
+          ...project.funding,
+          donorCount: project.funding.donorCount + 1,
+          fundingTotal: project.funding.fundingTotal + parseInt(investment)
+        }
+      }
+    }))
+  }
+
   projectFundraisingCard() {
-    const { classes } = this.props;
-    const { user } = this.state;
-    const { funding, fundingGoal, daysLeft, equalityExchange } = this.state.project;
+    const { user, project: { funding, fundingGoal, daysLeft }} = this.state;
 
     const calculateCompleted = () => {
       if (!funding.fundingTotal) return 0;
@@ -107,7 +179,7 @@ class Project extends React.Component {
       return Math.min(percentageComplete, 100);
     };
 
-    const handleEditProjectRedirect = () => {
+    const handleEditProject = () => {
       const { project } = this.state;
       const { _id: id, title, subtitle, description, industry, images, location, fundingGoal, fundingDeadline } = project;
       const projectUserId = this.state.user._id;
@@ -125,32 +197,17 @@ class Project extends React.Component {
       this.props.history.push('/messages');
     };
 
-    const handleFundProject = () => {
-      const { history, userDetails, match } = this.props
-
-      history.push({
-        pathname: '/checkout',
-        state: {
-          projectOwnerId: this.state.user._id,
-          userId: userDetails.id,
-          userName: userDetails.name,
-          projectId: match.params.id,
-          projectTitle: this.state.project.title
-        }
-      })
-    };
-
-    const disableFunding = () => {
-      // TODO: Logic to handle disabling funding of project, maybe if project fund period has ended
-      // Disabled by default for now until funding logic is added
-      return false;
-    };
-
     const getButtonType = () => {
-      const userId = this.state.user._id;
-      return this.props.userAuthenticated && userId === this.props.userDetails.id
-        ? <Button variant="outlined" color="primary" onClick={handleEditProjectRedirect}>Edit</Button>
-        : <Button variant="outlined" color="secondary" onClick={handleSendMessage}>Send Message</Button>;
+      const {isCurrentUser: cur} = this.state
+
+      return (
+        <Button 
+          variant="outlined" 
+          color={cur ? 'primary' : 'secondary'} 
+          onClick={cur ? handleEditProject : handleSendMessage} >
+          {cur ? 'Edit' : 'Send'}
+        </Button>
+      )
     }
 
     return (
@@ -164,9 +221,6 @@ class Project extends React.Component {
         </ProjectStyles.FundraisingAmounts>
 
         <PercentageProgressBar value={calculateCompleted()} />
-
-        <Typography variant="body1" className={classes.fundraisingEquity}>Equity
-          Exchange: {equalityExchange}% </Typography>
 
         <ProjectStyles.FundraisingStatContainer>
           <ProjectStyles.FundraisingStat>
@@ -184,7 +238,7 @@ class Project extends React.Component {
           <Avatar>
             {user.avatar
               ? <img src={user.avatar} alt="Project creator avatar" />
-              : user.name.split('')[0]
+              : user.name[0]
             }
           </Avatar>
           <Typography variant="h6">{user.name}</Typography>
@@ -192,9 +246,12 @@ class Project extends React.Component {
 
         <ProjectStyles.ProjectActionButtons>
           {getButtonType()}
-          {!disableFunding() && (
-            <Button variant="contained" color="primary" onClick={handleFundProject}>Fund This Project</Button>
-          )}
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={this.handleSelectFundProject}>
+            Fund This Project
+            </Button>
         </ProjectStyles.ProjectActionButtons>
       </Card>
     );
@@ -205,6 +262,10 @@ class Project extends React.Component {
       <ProjectStyles.Main>
         {this.projectHeaderContent()}
         <ProjectStyles.ProjectGrid>
+          {
+            this.state.checkoutOpen &&
+            this.renderCheckoutForm()
+          }
           {this.projectDetailsCard()}
           {this.projectFundraisingCard()}
         </ProjectStyles.ProjectGrid>
