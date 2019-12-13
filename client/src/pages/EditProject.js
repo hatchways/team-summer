@@ -3,19 +3,20 @@ import { Typography, withStyles, Button, TextField } from '@material-ui/core';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import validator from 'validator';
-import moment from 'moment'
+import moment from 'moment';
 
-import { OutlinedSelect } from 'components/Inputs';
+import { CustomOutlinedInput, OutlinedSelect } from 'components/Inputs';
 import UploadImages from 'components/UploadImages';
 import FormValidator from 'helpers/form-validation';
 import { editProject } from 'api/projects';
-import { locations, industries } from 'dummyData/dropDownItems'
+import { locations, industries } from 'dummyData/dropDownItems';
 import { withPageContext } from 'components/pageContext';
+import CenteredPageHeader from '../components/CenteredPageHeader';
 
 const styles = {
   pageContent: {
     display: 'flex',
-    justifyContent: 'left'
+    justifyContent: 'center'
   },
   projectPreviewContainer: {
     display: 'flex',
@@ -24,11 +25,11 @@ const styles = {
     marginRight: '20px',
     marginLeft: '10px',
     padding: '30px 50px 20px 30px',
-    boxShadow: '2px 0px 4px 2px #D3D3D3',
+    boxShadow: '2px 0px 4px 2px #D3D3D3'
   },
   addProjectPage: {
     margin: '10px',
-    padding: '20px',
+    padding: '20px'
   },
   form: {
     display: 'flex',
@@ -41,7 +42,7 @@ const styles = {
     marginBottom: '20px'
   },
   formLine: {
-    marginBottom: '20',
+    marginBottom: '20'
   },
   previewButton: {
     margin: '20px 0px 10px 0px'
@@ -49,7 +50,7 @@ const styles = {
   submitButton: {
     margin: 'auto'
   }
-}
+};
 
 class EditProject extends Component {
   constructor(props) {
@@ -60,6 +61,18 @@ class EditProject extends Component {
         method: validator.isEmpty,
         validWhen: false,
         message: 'Title is required.'
+      },
+      {
+        field: 'subtitle',
+        method: (value) => value.length <= 50,
+        validWhen: true,
+        message: 'Subtitle must be 50 characters or less.'
+      },
+      {
+        field: 'description',
+        method: (value) => value.length <= 2000,
+        validWhen: true,
+        message: 'Description must be 2000 characters or less.'
       },
       {
         field: 'industry',
@@ -102,24 +115,35 @@ class EditProject extends Component {
       projectUserId: null,
       validation: this.validators.valid(),
       uploading: false
-    }
+    };
   }
 
   componentDidMount() {
     const {
       id: projectId, title, subtitle, description, industry, location,
-      images: updatedImages, fundingGoal, projectUserId } = this.props.location.state
+      images: updatedImages, fundingGoal, projectUserId
+    } = this.props.location.state;
     const fundingDeadline = moment(this.props.location.state.fundingDeadline).format('YYYY-MM-DD');
-    const project = { projectId, title, subtitle, description, industry, location, updatedImages, fundingGoal, fundingDeadline }
-    this.setState({ project, projectUserId, formData: new FormData() })
+    const project = {
+      projectId,
+      title,
+      subtitle,
+      description,
+      industry,
+      location,
+      updatedImages,
+      fundingGoal,
+      fundingDeadline
+    };
+    this.setState({ project, projectUserId, formData: new FormData() });
   }
 
   handleInput = (event) => {
     const { value, name } = event.target;
     const { project } = this.state;
     project[name] = value;
-    this.setState({ project })
-  }
+    this.setState({ project });
+  };
 
   handleSubmit = async (event) => {
     event.preventDefault();
@@ -130,10 +154,6 @@ class EditProject extends Component {
       const { project, projectUserId, formData } = this.state;
 
       if (validation.isValid) {
-        // for (const name of project) { // have an odd and interesting error where an `ignore_whitespace` property is added with the value of false
-        //   console.log(name);
-        //   formData.set(name, project[name]);
-        // }
         formData.set('title', project.title);
         formData.set('subtitle', project.subtitle);
         formData.set('description', project.description);
@@ -167,27 +187,28 @@ class EditProject extends Component {
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   setImages = (newImages) => {
-    const { project } = this.state
+    const { project } = this.state;
     if (project.updatedImages.length + newImages.length > 6) {
-      console.log('Cannot add anymore images.')
+      console.log('Cannot add anymore images.');
       return;
     }
     const addImage = [...project.updatedImages, ...newImages];
     project.updatedImages = addImage;
+
     this.setState({ project });
-  }
+  };
 
   deleteImage = (imgName) => {
     const { project } = this.state;
     const { updatedImages } = project;
 
-    const filteredImages = updatedImages.filter(image => image !== imgName)
+    const filteredImages = updatedImages.filter(image => image !== imgName);
     project.updatedImages = filteredImages;
-    this.setState({ project })
-  }
+    this.setState({ project });
+  };
 
   disableSubmit = () => {
     const { title, industry, location } = this.state.project;
@@ -202,55 +223,38 @@ class EditProject extends Component {
 
     return (
       <main className={classes.pageContent}>
-        <div className={classes.projectPreviewContainer}>
-          <Typography variant="h3" align='left'>{title}</Typography>
-          <Button classes={{ root: classes.previewButton }} type="submit" variant="contained" color="primary" >
-            Preview
-                    </Button>
-        </div>
         <div className={classes.addProjectPage}>
-          <Typography variant="h2" align='left'>Edit your project</Typography>
-          <form className={classes.form} onSubmit={this.handleSubmit} >
+          <CenteredPageHeader title="Edit Project" descriptionText=""/>
 
-            <Typography variant="h4">Title</Typography>
-            <TextField
+          <form className={classes.form} onSubmit={this.handleSubmit}>
+
+            <CustomOutlinedInput
               name="title"
-              classes={{ root: classes.formLine }}
               value={title}
-              fullWidth={true}
+              label="Project title"
               onChange={this.handleInput}
-              type="title"
-              variant="outlined"
-              required
-              autoComplete={'false'}
               error={validation.title.isInvalid}
               helperText={validation.title.message}
             />
 
-
-            <Typography variant="h4">Subtitle</Typography>
-            <TextField
+            <CustomOutlinedInput
               name="subtitle"
-              classes={{ root: classes.formLine }}
               value={subtitle}
-              fullWidth={true}
+              label="Subtitle"
               onChange={this.handleInput}
-              type="subtitle"
-              variant="outlined"
-              autoComplete={'false'}
+              error={validation.subtitle.isInvalid}
+              helperText={validation.subtitle.message}
             />
 
-            <Typography variant="h4">Description</Typography>
-            <TextField
+            <CustomOutlinedInput
               name="description"
               multiline
               rows="5"
-              classes={{ root: classes.formLine }}
               value={description}
-              fullWidth={true}
+              label="Description"
               onChange={this.handleInput}
-              type="description"
-              variant="outlined"
+              error={validation.description.isInvalid}
+              helperText={validation.description.message}
             />
 
             <OutlinedSelect
@@ -262,21 +266,16 @@ class EditProject extends Component {
               selectName="industry"
               value={industry}
               error={validation.industry.isInvalid}
-              helperText={validation.industry.message}
-            >
-              {
-                industries.map(industry => {
-                  return (
-                    <option
-                      key={industry.id}
-                      value={industry.name}
-                    >
-                      {industry.name}
-                    </option>
-                  )
-                })
-              }
+              helperText={validation.industry.message}>
+              {industries.map((industry) => (
+                <option
+                  key={industry.id}
+                  value={industry.name}>
+                  {industry.name}
+                </option>
+              ))}
             </OutlinedSelect>
+
             <OutlinedSelect
               useLabel
               name="location"
@@ -286,58 +285,50 @@ class EditProject extends Component {
               selectName="location"
               value={location}
               error={validation.location.isInvalid}
-              helperText={validation.location.message}
-            >
-              {
-                locations.map(location => {
-                  return (
-                    <option
-                      key={location.id}
-                      value={location.name}
-                    >
-                      {location.name}
-                    </option>
-                  )
-                })
-              }
+              helperText={validation.location.message}>
+              {locations.map((location) => (
+                <option key={location.id} value={location.name}>
+                  {location.name}
+                </option>
+              ))}
             </OutlinedSelect>
-            <UploadImages setImages={this.setImages} showMany={true} images={updatedImages} deleteImage={this.deleteImage} />
-            <Typography variant="h4">Funding Goal Amount</Typography>
-            <OutlinedInput
+
+            <UploadImages setImages={this.setImages} showMany={true} images={updatedImages}
+                          deleteImage={this.deleteImage}/>
+
+            <CustomOutlinedInput
               name="fundingGoal"
-              id="fundingGoal"
               value={fundingGoal}
-              fullWidth={true}
+              label="Funding Goal"
               onChange={this.handleInput}
-              type="fundingGoal"
-              variant="outlined"
-              required
               error={validation.fundingGoal.isInvalid}
-              helpertext={validation.fundingGoal.message}
-              startAdornment={<InputAdornment position="start">$</InputAdornment>}
+              helperText={validation.fundingGoal.message}
+              InputProps={{
+                startAdornment: <InputAdornment position="start">$</InputAdornment>
+              }}
             />
-            <Typography variant="h4">Funding Deadline</Typography>
-            <TextField
-              className={classes.dateField}
+
+            <CustomOutlinedInput
               name="fundingDeadline"
-              id="fundingDeadline"
               type="date"
+              label="Funding Deadline"
               value={fundingDeadline}
               onChange={this.handleInput}
               required
               InputLabelProps={{
-                shrink: true,
+                shrink: true
               }}
               error={validation.fundingDeadline.isInvalid}
-              helperText={validation.fundingDeadline.message}
+              helpertext={validation.fundingDeadline.message}
             />
-            <Button classes={{ root: classes.submitButton }} type="submit" variant="contained" color="primary" disabled={this.disableSubmit()}>
+            <Button classes={{ root: classes.submitButton }} type="submit" variant="contained" color="primary"
+                    disabled={this.disableSubmit()}>
               Submit
             </Button>
           </form>
         </div>
       </main>
-    )
+    );
   }
 }
 

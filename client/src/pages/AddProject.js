@@ -105,10 +105,6 @@ class AddProject extends Component {
     let { value, name } = event.target;
     const { formData } = this.state;
 
-    // if (name === 'fundingGoal') {
-    //   value = parseInt(value)
-    // }
-
     formData.set(name, value);
     this.setState({ [name]: value, formData });
   };
@@ -123,6 +119,7 @@ class AddProject extends Component {
       for (const image of images) {
         formData.append('images', image);
       }
+
       const newProject = await addProject(formData);
       if (newProject.success) {
         console.log(newProject);
