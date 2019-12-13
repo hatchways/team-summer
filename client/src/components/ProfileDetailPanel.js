@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ProfileDetailPanel = (props) => {
   const { 
-    id, 
+    profileId, 
     profilePic, 
     name, 
     location, 
@@ -45,12 +45,11 @@ const ProfileDetailPanel = (props) => {
     e.preventDefault();
     if (isCurrentUser === true) {
       history.push({
-        pathname: `profile/edit/${id}`,
-        state: { id, profilePic, name, location, about }
+        pathname: `profile/edit/${profileId}`,
+        state: { profilePic, name, location, about }
       });
     } else {
-      console.log("create convo goes here when done")
-        await createConversation([currentUserId, id])
+        await createConversation([currentUserId, profileId])
           .catch((error) => console.log(error));
         history.push('/messages');
     }

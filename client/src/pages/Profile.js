@@ -63,14 +63,7 @@ class ProfilePage extends Component {
   };
   
   componentDidMount() {
-    if (!this.props.userAuthenticated) {
-      this.props.activateToast('Please log in to view profiles', 'error');
-      return this.props.history.push('/login');
-    }
-
-    //if the route has an id param isCurrentUser is false
-    const currentUserId = this.props.userDetails.id
-    this.setState({isPending: TextTrackCueList})
+    this.setState({isPending: true})
     const profileId = this.props.match.params.id || this.props.userDetails.id;
     getUser(profileId).then((profile) => {
       this.setState(
@@ -92,6 +85,9 @@ class ProfilePage extends Component {
     } else if (this.props.match.params.id === this.props.userDetails.id){
       return true
     }
+    else {
+      return false
+    }
   }
   
   renderUserInfo() {
@@ -101,8 +97,8 @@ class ProfilePage extends Component {
     return (
       <Fragment>
         <ProfileDetailPanel
-          id={this.props.userDetails.id}
-          currentUserId={this.props.currentUserId}
+          profileId={this.state.profile._id}
+          currentUserId={this.state.currentUserId}
           isCurrentUser={this.state.isCurrentUser}
           profilePic={avatarPic}
           name={name}

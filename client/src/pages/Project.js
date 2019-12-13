@@ -175,8 +175,9 @@ class Project extends React.Component {
     };
 
     const handleSendMessage = async () => {
-      // await createConversation([this.props.userDetails.id, this.state.user._id])
-      //   .catch((error) => console.log(error));
+      console.log("creds",[this.props.userDetails.id, this.state.user._id])
+      await createConversation([this.props.userDetails.id, this.state.user._id])
+        .catch((error) => console.log(error));
 
       this.props.history.push('/messages');
     };
@@ -223,7 +224,7 @@ class Project extends React.Component {
               style={{ margin: 'auto' }}>
               {user.avatar
                 ? <img src={user.avatar} alt="Project creator avatar" />
-                : user.name.split('')[0]
+                : user.name[0]
               }
             </Avatar>
             <Typography variant="h6">{user.name}</Typography>
