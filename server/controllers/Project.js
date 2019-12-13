@@ -115,8 +115,8 @@ exports.editProject = async (req, res) => {
       const { projectId } = req.params;
       const { title, subtitle, description, industry, location, fundingGoal, stringImage, fundingDeadline } = req.body;
       let images = req.files ? req.files.map((file) => file.location) : stringImage;
-      if (req.files && stringImage) images = [...images, ...stringImage];
-      const newProject = { title, subtitle, description, industry, location, fundingGoal: parseInt(fundingGoal), fundingDeadline, images }
+      if (req.files && stringImage) images = [...images, stringImage];
+      const newProject = { title, subtitle, description, industry, location, fundingGoal: parseInt(fundingGoal), fundingDeadline, images };
       await Project.findByIdAndUpdate(
         { _id: projectId },
         { $set: newProject },
