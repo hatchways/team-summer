@@ -17,7 +17,7 @@ const OutlinedSelect = (props) => {
     <React.Fragment>
       {props.useLabel && (
         <InputLabel id={`${props.selectId}-label`} {...props.labelProps}>
-          <Typography variant="h6" style={{ color: '#000000' }} component="p">
+          <Typography variant="body1" style={{ color: '#000000' }} component="p">
             {props.labelText}
           </Typography>
         </InputLabel>
@@ -55,8 +55,15 @@ OutlinedSelect.propTypes = {
   useLabel: PropTypes.bool
 };
 
+const outlineInputStyles = makeStyles({
+  input: {
+    paddingTop: 4
+  }
+});
+
 const CustomOutlinedInput = (props) => {
   const { id = `input-${props.label}`, type = 'text', autoComplete = 'false' } = props;
+  const classes = outlineInputStyles();
 
   return (
     <TextField
@@ -66,6 +73,9 @@ const CustomOutlinedInput = (props) => {
       variant="outlined"
       fullWidth
       autoComplete={autoComplete}
+      classes={{
+        root: classes.input
+      }}
       {...props}
     />
   );
