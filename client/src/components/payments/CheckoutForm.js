@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
     Card,
@@ -62,14 +62,14 @@ class _CheckoutForm extends Component {
                         Investment amount: {toDollars(investmentAmount)}
                     </Typography>
                 </CardContent>
-                <Divider className={classes.divider}></Divider>
+                <Divider className={classes.divider}/>
                 <form onSubmit={this.handlePaymentSubmit} >
                     <CardContent className={classes.content}>
                         <CardElement
                             {...stripeStyle.card()}
                         />
                     </CardContent>
-                    <Divider className={classes.divider}></Divider>
+                    <Divider className={classes.divider}/>
                     <CardContent className={classes.content}>
                         <button
                             style={stripeStyle.stripeButton}>
