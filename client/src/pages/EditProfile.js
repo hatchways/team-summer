@@ -1,13 +1,14 @@
 import React from 'react';
-import { Typography, withStyles, Button, TextField } from '@material-ui/core';
+import { withStyles, Button } from '@material-ui/core';
 import validator from 'validator';
 
-import { OutlinedSelect } from 'components/Inputs';
+import { CustomOutlinedInput, OutlinedSelect } from 'components/Inputs';
 import UploadImages from 'components/UploadImages';
 import FormValidator from 'helpers/form-validation';
 import { editUser } from 'api/users';
-import { locations } from 'dummyData/dropDownItems'
+import { locations } from 'dummyData/dropDownItems';
 import { withPageContext } from 'components/pageContext';
+import CenteredPageHeader from '../components/CenteredPageHeader';
 
 const styles = {
   pageContent: {
@@ -16,7 +17,7 @@ const styles = {
   },
   editProfilePage: {
     margin: '10px',
-    padding: '20px',
+    padding: '20px'
   },
   form: {
     display: 'flex',
@@ -26,12 +27,12 @@ const styles = {
     marginTop: '30px'
   },
   formLine: {
-    marginBottom: '20',
+    marginBottom: '20'
   },
   button: {
     margin: '20px 0px 10px 0px'
   }
-}
+};
 
 class EditProfile extends React.Component {
   constructor(props) {
@@ -42,8 +43,9 @@ class EditProfile extends React.Component {
         method: validator.isEmpty,
         validWhen: false,
         message: 'Name is Required'
-      },
-    ])
+      }
+    ]);
+
     this.state = {
       name: '',
       about: '',
@@ -51,7 +53,7 @@ class EditProfile extends React.Component {
       location: '',
       formData: {},
       validation: this.validators.valid()
-    }
+    };
   }
 
   componentDidMount() {
@@ -62,7 +64,7 @@ class EditProfile extends React.Component {
   handleInput = (event) => {
     const { value, name } = event.target;
     this.setState({ [name]: value });
-  }
+  };
 
   handleSubmit = async (event) => {
     event.preventDefault();
@@ -76,7 +78,7 @@ class EditProfile extends React.Component {
       formData.set('about', about);
       formData.set('location', location);
       if (typeof image[0] === 'string') {
-        formData.set('profilePic', image[0])
+        formData.set('profilePic', image[0]);
       } else {
         formData.set('image', image[0]);
       }
@@ -88,22 +90,22 @@ class EditProfile extends React.Component {
         this.props.activateToast('Edit Successful', 'success');
         this.props.history.push('/profile');
       } else if (newUserData.err) {
-        console.log(newUserData.err)
+        console.log(newUserData.err);
       }
     }
-  }
+  };
 
   setImages = (image) => {
     if (image.length > 1) {
-      console.log('Cannot add anymore images.')
+      console.log('Cannot add anymore images.');
       return;
     }
     this.setState({ image });
-  }
+  };
 
   deleteImage = () => {
-    this.setState({ image: '' })
-  }
+    this.setState({ image: '' });
+  };
 
   disableSubmit = () => {
     const { name } = this.state;
@@ -118,59 +120,48 @@ class EditProfile extends React.Component {
     return (
       <main className={classes.pageContent}>
         <div className={classes.editProfilePage}>
+          <CenteredPageHeader title="Edit Profile" descriptionText=""/>
           <form className={classes.form} onSubmit={this.handleSubmit}>
-            <Typography variant="h4">Name</Typography>
-            <TextField
+            <CustomOutlinedInput
               name="name"
-              classes={{ root: classes.formLine }}
               value={name}
-              fullWidth={true}
+              label="Name"
               onChange={this.handleInput}
-              type="name"
-              variant="outlined"
-              required
               error={validation.name.isInvalid}
               helperText={validation.name.message}
             />
-            <Typography variant="h4">About</Typography>
-            <TextField
+
+            <CustomOutlinedInput
               name="about"
-              classes={{ root: classes.formLine }}
               value={about}
-              fullWidth={true}
+              label="About"
               onChange={this.handleInput}
-              type="about"
-              variant="outlined"
             />
-            <UploadImages setImages={this.setImages} images={image} deleteImage={this.deleteImage} />
+
+            <UploadImages setImages={this.setImages} images={image} deleteImage={this.deleteImage}/>
+
             <OutlinedSelect
               name="location"
               labelText="Location"
               selectId="location"
               setState={this.handleInput}
               selectName="location"
-              value={location}
-            >
-              {
-                locations.map(location => {
-                  return (
-                    <option
-                      key={location.id}
-                      value={location.name}
-                    >
-                      {location.name}
-                    </option>
-                  )
-                })
-              }
+              value={location}>
+              {locations.map(location => (
+                <option key={location.id} value={location.name}>
+                  {location.name}
+                </option>
+              ))}
             </OutlinedSelect>
-            <Button classes={{ root: classes.button }} type="submit" variant="contained" color="primary" disabled={this.disableSubmit()}>
+
+            <Button classes={{ root: classes.button }} type="submit" variant="contained" color="primary"
+                    disabled={this.disableSubmit()}>
               Submit
             </Button>
           </form>
         </div>
       </main>
-    )
+    );
   }
 }
 
