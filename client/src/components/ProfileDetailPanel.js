@@ -1,53 +1,75 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Avatar, Button, Paper, Typography } from '@material-ui/core';
+// import { createConversation } from '../api/messages'; //SOCKETS WHEN DONE
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    padding: theme.spacing(2),
+    width: '100%',
+    padding: theme.spacing(3),
     textAlign: 'center',
     [theme.breakpoints.up('md')]: {
-      width: '30%',
-      minHeight: '100vh'
+      height: '100vh'
     },
   },
   avatar: {
-    width: 60,
-    height: 60,
-    margin: '10px auto',
+    width: 80,
+    height: 80,
+    margin: '20px auto',
     [theme.breakpoints.up('md')]: {
-      margin: '30px auto',
+      margin: '25px auto 30px',
+      width: 100,
+      height: 100,
     },
   },
   button: {
-    margin: '10px 0px 10px 0px',
+    width: '80% !important',
+    margin: '10px auto'
   }
 }));
 
-const ProfileDetailPanel = ({ id, profilePic, name, location, about, expertise, buttonType, history }) => {
-
+const ProfileDetailPanel = (props) => {
+  const { 
+    id, 
+    profilePic, 
+    name, 
+    location, 
+    about, 
+    expertise, 
+    currentUserId,
+    isCurrentUser, 
+    history } = props
   const classes = useStyles();
 
-  const handleRedirect = (buttonType) => (event) => {
-    event.preventDefault();
-    if (buttonType === 'edit') {
-      const userInfo = { id, profilePic, name, location, about };
+  const handleRedirect = async (e) => {
+    e.preventDefault();
+    if (isCurrentUser === true) {
       history.push({
         pathname: `profile/edit/${id}`,
-        state: userInfo
+        state: { id, profilePic, name, location, about }
       });
-    } else if (buttonType === 'message') {
-      // TO DO MESSAGING
+    } else {
+      console.log("create convo goes here when done")
+        // await createConversation([currentUserId, id])
+        //   .catch((error) => console.log(error));
+        history.push('/messages');
     }
   }
 
   return (
     <Paper className={classes.paper}>
-      <Avatar className={classes.avatar} src={profilePic || null} />
+      <Avatar className={classes.avatar} src={profilePic || null}>
+        <Typography variant="h1">{profilePic === null && name[0]}</Typography>
+      </Avatar>
       <Typography variant="h3">{name}</Typography>
       <Typography variant="body1">{location}</Typography>
-      <Button classes={{ root: classes.button }} type="submit" variant="outlined" color="primary" onClick={handleRedirect(buttonType)}>
-        {buttonType}
+      <Button 
+        classes={{ root: classes.button }} 
+        type="submit" 
+        variant="outlined"
+        color="primary" 
+        onClick={handleRedirect}>
+        {isCurrentUser ? 'edit' : 'message'}
       </Button>
       <Typography variant="body1">{about}</Typography>
       <Typography variant="body1">{expertise}</Typography>
