@@ -9,10 +9,9 @@ const mongoose = require('mongoose');
 chai.should();
 chai.use(chaiHttp);
 
-describe('/POST Invest', () => {
-  let userInfo, projectId;
+let userInfo, projectId;
 
-  before('Setup project and user', (done) => {
+before('Setup project and user', (done) => {
     db.open().then(() => {
       chai.request(app)
         .post(`/api/auth/register`)
@@ -41,7 +40,8 @@ describe('/POST Invest', () => {
     db.close().then(() => done()).catch(done)
   });
 
-  it('it should return 200 for successful investment', (done) => {
+describe('Investments', () => {
+  it('Successful Investment', (done) => {
     chai
       .request(app)
       .post(`/api/investments/invest`)
