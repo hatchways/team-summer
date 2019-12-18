@@ -10,15 +10,9 @@ chai.use(chaiHttp);
 
 let users = [];
 
-before('Connect to database', (done) => {
-  db.open().then(() => {
-    users = createUsers(2);
-    done();
-  }).catch(done);
-});
-
-after('Disconnect database', (done) => {
-  db.close().then(() => done()).catch(done);
+before('Create Users', (done) => {
+  users = createUsers(2);
+  done();
 });
 
 describe('Messages', () => {

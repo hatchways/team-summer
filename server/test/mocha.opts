@@ -1,0 +1,5 @@
+--file ./test/setup.js
+--file ./test/teardown.js
+--require @babel/register
+--exit
+--timeout 120000

@@ -4,18 +4,17 @@ const chaiHttp = require('chai-http');
 const faker = require('faker');
 const app = require('../app.js');
 const db = require('../DbConnection');
-const mongoose = require('mongoose');
 
 chai.should();
 chai.use(chaiHttp);
 
-before('Connect to database', (done) => {
-  db.open().then(() => done()).catch(done);
-});
-
-after('Disconnect database', (done) => {
-  db.close().then(() => done()).catch(done);
-});
+// before('Connect to database', (done) => {
+//   db.open().then(() => done()).catch(done);
+// });
+//
+// after('Disconnect database', (done) => {
+//   db.close().then(() => done()).catch(done);
+// });
 
 describe('Authentication', () => {
   let userInfo;

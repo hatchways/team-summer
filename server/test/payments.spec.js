@@ -12,7 +12,7 @@ chai.use(chaiHttp);
 let userInfo, projectId;
 
 before('Setup project and user', (done) => {
-    db.open().then(() => {
+    // db.open().then(() => {
       chai.request(app)
         .post(`/api/auth/register`)
         .send({ email: faker.internet.email(), name: faker.name.findName(), password: faker.internet.password() })
@@ -33,7 +33,7 @@ before('Setup project and user', (done) => {
               done();
             });
         });
-    }).catch(done);
+    // }).catch(done);
   });
 
   after('Closes database connection', (done) => {
