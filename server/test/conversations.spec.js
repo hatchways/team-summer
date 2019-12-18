@@ -8,30 +8,45 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 let users = [];
+let singleConversationId = '';
 
 before('Create Users', (done) => {
   users = createUsers(2);
   done();
 });
 
+const checkSingleConversation = (err, res) => {
+  should.not.exist(err);
+  res.should.have.status(200);
+
+  res.body.should.contain.all.keys([
+    'users',
+    'messages',
+    'created'
+  ]);
+
+  res.body.users.should.be.an('array').that.has.lengthOf(2);
+};
+
 describe('Conversations', () => {
   it('Creates a conversation', (done) => {
     chai.request(app)
       .post('/api/conversations/create')
       .send({ users: users.map((user) => user._id) })
-      .end((err, res) => {
-        should.not.exist(err);
-        res.should.have.status(200);
-
-        res.body.should.contain.all.keys([
-          'users',
-          'messages',
-          'created'
-        ]);
-
-        res.body.users.should.be.an('array').that.has.lengthOf(2);
+      .end(((err, res) => {
+        checkSingleConversation(err, res);
+        singleConversationId = res.body._id;
         done();
-      });
+      }));
+  });
+
+  it('Gets a single conversation', (done) => {
+    chai.request(app)
+      .get(`/api/conversations/${singleConversationId}`)
+      .end((err, res) => {
+        checkSingleConversation(err, res);
+        done();
+      })
   });
 
   it('Gets conversations for user', (done) => {
