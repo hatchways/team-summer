@@ -5,7 +5,7 @@ const { mongoDbErrorHandler } = require('../utils');
 exports.create = async (req, res) => {
   const { users } = req.body;
 
-  if (users.length < 2) return res.status(400).json({ error: 'You must provided 2 users' });
+  if (users.length < 2) return res.status(400).json({ error: 'You must provide 2 users ids' });
 
   try {
     // If the conversation exists, just return it
