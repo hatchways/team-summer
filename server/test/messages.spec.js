@@ -27,6 +27,7 @@ describe('Messages', () => {
           'messages',
           'created'
         ]);
+        res.body.users.should.be.an('array').that.has.lengthOf(2);
         done();
       }));
   });

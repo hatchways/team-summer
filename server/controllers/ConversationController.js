@@ -5,13 +5,15 @@ const { mongoDbErrorHandler } = require('../utils');
 exports.create = async (req, res) => {
   const { users } = req.body;
 
+  if (users.length < 2) return res.status(400).json({ error: 'You must provided 2 users' });
+
   try {
     // If the conversation exists, just return it
     const existingConversation = await Conversation.findOne({ users });
     if (existingConversation) return res.status(200).json(existingConversation);
 
     const conversation = await Conversation.create({ users });
-    await User.updateMany({_id: {$in: users}}, {conversations: conversation._id});
+    await User.updateMany({ _id: { $in: users } }, { conversations: conversation._id });
     return res.status(200).json(conversation);
   } catch (error) {
     mongoDbErrorHandler(error, res);
