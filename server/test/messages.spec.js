@@ -2,7 +2,6 @@ require('dotenv').config();
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../app.js');
-const db = require('../DbConnection');
 const { createUsers } = require('../utils/testUtils');
 
 const should = chai.should();
