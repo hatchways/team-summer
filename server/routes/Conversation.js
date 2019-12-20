@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { isAuth, isDev, conversationById } = require('../middlewares');
-const conversationController = require('../controllers/ConversationController');
+const conversationController = require('../controllers/conversationController.api');
 
 router.get('/', isAuth, conversationController.getConversationsForUser);
 router.get('/:id', conversationController.getConversation);
