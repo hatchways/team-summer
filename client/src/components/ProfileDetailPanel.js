@@ -62,7 +62,10 @@ const ProfileDetailPanel = (props) => {
         <Typography variant="h1">{profilePic === null && name[0]}</Typography>
       </Avatar>
       <Typography variant="h3">{name}</Typography>
-      <Typography variant="body1">{location}</Typography>
+      {
+        location !== "undefined" &&
+        <Typography variant="body1">{location}</Typography>
+      }
       <Button
         classes={{ root: classes.button }}
         type="submit"
@@ -71,7 +74,10 @@ const ProfileDetailPanel = (props) => {
         onClick={handleRedirect}>
         {isCurrentUser ? 'edit' : 'message'}
       </Button>
-      <Typography variant="body1">{about}</Typography>
+      {
+        about !== "undefined" &&
+        <Typography variant="body1">{about}</Typography>
+      }
       <Typography variant="body1">{expertise}</Typography>
     </Paper>
   );
