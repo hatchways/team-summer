@@ -56,7 +56,6 @@ const ThumbnailImage = styled('div')(({ theme, ...props }) => ({
 
 export default (props) => {
   const { images } = props;
-
   const [currentImage, setCurrentImage] = useState(0);
 
   const handleNavigate = (direction) => (event) => {
@@ -73,11 +72,13 @@ export default (props) => {
   return (
     <div>
       <CarouselBase>
-        <Arrow direction="left" onClick={handleNavigate('left')}/>
+       { images.length > 1 &&
+         <Arrow direction="left" onClick={handleNavigate('left')}/>}
         <CardMedia component="img" image={images[currentImage]}
                    title="Project image"
                    height="400"/>
-        <Arrow direction="right" onClick={handleNavigate('right')}/>
+        { images.length > 1 &&
+          <Arrow direction="right" onClick={handleNavigate('right')}/>}
       </CarouselBase>
       <ThumbnailContainer style={{ width: '100%' }}>
         {images.map((image, index) => <ThumbnailImage key={`img-${index}`} image={image} onClick={() => setCurrentImage(index)}/>)}
