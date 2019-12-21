@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { isAuth, userById } = require('../middlewares');
-const projects = require('../controllers/Project');
+const projects = require('../controllers/projectController.api');
 
 router.get('/:projectId', projects.getProject);
 router.post('/', isAuth, projects.addProject);
