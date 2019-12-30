@@ -53,7 +53,9 @@ class Messages extends React.Component {
   state = {
     activeConversation: 0,
     showChatPanel: false,
-    conversations: []
+    conversations: [],
+    unreadTotal: 0,
+    unread: []
   };
   chatWindowRef = React.createRef();
 
@@ -94,13 +96,25 @@ class Messages extends React.Component {
     this.scrollChatToBottom();
 
     this.props.socket.on('newMessage', (data) => {
+      this.setState((state) => ({
+        unreadTotal: state.unreadTotal + 1,
+        unread: state.unread.map((conversation) => {
+          if (conversation.id === data.conversation) {
+            conversation.total += 1;
+            return conversation;
+          } else {
+            return { id: data.conversation, total: 1 };
+          }
+        })
+      }));
+
       this.handleSetMessage(data.conversation, data.sender, data.content);
     });
   }
 
   switchPanelDisplay = (conversationId) => {
     this.setState({ showChatPanel: !this.state.showChatPanel });
-    this.setState({activeConversation: conversationId})
+    this.setState({ activeConversation: conversationId });
   };
 
   renderPageComponents = () => {
@@ -111,6 +125,7 @@ class Messages extends React.Component {
       desktop: this.props.desktop,
       handleSetMessage: this.handleSetMessage,
       chatWindowRef: this.chatWindowRef,
+      unreadTotal: this.state.unreadTotal,
       ...this.props
     };
 

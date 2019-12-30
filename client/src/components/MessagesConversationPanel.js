@@ -19,7 +19,7 @@ const ConversationListStyled = styled('div')(({ theme }) => ({
   maxHeight: 460,
   width: '100%',
   overflowY: 'auto',
-  padding: 5,
+  padding: 5
 }));
 
 const UserConversationCard = styled(({ active, ...props }) => <Card {...props}/>)(({ theme, ...props }) => ({
@@ -43,10 +43,23 @@ const UserConversationCard = styled(({ active, ...props }) => <Card {...props}/>
   }
 }));
 
-const getLastMessageByUser = (conversation, userId) => {
-  const message = conversation.messages.find((message) => message.sender === userId);
+const NewCount = styled('div')(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 
-  return message ? message.content : null
+  minWidth: 39,
+  height: 34,
+  borderRadius: 100,
+
+  color: '#ffffff',
+  backgroundColor: theme.palette.primary.main
+}));
+
+const getLastMessageByUser = (conversation, userId) => {
+  const message = conversation.messages.slice().reverse().find((message) => message.sender === userId);
+
+  return message ? message.content : null;
 };
 
 const ConversationList = ({ conversations, classes, activeConversation, switchPanelDisplay }) => {
@@ -94,6 +107,9 @@ export default (props) => {
 
       <Grid container alignItems="center" className={classes.conversationListHeader}>
         <Typography variant="h4" component="h3" className={classes.userListHeader}>Messages</Typography>
+        {Boolean(props.unreadTotal) && (
+          <NewCount>{props.unreadTotal}</NewCount>
+        )}
       </Grid>
 
       <ConversationList {...props}/>
