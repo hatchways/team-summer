@@ -2,8 +2,13 @@
   "name": "ts-product-launch",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "10.x"
+  },
   "scripts": {
-    "postinstall": "cd server && npm install",
-    "start": "cd server && babel-node ./bin/www"
-  }
+    "postinstall": "cd server/ && npm install",
+    "start": "cd server/ && babel-node ./bin/www"
+  },
+  "dependencies": {},
+  "devDependencies": {}
 }
