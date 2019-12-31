@@ -7,7 +7,7 @@
   },
   "scripts": {
     "postinstall": "cd server/ && npm install",
-    "start": "cd server/ && babel-node ./bin/www"
+    "start": "cd server/ && npm start"
   },
   "dependencies": {},
   "devDependencies": {}
