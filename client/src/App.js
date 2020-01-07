@@ -69,7 +69,7 @@ class App extends React.Component {
     jwTokenCheck(this.state);
   }
 
-  socket = socketClient(`${process.env.REACT_APP_SOCKET_ENDPOINT}:${process.env.PORT || 3001}`, { autoConnect: false });
+  socket = socketClient(process.env.REACT_APP_SOCKET_ENDPOINT, { autoConnect: false });
 
   openSocketAuthenticate = () => {
     /*
