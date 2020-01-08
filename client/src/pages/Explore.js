@@ -1,7 +1,6 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import moment from 'moment';
 
 import * as ExploreStyles from 'styles/ExploreSyles';
 import ProjectCard from 'components/ProjectCard';
@@ -10,6 +9,7 @@ import { withPageContext } from 'components/pageContext';
 import { OutlinedSelect } from 'components/Inputs';
 import { getUserProjects } from 'api/projects';
 import ProjectGrid from 'components/ProjectGrid';
+import { daysLeft } from 'helpers/formatting';
 
 class Explore extends React.Component {
   state = {
@@ -86,7 +86,7 @@ class Explore extends React.Component {
               funding={project.funding.fundingTotal}
               fundingGoal={project.fundingGoal}
               industry={project.industry}
-              daysLeft={parseInt(moment(project.fundingDeadline).fromNow().split(' ')[1])}
+              daysLeft={daysLeft(project.fundingDeadline)}
             />
           ))}
 

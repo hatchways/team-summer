@@ -4,7 +4,6 @@ import {
   Grid,
   Typography
 } from '@material-ui/core';
-import moment from 'moment';
 
 import FilterTabs from 'components/FilterTabs';
 import ProjectCard from 'components/ProjectCard';
@@ -12,6 +11,7 @@ import ProfileDetailPanel from 'components/ProfileDetailPanel';
 import { getUser } from 'api/users';
 import { withPageContext } from 'components/pageContext';
 import Loading from 'components/Loading';
+import { daysLeft } from 'helpers/formatting';
 
 const FILTER_TYPES = ['projects', 'investments'];
 
@@ -194,7 +194,7 @@ class ProfilePage extends Component {
                   funding={project.funding.fundingTotal}
                   fundingGoal={project.fundingGoal}
                   industry={project.industry}
-                  daysLeft={moment({ hours: 0 }).diff(project.fundingDeadline, 'days') * -1}
+                  daysLeft={daysLeft(project.fundingDeadline)}
                 />
               </Grid>
             ))

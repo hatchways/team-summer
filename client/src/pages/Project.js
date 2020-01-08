@@ -8,7 +8,6 @@ import {
   Avatar
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import moment from 'moment'
 
 import * as ProjectStyles from 'components/ProjectPageStyles';
 import CardCarousel from 'components/CardCarousel';
@@ -16,6 +15,7 @@ import PercentageProgressBar from 'components/PercentageProgressBar';
 import Checkout from 'components/payments/Checkout';
 import Modal from 'components/Modal';
 import { getProject } from 'api/projects';
+import { daysLeft } from 'helpers/formatting';
 
 import { withPageContext } from 'components/pageContext';
 import { createConversation } from 'api/messages';
@@ -64,8 +64,7 @@ class Project extends Component {
       const response = await getProject(this.props.match.params.id);
       const project = response.data;
       const isCurrentUser = this.props.userDetails.id === project.user._id
-      project.daysLeft = Math.max(0, moment({ hours: 0 })
-        .diff(project.fundingDeadline, 'days') * -1);
+      project.daysLeft = daysLeft(project.fundingDeadline);
 
       if (project.images.length === 0 || project.images[0] === '/images/image-not-found.png') {
         project.images = ['/images/image-not-found.png']
